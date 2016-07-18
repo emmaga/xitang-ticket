@@ -1,6 +1,59 @@
-﻿<div ng-controller="loginController as login">
-    用户名，
-    密码
-
-    <a ui-sref="ordersList">登录</a> 取消
+<div ng-controller="loginController as login" class="bg-gray full-screen">
+    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">西塘清云票管家</a>
+            </div>
+        </div>
+        <!-- /container -->
+    </div>
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="center-block fixed-width-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">登录</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form form-vertical">
+                            <div class="control-group">
+                                <label>账号</label>
+                                <div class="controls">
+                                    <input type="text" class="form-control" placeholder="输入账号">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label>密码</label>
+                                <div class="controls">
+                                    <input type="password" class="form-control" placeholder="输入账号">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label>企业码</label>
+                                <div class="controls">
+                                    <input type="password" class="form-control" placeholder="输入企业码">
+                                </div>
+                            </div>
+                            <hr class="break-space">
+                            <div class="control-group">
+                                <a class="btn btn-primary btn-block" ui-sref="ordersList">登录</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <a ui-sref="ordersList">登录</a> 取消 -->
 </div>
