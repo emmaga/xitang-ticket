@@ -3,9 +3,32 @@
 (function() {
   var app = angular.module('app.controllers', [ ]);
 
-  app.controller('loginController', ['$scope', function($scope) {
-    // console.log($scope.root.config.requestUrl);
+  app.controller('loginController', ['$scope', '$location', '$http', function($scope, $location, $http) {
     console.log('login');
+    this.login = function() {
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/login' + c.extension;
+      var data = {
+        "action": "GetToken",
+        "account": this.account,
+        "password": this.password,
+        "projectName": this.projectName
+      };
+      
+      this.msg = "登录中...";
+      var self = this;
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            $scope.root.params.token = data.token;
+            $location.path('/ordersList');
+          }else {
+            self.msg = data.errInfo;
+          }
+        }, function errorCallback(response) {
+          self.msg = "登录失败";
+        });
+    }
   }]);
 
   app.controller('alertWithChoiseController', ['$scope', function($scope) {

@@ -26,28 +26,28 @@
                         <h3 class="panel-title">登录</h3>
                     </div>
                     <div class="panel-body">
-                        <form class="form form-vertical">
+                        <form name="loginForm" class="form form-vertical" ng-submit="loginForm.$valid && login.login()">
                             <div class="control-group">
                                 <label>账号</label>
                                 <div class="controls">
-                                    <input type="text" class="form-control" placeholder="输入账号">
+                                    <input type="text" class="form-control" placeholder="输入账号" required ng-model="login.account">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label>密码</label>
                                 <div class="controls">
-                                    <input type="password" class="form-control" placeholder="输入账号">
+                                    <input type="password" class="form-control" placeholder="输入密码" required ng-model="login.password">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label>企业码</label>
                                 <div class="controls">
-                                    <input type="password" class="form-control" placeholder="输入企业码">
+                                    <input type="password" class="form-control" placeholder="输入企业码" required ng-model="login.projectName">
                                 </div>
                             </div>
                             <hr class="break-space">
                             <div class="control-group">
-                                <a class="btn btn-primary btn-block" ui-sref="ordersList">登录</a>
+                                <button type="submit" class="btn btn-primary btn-block">登录</button>
                             </div>
                         </form>
                     </div>
@@ -55,5 +55,5 @@
             </div>
         </div>
     </div>
-    <!-- <a ui-sref="ordersList">登录</a> 取消 -->
+    <div>{{login.msg}}</div>
 </div>

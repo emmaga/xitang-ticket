@@ -157,10 +157,16 @@
 
   app.controller('RootController', function() {
     this.config = config;
+    this.params = params;
   });
 
   var config = {
-    requestUrl: 'http://xxx.xxx.xxx.xx'
+    requestUrl: '/xitang-ticket/src/api',
+    extension: '.json'
+  };
+
+  var params = {
+    token: ''
   };
 
 })();
