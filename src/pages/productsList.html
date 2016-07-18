@@ -1,33 +1,66 @@
 ﻿<div ng-controller="productsListController as productsList">
 
-    
-    <input ng-model="productsList.searchName" type="text" /><a ng-click="productsList.search()" href>搜索</a> <a ui-sref="saleCodeAdd">添加</a>
-    内容<a ui-sref="saleCodeUpdate({saleCodeID:10})">修改</a>
-    
-    {{productsList.checkboxes.items}}
+
+    <!-- <input ng-model="productsList.searchName" type="text" /> -->
+    <!-- <a ng-click="productsList.search()" href>搜索</a> -->
+    <!-- <a ui-sref="saleCodeAdd">添加</a> 内容 -->
+    <!-- <a ui-sref="saleCodeUpdate({saleCodeID:10})">修改</a> -->
+    <!-- {{productsList.checkboxes.items}} -->
+
+
+    <div class="row">
+        <div class="col-xs-9">
+            <div class="btn-group ">
+                <a class="btn btn-default" ui-sref="saleCodeAdd">
+                    <i class="glyphicon glyphicon-plus"></i> 添加商品
+                </a>
+                <a class="btn btn-default">
+                    <i class="glyphicon glyphicon-remove"></i> 删除
+                </a>
+                <a class="btn btn-default" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                    <i class="glyphicon glyphicon-pencil"></i> 查看/编辑
+                </a>
+                <a class="btn btn-default">
+                    <i class="glyphicon glyphicon-lock"></i> 启用/禁用
+                </a>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="景区名/票型名/票型码/状态">
+                <span class="input-group-btn">
+					<button class="btn btn-default" type="button" ng-click="productsList.search()" href>搜索</button>
+				</span>
+            </div>
+        </div>
+    </div>
+    <hr class="break-space">
     <div ng-show="productsList.loading">loading...</div>
-    <table ng-table="productsList.tableParams" ng-init="productsList.search()" class="table table-bordered table-striped table-condensed">
+    <table ng-table="productsList.tableParams" ng-init="productsList.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
                 <input type="checkbox" ng-model="productsList.checkboxes.items[row.id]" />
             </td>
-            <td title="'Name'">
+            <td title="'商品名'">
                 {{row.name}}
             </td>
-            <td title="'Id'">
-                {{row.id}}
+            <td title="'检票时间'">
+                {{row.name}}
+            </td>
+            <td title="'检票期限'">
+                提前 {{row.id}}天
+                <br> 推后 {{row.id}}天
+            </td>
+            <td title="'有效时间'">
+                开始 {{row.id}}
+                <br> 结束 {{row.id}}
+            </td>
+            <td title="'状态'">
+                {{row.name}}
             </td>
         </tr>
     </table>
     <script type="text/ng-template" id="ng-table/headers/checkbox.html">
         <input type="checkbox" ng-model="productsList.checkboxes.checked" value="" />
     </script>
-
-
-
-
-    productsList
-    <a ui-sref="index">销售中心－商品列表－添加</a>
-    <a ui-sref="index">销售中心－商品列表－编辑</a>
 </div>
-
