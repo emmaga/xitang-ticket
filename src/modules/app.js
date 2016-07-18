@@ -3,10 +3,7 @@
 (function() {
   var app = angular.module('xt-ticket', [
     'ui.router',
-    'app.login',
-    'app.saleCodeList',
-    'app.saleCodeAdd',
-    'app.saleCodeUpdate'
+    'app.controllers'
   ]);
 
   app.config(function($stateProvider, $urlRouterProvider) {
