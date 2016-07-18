@@ -23,6 +23,9 @@
             var data = response.data;
             if(data.rescode === 200) {
               $cookies.put('token', data.token);
+              $cookies.put('account', data.account);
+              $cookies.put('userName', data.userName);
+              $cookies.put('projectName', data.projectName);
               $location.path('/ordersList');
             }else {
               self.msg = data.errInfo;
@@ -40,6 +43,8 @@
     if ($cookies.get('token') === "") {
       $location.path('/index');
     }
+
+    this.userName = $cookies.get('userName');
 
     this.logout = function() {
       $cookies.put('token', '');
