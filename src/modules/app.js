@@ -49,6 +49,116 @@
           }
         }
       })
+      .state('toBeChecked', {
+        url: '/toBeChecked',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@toBeChecked': {
+            templateUrl: 'pages/toBeChecked.html'
+          }
+        }
+      })
+      .state('productsList', {
+        url: '/productsList',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@productsList': {
+            templateUrl: 'pages/productsList.html'
+          }
+        }
+      })
+      .state('saleList', {
+        url: '/saleList',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@saleList': {
+            templateUrl: 'pages/saleList.html'
+          }
+        }
+      })
+      .state('partnerConfig', {
+        url: '/partnerConfig',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@partnerConfig': {
+            templateUrl: 'pages/partnerConfig.html'
+          }
+        }
+      })
+      .state('checkStatement', {
+        url: '/checkStatement',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@checkStatement': {
+            templateUrl: 'pages/checkStatement.html'
+          }
+        }
+      })
+      .state('operatingStatement', {
+        url: '/operatingStatement',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@operatingStatement': {
+            templateUrl: 'pages/operatingStatement.html'
+          }
+        }
+      })
+      .state('checkDetailStatement', {
+        url: '/checkDetailStatement',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@checkDetailStatement': {
+            templateUrl: 'pages/checkDetailStatement.html'
+          }
+        }
+      })
+      .state('exportStatementsList', {
+        url: '/exportStatementsList',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@exportStatementsList': {
+            templateUrl: 'pages/exportStatementsList.html'
+          }
+        }
+      })
+      .state('userList', {
+        url: '/userList',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@userList': {
+            templateUrl: 'pages/userList.html'
+          }
+        }
+      })
+      .state('applyRoles', {
+        url: '/applyRoles',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@applyRoles': {
+            templateUrl: 'pages/applyRoles.html'
+          }
+        }
+      })
   });
 
   app.controller('RootController', function() {
