@@ -21,9 +21,6 @@
         views: {
           '': {
             templateUrl: 'pages/main.html'
-          },
-          'mainFrame.body@main': {
-            templateUrl: 'pages/ordersList.html'
           }
         }
       })
