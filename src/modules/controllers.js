@@ -34,8 +34,9 @@
     }
   ]);
 
-  app.controller('mainController', ['$scope', '$location', '$cookies', function($scope, $location, $cookies) {
+  app.controller('mainController', ['$scope', '$location', '$cookies', '$state', function($scope, $location, $cookies, $state) {
     console.log('main');
+
     if ($cookies.get('token') === "") {
       $location.path('/index');
     }
@@ -44,6 +45,31 @@
       $cookies.put('token', '');
       $location.path('/index');
     };
+
+    var stateName = $state.current.name;
+    $scope.$state = '';
+
+    switch (stateName) {
+      case 'ordersList':
+      case 'toBeChecked':
+        $scope.$state = 'orders';
+        break;
+      case 'productsList':
+      case 'saleList':
+      case 'partnerConfig':
+        $scope.$state = 'products';
+        break;  
+      case 'exportStatementsList':
+      case 'checkDetailStatement':
+      case 'operatingStatement':
+      case 'checkStatement':
+        $scope.$state = 'statement';
+        break;
+      case 'userList':
+        $scope.$state = 'admin';
+        break;  
+    }
+
   }]);
 
   app.controller('alertWithChoiseController', ['$scope', function($scope) {
