@@ -1,4 +1,30 @@
 ﻿<div ng-controller="productsListController as productsList">
+    
+    <input ng-model="productsList.searchName" type="text" /><a ng-click="productsList.search()" href>搜索</a> <a ui-sref="saleCodeAdd">添加</a>
+    内容<a ui-sref="saleCodeUpdate({saleCodeID:10})">修改</a>
+    
+    {{productsList.checkboxes.items}}
+    <div ng-show="productsList.loading">loading...</div>
+    <table ng-table="productsList.tableParams" ng-init="productsList.search()" class="table table-bordered table-striped table-condensed">
+        <tr ng-repeat="row in $data">
+            <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
+                <input type="checkbox" ng-model="productsList.checkboxes.items[row.id]" />
+            </td>
+            <td title="'Name'">
+                {{row.name}}
+            </td>
+            <td title="'Id'">
+                {{row.id}}
+            </td>
+        </tr>
+    </table>
+    <script type="text/ng-template" id="ng-table/headers/checkbox.html">
+        <input type="checkbox" ng-model="productsList.checkboxes.checked" value="" />
+    </script>
+
+
+
+
     productsList
     <a ui-sref="index">销售中心－商品列表－添加</a>
     <a ui-sref="index">销售中心－商品列表－编辑</a>
