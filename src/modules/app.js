@@ -160,7 +160,8 @@
   });
 
   var config = {
-    requestUrl: 'http://xxx.xxx.xxx.xx'
+    requestUrl: '/xitang-ticket/src/api',
+    extension: '.json'
   };
 
 })();

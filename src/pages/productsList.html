@@ -1,76 +1,33 @@
 ﻿<div ng-controller="productsListController as productsList">
-    <a>
-        <strong>
-			<i class="glyphicon glyphicon-usd"></i>
-			销售设置
-			<i class="glyphicon glyphicon-chevron-right"></i>
-			商品列表
-		</strong>
-    </a>
-    <hr>
-    <div class="row">
-        <div class="col-sm-9">
-            <div class="btn-group ">
-                <a class="btn btn-default" data-page="#page0051">
-                    <i class="glyphicon glyphicon-plus"></i> 添加商品
-                </a>
-                <a class="btn btn-default" disabled data-deabledby="0005">
-                    <i class="glyphicon glyphicon-remove"></i> 删除
-                </a>
-                <a class="btn btn-default" data-page="#page0052" disabled data-deabledby="0005">
-                    <i class="glyphicon glyphicon-pencil"></i> 查看/编辑
-                </a>
-                <a class="btn btn-default" disabled data-deabledby="0005">
-                    <i class="glyphicon glyphicon-lock"></i> 启用/禁用
-                </a>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="景区名/票型名/票型码/状态">
-                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">搜索</button>
-                            </span>
-            </div>
-        </div>
-    </div>
-    <hr class="break-space">
-    <div class="table-responsive">
-        <table class="table table-hover table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        <input type="checkbox" data-deabledto="0005">
-                    </th>
-                    <th>商品名称</th>
-                    <th>开始时间</th>
-                    <th>结束时间</th>
-                    <th>可用时间</th>
-                    <th>状态</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>
-                        <input type="checkbox" data-deabledto="0005">
-                    </th>
-                    <td>成人票</td>
-                    <td>2016-7-1</td>
-                    <td>2016-7-31</td>
-                    <td>30天</td>
-                    <td>启用</td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- 
-                    <nav>
-                        <ul class="pagination">
-                            <li><a href="#"><span aria-hidden="true">&laquo;</span></a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#"><span aria-hidden="true">&raquo;</span></a></li>
-                        </ul>
-                    </nav>
-                     -->
-    </div>
+
+    
+    <input ng-model="productsList.searchName" type="text" /><a ng-click="productsList.search()" href>搜索</a> <a ui-sref="saleCodeAdd">添加</a>
+    内容<a ui-sref="saleCodeUpdate({saleCodeID:10})">修改</a>
+    
+    {{productsList.checkboxes.items}}
+    <div ng-show="productsList.loading">loading...</div>
+    <table ng-table="productsList.tableParams" ng-init="productsList.search()" class="table table-bordered table-striped table-condensed">
+        <tr ng-repeat="row in $data">
+            <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
+                <input type="checkbox" ng-model="productsList.checkboxes.items[row.id]" />
+            </td>
+            <td title="'Name'">
+                {{row.name}}
+            </td>
+            <td title="'Id'">
+                {{row.id}}
+            </td>
+        </tr>
+    </table>
+    <script type="text/ng-template" id="ng-table/headers/checkbox.html">
+        <input type="checkbox" ng-model="productsList.checkboxes.checked" value="" />
+    </script>
+
+
+
+
+    productsList
+    <a ui-sref="index">销售中心－商品列表－添加</a>
+    <a ui-sref="index">销售中心－商品列表－编辑</a>
 </div>
+

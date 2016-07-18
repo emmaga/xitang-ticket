@@ -1,11 +1,49 @@
 'use strict';
 
 (function() {
-  var app = angular.module('app.controllers', [ ]);
+  var app = angular.module('app.controllers', ['ngCookies', 'ngTable', 'ngResource']);
 
-  app.controller('loginController', ['$scope', function($scope) {
-    // console.log($scope.root.config.requestUrl);
-    console.log('login');
+  app.controller('loginController', ['$scope', '$location', '$http', '$cookies', 
+    function($scope, $location, $http, $cookies) {
+    
+      console.log('login');
+      this.login = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/login' + c.extension;
+        var data = {
+          "action": "GetToken",
+          "account": this.account,
+          "password": this.password,
+          "projectName": this.projectName
+        };
+        
+        this.msg = "登录中...";
+        var self = this;
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              $cookies.put('token', data.token);
+              $location.path('/ordersList');
+            }else {
+              self.msg = data.errInfo;
+            }
+          }, function errorCallback(response) {
+            self.msg = "登录失败";
+          });
+      }
+    }
+  ]);
+
+  app.controller('mainController', ['$scope', '$location', '$cookies', function($scope, $location, $cookies) {
+    console.log('main');
+    if ($cookies.get('token') === "") {
+      $location.path('/index');
+    }
+
+    this.logout = function() {
+      $cookies.put('token', '');
+      $location.path('/index');
+    };
   }]);
 
   app.controller('alertWithChoiseController', ['$scope', function($scope) {
@@ -72,8 +110,56 @@
     console.log('productEdit');
   }]);
 
-  app.controller('productsListController', ['$scope', function($scope) {
+  app.controller('productsListController', ['$scope', 'NgTableParams', '$resource', function($scope, NgTableParams, $resource) {
     console.log('productsList');
+      var self = this;
+      
+      // checkbox
+      self.checkboxes = { 'checked': false, items: {} };
+      
+      // watch for check all checkbox
+      $scope.$watch('productsList.checkboxes.checked', function(value) {
+          angular.forEach(self.tableData, function(item) {
+              if (angular.isDefined(item.id)) {
+                self.checkboxes.items[item.id] = value;
+              }
+          });
+      });
+
+      // ngtable
+      self.search = function() {
+        self.loading = true;
+        self.initTable();
+        self.tableParams = new NgTableParams(
+          {
+            page: 1, 
+            count: 15,
+            url: ''
+          }, 
+          {
+            counts: [15, 30],
+            getData: function(params) {
+              var paramsUrl = params.url();
+              if (self.searchName) {
+                paramsUrl.searchName = self.searchName;
+              }
+              return $resource('api/productsList.php').query(paramsUrl).$promise.then(function(result){
+                self.loading = false;
+                params.total(30);
+                self.tableData = result;
+                return result;
+              });
+            }
+          }
+        );
+      }
+
+      // initTable
+      self.initTable = function() {
+
+        // checkbox
+        self.checkboxes = { 'checked': false, items: {} };
+      }
   }]);
 
   app.controller('saleListController', ['$scope', function($scope) {
