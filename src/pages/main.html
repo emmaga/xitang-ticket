@@ -1,22 +1,115 @@
-﻿<div>
-    <a ui-sref="index">登出</a>
+<div class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">西塘清云票管家</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" role="button" data-toggle="dropdown">
+                        <i class="glyphicon glyphicon-user"></i> Admin
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a ui-sref="personalInfo">用户设置</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a ui-sref="index">
+                        <i class="glyphicon glyphicon-lock"></i> 登出
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
-<div>
-    <li ui-sref-active='emma-test'><a ui-sref="personalInfo">个人信息</a></li>
-    <li ui-sref-active='emma-test'><a ui-sref="ordersList">订单中心－订单列表</a></li>
-    <a ui-sref="toBeChecked">订单中心－手动检票</a>
-    <a ui-sref="productsList">销售中心－商品列表</a>
-    <a ui-sref="saleList">销售中心－价格管理</a>
-    <a ui-sref="partnerConfig">销售中心－分销商设置</a>
-    <a ui-sref="checkStatement">报表中心－营业报表－检票报表</a>
-    <a ui-sref="operatingStatement">报表中心－营业报表－营业汇总</a>
-    <a ui-sref="checkDetailStatement">报表中心－营业报表－检票员检票报表</a>
-    <a ui-sref="exportStatementsList">报表中心－导出列表</a>
-    <a ui-sref="userList">管理员工具－用户管理</a>
-    <a ui-sref="applyRoles">管理员工具－用户管理－配角色</a>
-</div>
-<div ui-view="mainFrame.body">
-</div>
-<div>
-    footer
+<div class="container-fluid">
+    <div class="row">
+        <!-- 左侧菜单   -->
+        <div ui-view="mainFrame.nav" class="col-sm-3 col-left">
+            <!-- <a class="font-bold no-underline cursor-default">
+                <i class="glyphicon glyphicon-dashboard"></i> 系统总览
+            </a> -->
+            <!-- <hr> -->
+            <a class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-uxxvlg">
+                <i class="glyphicon glyphicon-barcode"></i> 订单中心
+                <i class="glyphicon glyphicon-chevron-down pull-right margin-right-15"></i>
+            </a>
+            <ul class="nav nav-stacked collapse in" id="rd-uxxvlg">
+                <hr>
+                <li class="nav-header">
+                    <a ui-sref="ordersList">
+                            订单列表
+                        </a>
+                </li>
+                <li class="nav-header">
+                    <a ui-sref="toBeChecked">
+                            手动检票
+                        </a>
+                </li>
+            </ul>
+            <hr>
+            <a class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-neqdko">
+                <i class="glyphicon glyphicon-usd"></i> 销售中心
+                <i class="glyphicon glyphicon-chevron-right pull-right margin-right-15"></i>
+            </a>
+            <ul class="nav nav-stacked collapse " id="rd-neqdko">
+                <hr>
+                <li class="nav-header">
+                    <a  ui-sref="productsList">
+                            商品列表
+                        </a>
+                </li>
+                <li class="nav-header">
+                    <a ui-sref="saleList">
+                        价格管理
+                    </a>
+                </li>
+                <li class="nav-header">
+                    <a ui-sref="partnerConfig">
+                        分销商设置
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <a class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-tosgxq">
+                <i class="glyphicon glyphicon-list-alt"></i> 报表中心
+                <i class="glyphicon glyphicon-chevron-right pull-right margin-right-15"></i>
+            </a>
+            <ul class="nav nav-stacked collapse" id="rd-tosgxq">
+                <hr>
+                <li class="nav-header">
+                    <a ui-sref="checkStatement">
+                            检票报表
+                        </a>
+                </li>
+                <li class="nav-header">
+                    <a ui-sref="operatingStatement">
+                            营业汇总
+                        </a>
+                </li>
+                <li class="nav-header">
+                    <a ui-sref="checkDetailStatement">
+                            检票员检票
+                        </a>
+                </li>
+                <li class="nav-header">
+                    <a ui-sref="exportStatementsList">
+                            导出列表
+                        </a>
+                </li>
+            </ul>
+            <hr>
+            <a class="font-bold no-underline cursor-default" ui-sref="userList">
+                <i class="glyphicon glyphicon-wrench"></i> 管理员工具
+                <i class="glyphicon glyphicon-chevron-right pull-right margin-right-15"></i>
+            </a>
+            <hr>
+        </div>
+        <!-- 页面 -->
+        <div ui-view="mainFrame.body" class="col-sm-9 col-right page">
+        </div>
+    </div>
 </div>

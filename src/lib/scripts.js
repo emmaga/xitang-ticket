@@ -9,12 +9,12 @@ $(document).ready(function() {
     });
 
 
-    $('[data-page]').mousedown(function() {
-        var page_id = $(this).attr('data-page');
-        $('.page').hide();
-        $(page_id).show();
-        $(window).scrollTop(0);
-    });
+    // $('[data-page]').mousedown(function() {
+    //     var page_id = $(this).attr('data-page');
+    //     $('.page').hide();
+    //     $(page_id).show();
+    //     $(window).scrollTop(0);
+    // });
 
     $('[data-deabledto]').change(function() {
 
