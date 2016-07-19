@@ -188,18 +188,12 @@
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
-          "sortBy": "createDate",
-          "asc": "desc",
-          "count": paramsUrl.count, //一页显示数量
-          "page": paramsUrl.page,   //当前页
-          "search": {
-            "goodsName": searchName //完全匹配查询
-          }
+          "goodsId": 1,
+          "state": status === 'on' ? 'off' : 'on'
         };
         data = JSON.stringify(data);
-        self.loading = true;
         
-        return $http.post(url, data).then(function successCallback(response) {
+        $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
               self.checkboxes = { 'checked': false, items: {} };
@@ -361,7 +355,7 @@
 
   app.controller('saleAddController', ['$scope', function($scope) {
     console.log('saleAdd');
-    
+
     this.init = function() {
       $('.form_date').datetimepicker({
         language:  'zh-CN',
