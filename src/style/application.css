@@ -98,6 +98,9 @@ tbody th{
 .cursor-default{
   cursor: default;
 }
+.cursor-pointer{
+  cursor: pointer;
+}
 
 .margin-right-15{
   margin-right: 15px;

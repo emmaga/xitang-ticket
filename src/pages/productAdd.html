@@ -34,31 +34,27 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>有效时间</label>
+                            <label class="">有效时间</label>
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <label class="required-info">提前天数</label>
-                                    <div class="controls">
-                                        <input type="number" class="form-control" value="0">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="required-info">推后天数</label>
-                                    <div class="controls">
-                                        <input type="number" class="form-control" value="0">
-                                    </div>
-                                </div>
+                            	<div class="col-sm-6">
+		                            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_dmukgs" data-link-format="yyyy-mm-dd">
+		                            	<span class="input-group-addon">开始</span>
+		                                <input class="form-control cursor-pointer" size="16" type="text" value="" readonly>
+		                            	<input type="hidden" id="rd_dmukgs" value="" />
+		                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+		                            </div>
+                            	</div>
+                            	<div class="col-sm-6">
+		                            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_dmukgs" data-link-format="yyyy-mm-dd">
+		                            	<span class="input-group-addon">结束</span>
+		                                <input class="form-control" size="16" type="text" value="" readonly>
+		                            	<input type="hidden" id="rd_dmukgs" value="" />
+		                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+		                            </div>
+                            	</div>
                             </div>
+                            
                         </div>
-                        <div class="form-group">
-                <label for="dtp_input2" class="col-md-2 control-label">Date Picking</label>
-                <div class="input-group date form_date col-md-5" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                    <input class="form-control" size="16" type="text" value="" readonly>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-				<input type="hidden" id="dtp_input2" value="" /><br/>
-            </div>
                         <label class="font-normal">检票信息</label>
                         <hr class="hr-half">
                     </form>
