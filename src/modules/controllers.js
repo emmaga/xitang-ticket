@@ -157,8 +157,8 @@
     console.log('productEdit');
   }]);
 
-  app.controller('productsListController', ['$scope', '$http', '$cookies', 'NgTableParams', 
-    function($scope, $http, $cookies, NgTableParams) {
+  app.controller('productsListController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
+    function($scope, $http, $cookies, $location, $window, NgTableParams) {
       console.log('productsList');
       var self = this;
       
@@ -196,18 +196,15 @@
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
-              self.checkboxes = { 'checked': false, items: {} };
-              self.loading = false;
-              params.total(data.goods.totalCount);
-              self.tableData = data.goods.lists;
-              return data.goods.lists;
+              alert('启用／禁用 设置成功！');
+              $window.location.reload();
             }else if(data.rescode === 401){
               $location.path('/index');
             }else {
               alert(data.errInfo);
             }  
           }, function errorCallback(response) {
-            alert('加载失败，请重试');
+            alert('设置失败，请重试');
           });
       }
 
