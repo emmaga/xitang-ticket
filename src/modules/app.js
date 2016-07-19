@@ -76,6 +76,17 @@
           }
         }
       })
+      .state('productEdit', {
+        url: '/productEdit/{id:[0-9]{1,4}}',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@productEdit': {
+            templateUrl: 'pages/productEdit.html'
+          }
+        }
+      })
       .state('saleList', {
         url: '/saleList',
         views: {
@@ -95,6 +106,17 @@
           },
           'mainFrame.body@saleAdd': {
             templateUrl: 'pages/saleAdd.html'
+          }
+        }
+      })
+      .state('saleEdit', {
+        url: '/saleEdit',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@saleEdit': {
+            templateUrl: 'pages/saleEdit.html'
           }
         }
       })

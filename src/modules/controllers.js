@@ -65,6 +65,7 @@
       case 'partnerConfig':
       case 'productAdd':
       case 'saleAdd':
+      case 'saleEdit':
         $scope.$state = 'products';
         break;  
       case 'exportStatementsList':
@@ -153,9 +154,25 @@
     }
   }]);
 
-  app.controller('productEditController', ['$scope', function($scope) {
-    console.log('productEdit');
-  }]);
+  app.controller('productEditController', ['$scope', '$state', '$stateParams', 
+    function($scope, $state, $stateParams) {
+      console.log('productEdit');
+      console.log($stateParams.id);
+
+      this.init = function() {
+        $('.form_date').datetimepicker({
+          language:  'zh-CN',
+          weekStart: 1,
+          todayBtn:  1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0
+        });
+      }
+    }
+  ]);
 
   app.controller('productsListController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
     function($scope, $http, $cookies, $location, $window, NgTableParams) {
@@ -350,22 +367,27 @@
     }
   ]);
 
-  app.controller('saleAddController', ['$scope', function($scope) {
-    console.log('saleAdd');
+  app.controller('saleEditController', ['$scope', '$state', '$stateParams', 
+    function($scope, $state, $stateParams) {
+      console.log('saleEdit');
+      console.log($stateParams.id);
 
-    this.init = function() {
-      $('.form_date').datetimepicker({
-        language:  'zh-CN',
-        weekStart: 1,
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0
-      });
+      this.init = function() {
+        $('.form_date').datetimepicker({
+          language:  'zh-CN',
+          weekStart: 1,
+          todayBtn:  1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0
+        });
+      }
     }
-  }]);
+  ]);
+
+
 
   app.controller('saleCodeAddController', ['$scope', function($scope) {
     console.log('saleCodeAdd');
