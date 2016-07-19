@@ -1,3 +1,83 @@
 ﻿<div ng-controller="productAddController as productAdd">
-    productAdd
+    <a>
+        <strong>
+			<i class="glyphicon glyphicon-user"></i>
+			销售设置
+			<i class="glyphicon glyphicon-chevron-right"></i>
+			商品
+			<i class="glyphicon glyphicon-chevron-right"></i>
+			添加商品              
+		</strong>
+    </a>
+    <hr>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="panel panel-default panel-sm">
+                <div class="panel-heading">
+                    <i class="glyphicon glyphicon-wrench pull-right"></i> 商品信息
+                </div>
+                <div class="panel-body">
+                    <form class="form form-vertical">
+                        <label class="font-normal">基本信息</label>
+                        <hr class="hr-half">
+                        <div class="form-group">
+                            <label>商品名</label>
+                            <input type="text" class="form-control" placeholder="请输入商品名称">
+                        </div>
+                        <div class="form-group">
+                            <label>成本价</label>
+                            <div class="controls input-group">
+                                <span class="input-group-addon">
+									￥
+								</span>
+                                <input type="text" class="form-control" placeholder="00.00">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>有效时间</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="required-info">提前天数</label>
+                                    <div class="controls">
+                                        <input type="number" class="form-control" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="required-info">推后天数</label>
+                                    <div class="controls">
+                                        <input type="number" class="form-control" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                <label for="dtp_input2" class="col-md-2 control-label">Date Picking</label>
+                <div class="input-group date form_date col-md-5" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+				<input type="hidden" id="dtp_input2" value="" /><br/>
+            </div>
+                        <label class="font-normal">检票信息</label>
+                        <hr class="hr-half">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    
+	$('.form_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+    });
+	
+</script>
 </div>
