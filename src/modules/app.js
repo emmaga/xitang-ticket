@@ -65,6 +65,17 @@
           }
         }
       })
+      .state('productAdd', {
+        url: '/productAdd',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@productAdd': {
+            templateUrl: 'pages/productAdd.html'
+          }
+        }
+      })
       .state('saleList', {
         url: '/saleList',
         views: {
