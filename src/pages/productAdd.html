@@ -1,4 +1,4 @@
-﻿<div ng-controller="productAddController as productAdd">
+﻿<div ng-controller="productAddController as productAdd" ng-init="productAdd.init()">
     <a>
         <strong>
 			<i class="glyphicon glyphicon-user"></i>
@@ -66,18 +66,4 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-    
-	$('.form_date').datetimepicker({
-        language:  'zh-CN',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0
-    });
-	
-</script>
 </div>
