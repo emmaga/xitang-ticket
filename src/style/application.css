@@ -45,6 +45,10 @@ footer {
 
 
 /*modified*/
+.btn-xs>.glyphicon{
+  font-size: 12px;
+}
+
 .full-screen{
   position: absolute;
   width: 100%;
