@@ -54,36 +54,36 @@
           }
         }
       })
-      .state('productsList', {
-        url: '/productsList',
+      .state('goodsList', {
+        url: '/goodsList',
         views: {
           '': {
             templateUrl: 'pages/main.html'
           },
-          'mainFrame.body@productsList': {
-            templateUrl: 'pages/productsList.html'
+          'mainFrame.body@goodsList': {
+            templateUrl: 'pages/goodsList.html'
           }
         }
       })
-      .state('productAdd', {
-        url: '/productAdd',
+      .state('goodsAdd', {
+        url: '/goodsAdd',
         views: {
           '': {
             templateUrl: 'pages/main.html'
           },
-          'mainFrame.body@productAdd': {
-            templateUrl: 'pages/productAdd.html'
+          'mainFrame.body@goodsAdd': {
+            templateUrl: 'pages/goodsAdd.html'
           }
         }
       })
-      .state('productEdit', {
-        url: '/productEdit/{id:[0-9]{1,4}}',
+      .state('goodsEdit', {
+        url: '/goodsEdit/{id:[0-9]{1,4}}',
         views: {
           '': {
             templateUrl: 'pages/main.html'
           },
-          'mainFrame.body@productEdit': {
-            templateUrl: 'pages/productEdit.html'
+          'mainFrame.body@goodsEdit': {
+            templateUrl: 'pages/goodsEdit.html'
           }
         }
       })

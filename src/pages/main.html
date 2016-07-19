@@ -54,12 +54,12 @@
                 <hr>
                 <a class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-neqdko">
                     <i class="glyphicon glyphicon-usd"></i> 销售中心
-                    <i ng-class="{'glyphicon-chevron-down': $state.includes('products'), 'glyphicon-chevron-right': !$state.includes('products')}" class="glyphicon pull-right margin-right-15"></i>
+                    <i ng-class="{'glyphicon-chevron-down': $state.includes('goods'), 'glyphicon-chevron-right': !$state.includes('goods')}" class="glyphicon pull-right margin-right-15"></i>
                 </a>
-                <ul ng-class="{in: $state.includes('products')}" class="nav nav-stacked collapse " id="rd-neqdko">
+                <ul ng-class="{in: $state.includes('goods')}" class="nav nav-stacked collapse " id="rd-neqdko">
                     <hr>
                     <li class="nav-header">
-                        <a  ui-sref="productsList">
+                        <a  ui-sref="goodsList">
                                 商品列表
                             </a>
                     </li>

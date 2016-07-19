@@ -1,4 +1,4 @@
-﻿<div ng-controller="productsListController as productsList">
+﻿<div ng-controller="goodsListController as goodsList">
     <a>
         <strong>
             <i class="glyphicon glyphicon-usd"></i>
@@ -11,29 +11,29 @@
     <div class="row">
         <div class="col-xs-6">
             <div class="btn-group ">
-                <a class="btn btn-default" ui-sref="productAdd">
+                <a class="btn btn-default" ui-sref="goodsAdd">
                     <i class="glyphicon glyphicon-plus"></i> 添加商品
                 </a>
-                <a ng-click="productsList.delete()" ng-class="{disabled: !productsList.isChecked()}" class="btn btn-default">
+                <a ng-click="goodsList.delete()" ng-class="{disabled: !goodsList.isChecked()}" class="btn btn-default">
                     <i class="glyphicon glyphicon-remove"></i> 删除
                 </a>
             </div>
         </div>
         <div class="col-xs-6">
             <div class="input-group">
-                <input ng-model="productsList.searchName" type="text" class="form-control" placeholder="商品名">
+                <input ng-model="goodsList.searchName" type="text" class="form-control" placeholder="商品名">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="productsList.search()" href>搜索</button>
+                    <button class="btn btn-default" type="button" ng-click="goodsList.search()" href>搜索</button>
                 </span>
             </div>
         </div>
     </div>
     <hr class="break-space">
-    <div ng-show="productsList.loading">loading...</div>
-    <table ng-table="productsList.tableParams" ng-init="productsList.search()" class="table table-hover table-striped">
+    <div ng-show="goodsList.loading">loading...</div>
+    <table ng-table="goodsList.tableParams" ng-init="goodsList.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
-                <input type="checkbox" ng-model="productsList.checkboxes.items[row.id]" />
+                <input type="checkbox" ng-model="goodsList.checkboxes.items[row.id]" />
             </td>
             <td title="'商品名'">
                 {{row.goodsName}}
@@ -55,12 +55,12 @@
             </td>
             <td title="'操作'">
                 <small>
-                    <a ng-click="productsList.changeStatus(row.status)" title="{{productsList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': productsList.isOn(row.status), 'btn-warning': !productsList.isOn(row.status) }" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                        <i ng-class="{ 'glyphicon-ok': productsList.isOn(row.status), 'glyphicon-lock': !productsList.isOn(row.status) }" class="glyphicon"></i>
-                        {{productsList.getStatus(row.status)}}
+                    <a ng-click="goodsList.changeStatus(row.status)" title="{{goodsList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': goodsList.isOn(row.status), 'btn-warning': !goodsList.isOn(row.status) }" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                        <i ng-class="{ 'glyphicon-ok': goodsList.isOn(row.status), 'glyphicon-lock': !goodsList.isOn(row.status) }" class="glyphicon"></i>
+                        {{goodsList.getStatus(row.status)}}
                     </a>
                     
-                    <a ui-sref="productEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
+                    <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
                         <i class="glyphicon glyphicon-pencil"></i>
                         编辑
                     </a>
@@ -70,7 +70,7 @@
     </table>
 
     <script type="text/ng-template" id="ng-table/headers/checkbox.html">
-        <input type="checkbox" ng-model="productsList.checkboxes.checked" value="" />
+        <input type="checkbox" ng-model="goodsList.checkboxes.checked" value="" />
     </script>
     
 </div>

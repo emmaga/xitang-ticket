@@ -60,13 +60,13 @@
       case 'toBeChecked':
         $scope.$state = 'orders';
         break;
-      case 'productsList':
+      case 'goodsList':
       case 'saleList':
       case 'partnerConfig':
-      case 'productAdd':
+      case 'goodsAdd':
       case 'saleAdd':
       case 'saleEdit':
-        $scope.$state = 'products';
+        $scope.$state = 'goods';
         break;  
       case 'exportStatementsList':
       case 'checkDetailStatement':
@@ -137,8 +137,8 @@
     console.log('personalInfo');
   }]);
 
-  app.controller('productAddController', ['$scope', function($scope) {
-    console.log('productAdd');
+  app.controller('goodsAddController', ['$scope', function($scope) {
+    console.log('goodsAdd');
 
     this.init = function() {
       $('.form_date').datetimepicker({
@@ -154,9 +154,9 @@
     }
   }]);
 
-  app.controller('productEditController', ['$scope', '$state', '$stateParams', 
+  app.controller('goodsEditController', ['$scope', '$state', '$stateParams', 
     function($scope, $state, $stateParams) {
-      console.log('productEdit');
+      console.log('goodsEdit');
       console.log($stateParams.id);
 
       this.init = function() {
@@ -174,9 +174,9 @@
     }
   ]);
 
-  app.controller('productsListController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
+  app.controller('goodsListController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
     function($scope, $http, $cookies, $location, $window, NgTableParams) {
-      console.log('productsList');
+      console.log('goodsList');
       var self = this;
       
       // checkbox
@@ -276,7 +276,7 @@
       }
 
       // watch for check all checkbox
-      $scope.$watch('productsList.checkboxes.checked', function(value) {
+      $scope.$watch('goodsList.checkboxes.checked', function(value) {
           angular.forEach(self.tableData, function(item) {
               if (angular.isDefined(item.id)) {
                 self.checkboxes.items[item.id] = value;
