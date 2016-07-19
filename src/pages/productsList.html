@@ -1,7 +1,7 @@
 ﻿<div ng-controller="productsListController as productsList">
     <a>
         <strong>
-            <i class="glyphicon glyphicon-user"></i>
+            <i class="glyphicon glyphicon-usd"></i>
             销售中心
             <i class="glyphicon glyphicon-chevron-right"></i>
             商品列表             
@@ -9,7 +9,7 @@
     </a>
     <hr>
     <div class="row">
-        <div class="col-xs-9">
+        <div class="col-xs-6">
             <div class="btn-group ">
                 <a class="btn btn-default" ui-sref="productAdd">
                     <i class="glyphicon glyphicon-plus"></i> 添加商品
@@ -19,7 +19,7 @@
                 </a>
             </div>
         </div>
-        <div class="col-xs-3">
+        <div class="col-xs-6">
             <div class="input-group">
                 <input ng-model="productsList.searchName" type="text" class="form-control" placeholder="商品名">
                 <span class="input-group-btn">

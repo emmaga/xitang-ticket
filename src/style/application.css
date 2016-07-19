@@ -102,7 +102,7 @@ tbody th{
   cursor: default;
 }
 .cursor-pointer{
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .margin-right-15{
