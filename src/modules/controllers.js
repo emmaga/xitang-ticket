@@ -158,7 +158,7 @@
 
   app.controller('productsListController', ['$scope', '$http', '$cookies', 'NgTableParams', 
     function($scope, $http, $cookies, NgTableParams) {
-    console.log('productsList');
+      console.log('productsList');
       var self = this;
       
       // checkbox
@@ -231,9 +231,80 @@
     }
   ]);
 
-  app.controller('saleListController', ['$scope', function($scope) {
-    console.log('saleList');
-  }]);
+  app.controller('saleListController', ['$scope', '$http', '$cookies', 'NgTableParams', 
+    function($scope, $http, $cookies, NgTableParams) {
+      console.log('saleList');
+      var self = this;
+      
+      // checkbox
+      self.checkboxes = { 'checked': false, items: {} };
+      
+      // watch for check all checkbox
+      $scope.$watch('saleList.checkboxes.checked', function(value) {
+          angular.forEach(self.tableData, function(item) {
+              if (angular.isDefined(item.id)) {
+                self.checkboxes.items[item.id] = value;
+              }
+          });
+      });
+
+      // ngtable
+      self.search = function() {
+        self.tableParams = new NgTableParams(
+          {
+            page: 1, 
+            count: 15,
+            url: ''
+          }, 
+          {
+            counts: [15, 30],
+            getData: function(params) {
+              var paramsUrl = params.url();
+              var searchName = "";
+              if (self.searchName) {
+                searchName = self.searchName;
+              }
+
+              var c = $scope.root.config;
+              var url = c.requestUrl + '/goods' + c.extension;
+              var data = {
+                "action": "GetList",
+                "account": $cookies.get('account'),
+                "token": $cookies.get('token'),
+                "projectName": $cookies.get('projectName'),
+                "sortBy": "createDate",
+                "asc": "desc",
+                "count": paramsUrl.count, //一页显示数量
+                "page": paramsUrl.page,   //当前页
+                "search": {
+                  "goodsName": searchName //完全匹配查询
+                }
+              };
+              data = JSON.stringify(data);
+              self.loading = true;
+              
+              return $http.post(url, data).then(function successCallback(response) {
+                  var data = response.data;
+                  if(data.rescode === 200) {
+                    self.checkboxes = { 'checked': false, items: {} };
+                    self.loading = false;
+                    params.total(data.goods.totalCount);
+                    self.tableData = data.goods.lists;
+                    return data.goods.lists;
+                  }else if(data.rescode === 401){
+                    $location.path('/index');
+                  }else {
+                    alert(data.errInfo);
+                  }  
+                }, function errorCallback(response) {
+                  alert('加载失败，请重试');
+                });
+            }
+          }
+        );
+      }
+    }
+  ]);
 
   app.controller('saleAddController', ['$scope', function($scope) {
     console.log('saleAdd');
