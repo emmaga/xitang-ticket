@@ -192,9 +192,59 @@
         return ret;
       }
 
+      self.isChecked = function() {
+        var ret = false;
+        var keepGoing = true;
+        angular.forEach(self.checkboxes.items, function(value, key) {
+          if(keepGoing) {
+            if(value === true){
+              ret = true;
+              keepGoing = false;
+            }
+          }
+        });
+        return ret;
+      }
+
       self.getStatusAction = function(status) {
         var ret = status === 'on' ? '禁用' : '启用';
         return ret;
+      }
+
+      self.delete = function() {
+        if(!confirm('确定删除？')) {
+          return;
+        }
+        
+        var goods = [];
+        angular.forEach(self.checkboxes.items, function(value, key) {
+          if(value === true) {
+            goods.push({"id": key});
+          }
+        });
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+        var data = {
+          "action": "delete",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "goods": goods
+        };
+        data = JSON.stringify(data);
+        
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              $window.location.reload();
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('删除失败，请重试');
+          });
       }
 
       self.changeStatus = function(status) {

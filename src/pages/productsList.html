@@ -4,7 +4,7 @@
             <i class="glyphicon glyphicon-usd"></i>
             销售中心
             <i class="glyphicon glyphicon-chevron-right"></i>
-            商品列表             
+            商品列表         
         </strong>
     </a>
     <hr>
@@ -14,7 +14,7 @@
                 <a class="btn btn-default" ui-sref="productAdd">
                     <i class="glyphicon glyphicon-plus"></i> 添加商品
                 </a>
-                <a class="btn btn-default">
+                <a ng-click="productsList.delete()" ng-class="{disabled: !productsList.isChecked()}" class="btn btn-default">
                     <i class="glyphicon glyphicon-remove"></i> 删除
                 </a>
             </div>
