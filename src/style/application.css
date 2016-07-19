@@ -41,6 +41,9 @@ footer {
 
 
 /*modified*/
+a:hover{
+  text-decoration: none;
+}
 .status-active .glyphicon{
   opacity: 0.5
 
