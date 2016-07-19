@@ -142,7 +142,8 @@
     console.log('productEdit');
   }]);
 
-  app.controller('productsListController', ['$scope', 'NgTableParams', '$resource', function($scope, NgTableParams, $resource) {
+  app.controller('productsListController', ['$scope', 'NgTableParams', '$resource', 
+    function($scope, NgTableParams, $resource) {
     console.log('productsList');
       var self = this;
       
@@ -192,7 +193,8 @@
         // checkbox
         self.checkboxes = { 'checked': false, items: {} };
       }
-  }]);
+    }
+  ]);
 
   app.controller('saleListController', ['$scope', function($scope) {
     console.log('saleList');
