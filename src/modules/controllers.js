@@ -164,6 +164,25 @@
       // checkbox
       self.checkboxes = { 'checked': false, items: {} };
       
+      self.getStatus = function(status) {
+        var ret = status === 'on' ? '已启用' : '已禁用';
+        return ret;
+      }
+
+      self.isOn = function(status) {
+        var ret = status === 'on' ? true : false;
+        return ret;
+      }
+
+      self.getStatusAction = function(status) {
+        var ret = status === 'on' ? '禁用' : '启用';
+        return ret;
+      }
+
+      self.changeStatus = function() {
+        
+      }
+
       // watch for check all checkbox
       $scope.$watch('productsList.checkboxes.checked', function(value) {
           angular.forEach(self.tableData, function(item) {

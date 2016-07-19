@@ -36,28 +36,28 @@
                 <input type="checkbox" ng-model="productsList.checkboxes.items[row.id]" />
             </td>
             <td title="'商品名'">
-                {{row.name}}
+                {{row.goodsName}}
             </td>
             <td title="'检票时间'">
-                08:00 ~ 16:30
+                {{row.checkTimeStart}} ~ {{row.checkTimeEnd}}
             </td>
             <td title="'检票期限'">
-                前{{row.id}}天，后{{row.id}}天
+                前{{row.beforeDays}}天，后{{row.afterDays}}天
             </td>
             <td title="'成本价'">
-                ￥100
+                ￥{{row.cost}}
             </td>
             <td title="'有效时间'">
-                2016.07.01 ~ 2016.08.01
+                {{row.checkDateStart | date:'yyyy.MM.dd'}} ~ {{row.checkDateEnd | date:'yyyy.MM.dd'}}
             </td>
             <td title="'创建时间'">
-                2016.01.01
+                {{row.createDate | date:'yyyy.MM.dd'}}
             </td>
             <td title="'操作'">
                 <small>
-                    <a title="禁用" class="btn btn-default btn-xs btn-success" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                        <i class="glyphicon glyphicon-ok"></i>
-                        已启用
+                    <a ng-click="productsList.changeStatus(row.status)" title="{{productsList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': productsList.isOn(row.status), 'btn-warning': !productsList.isOn(row.status) }" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                        <i ng-class="{ 'glyphicon-ok': productsList.isOn(row.status), 'glyphicon-lock': !productsList.isOn(row.status) }" class="glyphicon"></i>
+                        {{productsList.getStatus(row.status)}}
                     </a>
                     
                     <a title="编辑" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">

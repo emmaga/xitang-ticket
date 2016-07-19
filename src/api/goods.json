@@ -19,7 +19,7 @@
         },
         {
           "id": 2,
-          "status": "on",
+          "status": "off",
           "goodsName": "西塘老人票",
           "cost": 80,
           "checkTimeStart": "08:00",
