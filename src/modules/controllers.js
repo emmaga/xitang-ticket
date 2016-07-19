@@ -64,6 +64,7 @@
       case 'saleList':
       case 'partnerConfig':
       case 'productAdd':
+      case 'saleAdd':
         $scope.$state = 'products';
         break;  
       case 'exportStatementsList':

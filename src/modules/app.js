@@ -87,6 +87,17 @@
           }
         }
       })
+      .state('saleAdd', {
+        url: '/saleAdd',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@saleAdd': {
+            templateUrl: 'pages/saleAdd.html'
+          }
+        }
+      })
       .state('partnerConfig', {
         url: '/partnerConfig',
         views: {
