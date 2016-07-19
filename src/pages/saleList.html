@@ -1,5 +1,75 @@
 ﻿<div ng-controller="saleListController as saleList">
-    saleList
-    <a ui-sref="index">销售中心－价格管理－添加</a>
-    <a ui-sref="index">销售中心－价格管理－编辑</a>
+    <a>
+        <strong>
+		<i class="glyphicon glyphicon-user"></i>
+		销售中心
+		<i class="glyphicon glyphicon-chevron-right"></i>
+		价格管理             
+		</strong>
+    </a>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="btn-group ">
+                <a class="btn btn-default" data-page="#page0061">
+                    <i class="glyphicon glyphicon-plus"></i> 添加价格
+                </a>
+                <a class="btn btn-default" disabled data-deabledby="0006">
+                    <i class="glyphicon glyphicon-remove"></i> 删除
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="商品/价格/分销商">
+                <span class="input-group-btn">
+					<button class="btn btn-default" type="button">搜索</button>
+				</span>
+            </div>
+        </div>
+    </div>
+    <hr class="break-space">
+    <div ng-show="saleList.loading">loading...</div>
+    <table ng-table="saleList.tableParams" ng-init="saleList.search()" class="table table-hover table-striped">
+        <tr ng-repeat="row in $data">
+            <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
+                <input type="checkbox" ng-model="saleList.checkboxes.items[row.id]" />
+            </td>
+            <td title="'商品名'">
+                {{row.name}}
+            </td>
+            <td title="'检票时间'">
+                08:00 ~ 16:30
+            </td>
+            <td title="'检票期限'">
+                前{{row.id}}天，后{{row.id}}天
+            </td>
+            <td title="'成本价'">
+                ￥100
+            </td>
+            <td title="'有效时间'">
+                2016.07.01 ~ 2016.08.01
+            </td>
+            <td title="'创建时间'">
+                2016.01.01
+            </td>
+            <td title="'操作'">
+                <small>
+                    <a title="禁用" class="btn btn-default btn-xs btn-success" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                        <i class="glyphicon glyphicon-ok"></i>
+                        已启用
+                    </a>
+                    
+                    <a title="编辑" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                        编辑
+                    </a>
+                </small>
+            </td>
+        </tr>
+    </table>
+    <script type="text/ng-template" id="ng-table/headers/checkbox.html">
+        <input type="checkbox" ng-model="saleList.checkboxes.checked" value="" />
+    </script>
+</div>
 </div>
