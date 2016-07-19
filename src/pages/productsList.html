@@ -1,5 +1,4 @@
 ﻿<div ng-controller="productsListController as productsList">
-
     <div class="row">
         <div class="col-xs-9">
             <div class="btn-group ">
@@ -9,16 +8,14 @@
                 <a class="btn btn-default">
                     <i class="glyphicon glyphicon-remove"></i> 删除
                 </a>
-               
-                
             </div>
         </div>
         <div class="col-xs-3">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="商品名">
                 <span class="input-group-btn">
-					<button class="btn btn-default" type="button" ng-click="productsList.search()" href>搜索</button>
-				</span>
+                    <button class="btn btn-default" type="button" ng-click="productsList.search()" href>搜索</button>
+                </span>
             </div>
         </div>
     </div>
@@ -36,7 +33,10 @@
                 08:00 ~ 16:30
             </td>
             <td title="'检票期限'">
-                前{{row.id}}天后{{row.id}}天
+                前{{row.id}}天，后{{row.id}}天
+            </td>
+            <td title="'成本价'">
+                ￥100
             </td>
             <td title="'有效时间'">
                 2016.07.01 ~ 2016.08.01
@@ -44,15 +44,18 @@
             <td title="'创建时间'">
                 2016.01.01
             </td>
-            
             <td title="'操作'">
-                <a title="锁定" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                    <i class="glyphicon glyphicon-lock"></i>
-                </a>
-                <a title="编辑" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                    <i class="glyphicon glyphicon-pencil"></i>
-                </a>
-
+                <small>
+                    <a title="禁用" class="btn btn-default btn-xs btn-success" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                        <i class="glyphicon glyphicon-ok"></i>
+                        已启用
+                    </a>
+                    
+                    <a title="编辑" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                        编辑
+                    </a>
+                </small>
             </td>
         </tr>
     </table>
