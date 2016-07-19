@@ -33,26 +33,24 @@
                 {{row.name}}
             </td>
             <td title="'检票时间'">
-                08:00 ~ 10:00
+                08:00 ~ 16:30
             </td>
             <td title="'检票期限'">
-                提前 {{row.id}}天
-                <br> 推后 {{row.id}}天
+                前{{row.id}}天后{{row.id}}天
             </td>
             <td title="'有效时间'">
-                开始 {{row.id}}
-                <br> 结束 {{row.id}}
+                2016.07.01 ~ 2016.08.01
             </td>
             <td title="'创建时间'">
-                2016-1-1
+                2016.01.01
             </td>
             
             <td title="'操作'">
-                <a class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                    <i class="glyphicon glyphicon-lock"></i> 禁用
+                <a title="锁定" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                    <i class="glyphicon glyphicon-lock"></i>
                 </a>
-                <a class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                    <i class="glyphicon glyphicon-pencil"></i> 编辑
+                <a title="编辑" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                    <i class="glyphicon glyphicon-pencil"></i>
                 </a>
 
             </td>
