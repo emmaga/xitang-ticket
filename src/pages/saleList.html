@@ -36,17 +36,19 @@
                 <input type="checkbox" ng-model="saleList.checkboxes.items[row.id]" />
             </td>
             <td title="'商品名'">
-                {{row.name}}
+                成人票
             </td>
-            <td title="'检票时间'">
-                08:00 ~ 16:30
+            <td title="'分销商'">
+                驴妈妈
             </td>
-            <td title="'检票期限'">
-                前{{row.id}}天，后{{row.id}}天
-            </td>
-            <td title="'成本价'">
+            <td title="'价格'">
                 ￥100
             </td>
+
+            <td title="'预定时间'">
+                当日10:00前
+            </td>
+            
             <td title="'有效时间'">
                 2016.07.01 ~ 2016.08.01
             </td>
@@ -54,17 +56,12 @@
                 2016.01.01
             </td>
             <td title="'操作'">
-                <small>
-                    <a title="禁用" class="btn btn-default btn-xs btn-success" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                        <i class="glyphicon glyphicon-ok"></i>
-                        已启用
-                    </a>
-                    
-                    <a title="编辑" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                        <i class="glyphicon glyphicon-pencil"></i>
-                        编辑
-                    </a>
-                </small>
+                <a title="禁用" class="btn btn-default btn-xs btn-success" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                    <i class="glyphicon glyphicon-ok"></i> 已启用
+                </a>
+                <a title="编辑" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                    <i class="glyphicon glyphicon-pencil"></i> 编辑
+                </a>
             </td>
         </tr>
     </table>
