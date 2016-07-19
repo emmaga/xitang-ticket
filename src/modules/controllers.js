@@ -16,6 +16,7 @@
           "password": this.password,
           "projectName": this.projectName
         };
+        data = JSON.stringify(data);
         
         this.msg = "登录中...";
         var self = this;
@@ -155,8 +156,8 @@
     console.log('productEdit');
   }]);
 
-  app.controller('productsListController', ['$scope', 'NgTableParams', '$resource', 
-    function($scope, NgTableParams, $resource) {
+  app.controller('productsListController', ['$scope', '$http', '$cookies', 'NgTableParams', 
+    function($scope, $http, $cookies, NgTableParams) {
     console.log('productsList');
       var self = this;
       
@@ -174,8 +175,6 @@
 
       // ngtable
       self.search = function() {
-        self.loading = true;
-        self.initTable();
         self.tableParams = new NgTableParams(
           {
             page: 1, 
@@ -186,25 +185,48 @@
             counts: [15, 30],
             getData: function(params) {
               var paramsUrl = params.url();
+              var searchName = "";
               if (self.searchName) {
-                paramsUrl.searchName = self.searchName;
+                searchName = self.searchName;
               }
-              return $resource('api/productsList.php').query(paramsUrl).$promise.then(function(result){
-                self.loading = false;
-                params.total(30);
-                self.tableData = result;
-                return result;
-              });
+
+              var c = $scope.root.config;
+              var url = c.requestUrl + '/goods' + c.extension;
+              var data = {
+                "action": "GetList",
+                "account": $cookies.get('account'),
+                "token": $cookies.get('token'),
+                "projectName": $cookies.get('projectName'),
+                "sortBy": "createDate",
+                "asc": "desc",
+                "count": paramsUrl.count, //一页显示数量
+                "page": paramsUrl.page,   //当前页
+                "search": {
+                  "goodsName": searchName //完全匹配查询
+                }
+              };
+              data = JSON.stringify(data);
+              self.loading = true;
+              
+              return $http.post(url, data).then(function successCallback(response) {
+                  var data = response.data;
+                  if(data.rescode === 200) {
+                    self.checkboxes = { 'checked': false, items: {} };
+                    self.loading = false;
+                    params.total(data.goods.totalCount);
+                    self.tableData = data.goods.lists;
+                    return data.goods.lists;
+                  }else if(data.rescode === 401){
+                    $location.path('/index');
+                  }else {
+                    alert(data.errInfo);
+                  }  
+                }, function errorCallback(response) {
+                  alert('加载失败，请重试');
+                });
             }
           }
         );
-      }
-
-      // initTable
-      self.initTable = function() {
-
-        // checkbox
-        self.checkboxes = { 'checked': false, items: {} };
       }
     }
   ]);
