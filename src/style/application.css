@@ -106,9 +106,6 @@ tbody th{
   margin-right: 15px;
 }
 
-.controls{
-  margin-bottom: 15px;
-}
 
 .required-info:before{
   content: '*';

@@ -21,8 +21,29 @@
                         <label class="font-normal">基本信息</label>
                         <hr class="hr-half">
                         <div class="form-group">
-                            <label>商品名</label>
-                            <input type="text" class="form-control" placeholder="请输入商品名称">
+                            <label class="required-info">商品名</label>
+                            <input required="" type="text" class="form-control" placeholder="请输入商品名称">
+                        </div>
+                        <div class="form-group">
+                            <label class="required-info">有效时间</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_dmukgs" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">开始</span>
+                                        <input class="form-control cursor-pointer" size="16" type="text" value="" readonly>
+                                        <input required="" type="hidden" id="rd_dmukgs" value="" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">结束</span>
+                                        <input class="form-control" size="16" type="text" value="" readonly>
+                                        <input required="" type="hidden" id="rd_qcaxwa" value="" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>成本价</label>
@@ -33,30 +54,61 @@
                                 <input type="text" class="form-control" placeholder="00.00">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="">有效时间</label>
-                            <div class="row">
-                            	<div class="col-sm-6">
-		                            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_dmukgs" data-link-format="yyyy-mm-dd">
-		                            	<span class="input-group-addon">开始</span>
-		                                <input class="form-control cursor-pointer" size="16" type="text" value="" readonly>
-		                            	<input type="hidden" id="rd_dmukgs" value="" />
-		                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-		                            </div>
-                            	</div>
-                            	<div class="col-sm-6">
-		                            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_dmukgs" data-link-format="yyyy-mm-dd">
-		                            	<span class="input-group-addon">结束</span>
-		                                <input class="form-control" size="16" type="text" value="" readonly>
-		                            	<input type="hidden" id="rd_dmukgs" value="" />
-		                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-		                            </div>
-                            	</div>
-                            </div>
-                            
-                        </div>
+                        <hr class="break-space">
                         <label class="font-normal">检票信息</label>
                         <hr class="hr-half">
+                        <div class="form-group">
+
+							<label class="required-info">检票期限</label>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">提前</span>
+                                        <input required="" type="number" class="form-control" value="0">
+                                    	<span class="input-group-addon">天</span>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">推后</span>
+                                        <input required="" type="number" class="form-control" value="0">
+                                    	<span class="input-group-addon">天</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="label-explain">默认0天，即此票只能当天使用</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="required-info">检票时间</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">开始</span>
+                                        <input required="" type="text" class="form-control" placeholder="请输入每天检票时间">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">结束</span>
+                                        <input required="" type="text" class="form-control" placeholder="请输入每天检票时间">
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="label-explain">填写格式为 [时:分] ，如 [17:30]</label>
+                        </div>
+                        <div class="form-group pull-right">
+                            
+                            <div class="controls">
+                                <button type="submit" class="btn btn-default">
+                                    取消
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    保存修改
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
