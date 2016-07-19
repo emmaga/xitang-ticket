@@ -1,12 +1,13 @@
 'use strict';
 
 (function() {
-  var app = angular.module('app.controllers', ['ngCookies', 'ngTable', 'ngResource']);
+  var app = angular.module('app.controllers', ['ngCookies', 'ngTable']);
 
   app.controller('loginController', ['$scope', '$location', '$http', '$cookies', 
     function($scope, $location, $http, $cookies) {
-    
       console.log('login');
+      var self = this;
+
       this.login = function() {
         var c = $scope.root.config;
         var url = c.requestUrl + '/login' + c.extension;
@@ -19,7 +20,6 @@
         data = JSON.stringify(data);
         
         this.msg = "登录中...";
-        var self = this;
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
@@ -83,62 +83,77 @@
 
   app.controller('alertWithChoiseController', ['$scope', function($scope) {
     console.log('alertWithChoise');
+    var self = this;
   }]);
 
   app.controller('userListController', ['$scope', function($scope) {
     console.log('userList');
+    var self = this;
   }]);
 
   app.controller('applyRolesController', ['$scope', function($scope) {
     console.log('applyRoles');
+    var self = this;
   }]);
 
   app.controller('toBeCheckedController', ['$scope', function($scope) {
     console.log('toBeChecked');
+    var self = this;
   }]);
 
   app.controller('checkController', ['$scope', function($scope) {
     console.log('check');
+    var self = this;
   }]);
 
   app.controller('checkDetailController', ['$scope', function($scope) {
     console.log('checkDetail');
+    var self = this;
   }]);
 
   app.controller('checkDetailStatementController', ['$scope', function($scope) {
     console.log('checkDetailStatement');
+    var self = this;
   }]);
 
   app.controller('checkStatementController', ['$scope', function($scope) {
     console.log('checkStatement');
+    var self = this;
   }]);
 
   app.controller('exportStatementsListController', ['$scope', function($scope) {
     console.log('exportStatementsList');
+    var self = this;
   }]);
 
   app.controller('operatingStatementController', ['$scope', function($scope) {
     console.log('operatingStatement');
+    var self = this;
   }]);
 
   app.controller('orderDetailController', ['$scope', function($scope) {
     console.log('orderDetail');
+    var self = this;
   }]);
 
   app.controller('ordersListController', ['$scope', function($scope) {
     console.log('ordersList');
+    var self = this;
   }]);
 
   app.controller('partnerConfigController', ['$scope', function($scope) {
     console.log('partnerConfig');
+    var self = this;
   }]);
 
   app.controller('personalInfoController', ['$scope', function($scope) {
     console.log('personalInfo');
+    var self = this;
   }]);
 
-  app.controller('goodsAddController', ['$scope', function($scope) {
+  app.controller('goodsAddController', ['$scope', '$location', '$cookies', '$http', function($scope, $location, $cookies, $http) {
     console.log('goodsAdd');
+    var self = this;
 
     this.init = function() {
       $('.form_date').datetimepicker({
@@ -152,6 +167,49 @@
         forceParse: 0
       });
     }
+
+    this.addBtnText = "添加";
+    this.submitting = false;
+
+    this.submit = function() {
+
+      // 有效时间 必填
+      if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
+        alert('请输入有效时间');
+        return;
+      }
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/goods' + c.extension;
+      this.goods.status = 'on';
+      this.goods.checkDateStart = new Date($('#rd_dmukgs').val()).getTime();
+      this.goods.checkDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+
+      var data = {
+        "action": "Add",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "goods": self.goods
+      };
+      data = JSON.stringify(data);
+      
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            $location.path('/goodsList');
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            this.addBtnText = "添加";
+            this.submitting = false;
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          this.addBtnText = "添加";
+          this.submitting = false;
+          alert('添加失败，请重试');
+        });
+    }
   }]);
 
   app.controller('goodsEditController', ['$scope', '$state', '$stateParams', 
@@ -159,6 +217,7 @@
       console.log('goodsEdit');
       console.log($stateParams.id);
 
+      var self = this;
       this.init = function() {
         $('.form_date').datetimepicker({
           language:  'zh-CN',
@@ -421,6 +480,7 @@
     function($scope, $state, $stateParams) {
       console.log('saleEdit');
       console.log($stateParams.id);
+      var self = this;
 
       this.init = function() {
         $('.form_date').datetimepicker({
@@ -441,14 +501,17 @@
 
   app.controller('saleCodeAddController', ['$scope', function($scope) {
     console.log('saleCodeAdd');
+    var self = this;
   }]);
 
   app.controller('saleCodeAppListController', ['$scope', function($scope) {
     console.log('saleCodeAppList');
+    var self = this;
   }]);
 
   app.controller('saleCodeListController', ['$scope', function($scope) {
     console.log('saleCodeList');
+    var self = this;
   }]);
 
 })();

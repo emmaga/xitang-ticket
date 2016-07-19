@@ -17,12 +17,12 @@
                     <i class="glyphicon glyphicon-wrench pull-right"></i> 商品信息
                 </div>
                 <div class="panel-body">
-                    <form class="form form-vertical">
+                    <form name="goodsAddForm" class="form form-vertical" ng-submit="goodsAddForm.$valid && goodsAdd.submit()">
                         <label class="font-normal">基本信息</label>
                         <hr class="hr-half">
                         <div class="form-group">
                             <label class="required-info">商品名</label>
-                            <input required="" type="text" class="form-control" placeholder="请输入商品名称">
+                            <input ng-model="goodsAdd.goods.goodsName" required type="text" class="form-control" placeholder="请输入商品名称">
                         </div>
                         <div class="form-group">
                             <label class="required-info">有效时间</label>
@@ -31,7 +31,7 @@
                                     <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_dmukgs" data-link-format="yyyy-mm-dd">
                                         <span class="input-group-addon">开始</span>
                                         <input class="form-control cursor-pointer" size="16" type="text" value="" readonly>
-                                        <input required="" type="hidden" id="rd_dmukgs" value="" />
+                                        <input type="hidden" id="rd_dmukgs" value="" />
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                     </div>
                                 </div>
@@ -39,7 +39,7 @@
                                     <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
                                         <span class="input-group-addon">结束</span>
                                         <input class="form-control" size="16" type="text" value="" readonly>
-                                        <input required="" type="hidden" id="rd_qcaxwa" value="" />
+                                        <input type="hidden" id="rd_qcaxwa" value="" />
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                     </div>
                                 </div>
@@ -51,7 +51,7 @@
                                 <span class="input-group-addon">
 									￥
 								</span>
-                                <input type="text" class="form-control" placeholder="00.00">
+                                <input ng-model="goodsAdd.goods.cost" type="text" class="form-control" placeholder="00.00">
                             </div>
                         </div>
                         <hr class="break-space">
@@ -65,7 +65,7 @@
                                 <div class="col-sm-6">
                                     <div class="controls input-group">
                                         <span class="input-group-addon">提前</span>
-                                        <input required="" type="number" class="form-control" value="0">
+                                        <input ng-model="goodsAdd.goods.beforeDays" required type="number" class="form-control" value="0">
                                     	<span class="input-group-addon">天</span>
                                         
                                     </div>
@@ -73,7 +73,7 @@
                                 <div class="col-sm-6">
                                     <div class="controls input-group">
                                         <span class="input-group-addon">推后</span>
-                                        <input required="" type="number" class="form-control" value="0">
+                                        <input ng-model="goodsAdd.goods.afterDays" required type="number" class="form-control" value="0">
                                     	<span class="input-group-addon">天</span>
                                     </div>
                                 </div>
@@ -86,13 +86,13 @@
                                 <div class="col-sm-6">
                                     <div class="controls input-group">
                                         <span class="input-group-addon">开始</span>
-                                        <input required="" type="text" class="form-control" placeholder="请输入每天检票时间">
+                                        <input ng-model="goodsAdd.goods.checkTimeStart" required type="text" class="form-control" placeholder="请输入每天检票时间">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="controls input-group">
                                         <span class="input-group-addon">结束</span>
-                                        <input required="" type="text" class="form-control" placeholder="请输入每天检票时间">
+                                        <input ng-model="goodsAdd.goods.checkTimeEnd" required type="text" class="form-control" placeholder="请输入每天检票时间">
                                     </div>
                                 </div>
                             </div>
@@ -101,11 +101,11 @@
                         <div class="form-group pull-right">
                             
                             <div class="controls">
-                                <button type="submit" class="btn btn-default">
+                                <button ui-sref="goodsList" class="btn btn-default">
                                     取消
                                 </button>
-                                <button type="submit" class="btn btn-primary">
-                                    保存修改
+                                <button type="submit" class="btn btn-primary" ng-class="{disabled:goodsAdd.submitting}">
+                                    {{goodsAdd.addBtnText}}
                                 </button>
                             </div>
                         </div>
