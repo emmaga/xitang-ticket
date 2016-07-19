@@ -180,8 +180,41 @@
         return ret;
       }
 
-      self.changeStatus = function() {
+      self.changeStatus = function(status) {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+        var data = {
+          "action": "changeStatus",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "createDate",
+          "asc": "desc",
+          "count": paramsUrl.count, //一页显示数量
+          "page": paramsUrl.page,   //当前页
+          "search": {
+            "goodsName": searchName //完全匹配查询
+          }
+        };
+        data = JSON.stringify(data);
+        self.loading = true;
         
+        return $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              self.checkboxes = { 'checked': false, items: {} };
+              self.loading = false;
+              params.total(data.goods.totalCount);
+              self.tableData = data.goods.lists;
+              return data.goods.lists;
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('加载失败，请重试');
+          });
       }
 
       // watch for check all checkbox
@@ -328,6 +361,19 @@
 
   app.controller('saleAddController', ['$scope', function($scope) {
     console.log('saleAdd');
+    
+    this.init = function() {
+      $('.form_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+      });
+    }
   }]);
 
   app.controller('saleCodeAddController', ['$scope', function($scope) {
