@@ -795,69 +795,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
 
-  app.controller('partnerConfigController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
-    function($scope, $http, $cookies, $location, $window, NgTableParams) {
-      console.log('partnerConfig');
-      var self = this;
-
-      // ngtable
-      self.search = function() {
-        self.tableParams = new NgTableParams(
-          {
-            page: 1, 
-            count: 15,
-            url: ''
-          }, 
-          {
-            counts: [15, 30],
-            getData: function(params) {
-              var paramsUrl = params.url();
-              var searchName = "";
-              if (self.searchName) {
-                searchName = self.searchName;
-              }
-
-              var c = $scope.root.config;
-              var url = c.requestUrl + '/goods' + c.extension;
-              var data = {
-                "action": "GetList",
-                "account": $cookies.get('account'),
-                "token": $cookies.get('token'),
-                "projectName": $cookies.get('projectName'),
-                "sortBy": "createDate",
-                "orderBy": "desc",
-                "count": paramsUrl.count, //一页显示数量
-                "page": paramsUrl.page,   //当前页
-                "search": {
-                  "goodsName": searchName //完全匹配查询
-                }
-              };
-              data = JSON.stringify(data);
-              self.loading = true;
-              
-              return $http.post(url, data).then(function successCallback(response) {
-                  var data = response.data;
-                  if(data.rescode === 200) {
-                    self.checkboxes = { 'checked': false, items: {} };
-                    self.loading = false;
-                    params.total(data.goods.totalCount);
-                    self.tableData = data.goods.lists;
-                    return data.goods.lists;
-                  }else if(data.rescode === 401){
-                    $location.path('/index');
-                  }else {
-                    alert(data.errInfo);
-                  }  
-                }, function errorCallback(response) {
-                  alert('加载失败，请重试');
-                });
-            }
-          }
-        );
-      }
-    }
-  ]);
-
   app.controller('personalInfoController', ['$scope', function($scope) {
     console.log('personalInfo');
     var self = this;
@@ -1374,6 +1311,106 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       }
     }
   ]);
+  
+  app.controller('partnerConfigController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
+    function($scope, $http, $cookies, $location, $window, NgTableParams) {
+      console.log('partnerConfig');
+      var self = this;
+      
+      self.getStatus = function(status) {
+        var ret = status === 'on' ? '已启用' : '已禁用';
+        return ret;
+      }
+
+      self.isOn = function(status) {
+        var ret = status === 'on' ? true : false;
+        return ret;
+      }
+
+      self.getStatusAction = function(status) {
+        var ret = status === 'on' ? '禁用' : '启用';
+        return ret;
+      }
+
+      self.changeStatus = function(status) {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+        var data = {
+          "action": "changeStatus",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "goodsId": 1,
+          "state": status === 'on' ? 'off' : 'on'
+        };
+        data = JSON.stringify(data);
+        
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              alert('启用／禁用 设置成功！');
+              $window.location.reload();
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('设置失败，请重试');
+          });
+      }
+
+      // ngtable
+      self.search = function() {
+        self.tableParams = new NgTableParams(
+          {
+            page: 1, 
+            count: 15,
+            url: ''
+          }, 
+          {
+            counts: [15, 30],
+            getData: function(params) {
+              var paramsUrl = params.url();
+
+              var c = $scope.root.config;
+              var url = c.requestUrl + '/partners' + c.extension;
+              var data = {
+                "action": "GetList",
+                "account": $cookies.get('account'),
+                "token": $cookies.get('token'),
+                "projectName": $cookies.get('projectName'),
+                "sortBy": "createDate",
+                "orderBy": "desc",
+                "count": paramsUrl.count, //一页显示数量
+                "page": paramsUrl.page,   //当前页
+                "search": {
+                  "partnerName": ""
+                }
+              };
+              data = JSON.stringify(data);
+              self.loading = true;
+              
+              return $http.post(url, data).then(function successCallback(response) {
+                  var data = response.data;
+                  if(data.rescode === 200) {
+                    self.loading = false;
+                    params.total(data.partners.totalCount);
+                    return data.partners.lists;
+                  }else if(data.rescode === 401){
+                    $location.path('/index');
+                  }else {
+                    alert(data.errInfo);
+                  }  
+                }, function errorCallback(response) {
+                  alert('加载失败，请重试');
+                });
+            }
+          }
+        );
+      }
+    }
+  ]);
 
   app.controller('saleAddController', ['$scope', '$location', '$cookies', '$http', function($scope, $location, $cookies, $http) {
     console.log('saleAdd');
@@ -1391,7 +1428,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         forceParse: 0
       });
       this.initPartnersList();
-      this.initgoodsList();
+      this.initpartnerConfig();
     };
 
     this.initPartnersList = function() {
@@ -1429,7 +1466,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         });
     };
     
-    this.initgoodsList = function() {
+    this.initpartnerConfig = function() {
       var c = $scope.root.config;
       var url = c.requestUrl + '/goods' + c.extension;
 
@@ -1504,7 +1541,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
           if(data.rescode === 200) {
-            $location.path('/goodsList');
+            $location.path('/partnerConfig');
           }else if(data.rescode === 401){
             $location.path('/index');
           }else {
