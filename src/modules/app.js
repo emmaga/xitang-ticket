@@ -186,6 +186,17 @@
           }
         }
       })
+      .state('userAdd', {
+        url: '/userAdd',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@userAdd': {
+            templateUrl: 'pages/userAdd.html'
+          }
+        }
+      })
       .state('applyRoles', {
         url: '/applyRoles',
         views: {
