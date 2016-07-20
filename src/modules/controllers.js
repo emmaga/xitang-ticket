@@ -1302,17 +1302,72 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     };
 
     this.initPartnersList = function() {
-      $scope.partners = [
-        {name:'black', shade:'dark'},
-        {name:'white', shade:'light', notAnOption: true},
-        {name:'red', shade:'dark'},
-        {name:'blue', shade:'dark', notAnOption: true},
-        {name:'yellow', shade:'light', notAnOption: false}
-      ];
+
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/partners' + c.extension;
+
+      var data = {
+        "action": "GetList",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "sortBy": "createDate",
+        "orderBy": "desc",
+        "count": 10000,
+        "page": 1,
+        "search": {
+          "partnerName": ""
+        }
+      };
+      data = JSON.stringify(data);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.partners = data.partners.lists;
+            // self.myPartner = self.partners[0];
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取分销商信息失败');
+        });
     };
     
     this.initgoodsList = function() {
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/goods' + c.extension;
 
+      var data = {
+        "action": "GetList",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "sortBy": "createDate",
+        "orderBy": "desc",
+        "count": 10000,
+        "page": 1,
+        "search": {
+          "goodsName": ""
+        }
+      };
+      data = JSON.stringify(data);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.goods = data.goods.lists;
+            // self.myGoods = self.goods[0];
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取商品信息失败');
+        });
     };
 
     self.setSubmit = function (status) {
@@ -1335,20 +1390,22 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         return;
       }
       var c = $scope.root.config;
-      var url = c.requestUrl + '/goods' + c.extension;
-      this.goods.status = 'on';
-      this.goods.validDateStart = new Date($('#rd_dmukgs').val()).getTime();
-      this.goods.validDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+      var url = c.requestUrl + '/sale' + c.extension;
+      self.sale.status = 'on';
+      self.sale.saleDateStart = new Date($('#rd_dmukgs').val()).getTime();
+      self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+      self.sale.goodsId = self.myGoods.id;
+      self.sale.partnerCode = self.myPartner.partnerCode;
 
       var data = {
         "action": "Add",
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
-        "goods": self.goods
+        "sale": self.sale
       };
       data = JSON.stringify(data);
-      
+      console.log(data);
       self.setSubmit(true);
 
       $http.post(url, data).then(function successCallback(response) {

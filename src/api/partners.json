@@ -1,0 +1,19 @@
+{
+    "rescode": 200,
+    "errInfo": "",
+    "partners": {
+      "totalCount": 200,
+      "lists": [
+        {
+          "partnerCode": "LVMAMA",
+          "partnerName": "驴妈妈",
+          "status": "on"
+        },
+        {
+          "partnerCode": "TONGCHENG",
+          "partnerName": "同程",
+          "status": "off"
+        }
+      ]
+    }
+}
