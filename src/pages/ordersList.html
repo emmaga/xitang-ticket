@@ -7,21 +7,47 @@
             商品列表         
         </strong>
     </a>
+    
     <hr>
     <div class="row">
         <div class="col-xs-6">
-            <div class="btn-group ">
-                <a class="btn btn-default" ui-sref="goodsAdd">
-                    <i class="glyphicon glyphicon-plus"></i> 添加商品
-                </a>
-                <a ng-click="ordersList.delete()" ng-class="{disabled: !ordersList.isChecked()}" class="btn btn-default">
-                    <i class="glyphicon glyphicon-remove"></i> 删除
-                </a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    全部商品 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a>成人票</a></li>
+                    <li><a>儿童票</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a>全部商品</a></li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    全部分销商 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a>驴妈妈</a></li>
+                    <li><a>去哪儿</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a>全部分销商</a></li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    全部状态 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a>有效</a></li>
+                    <li><a>失效</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a>全部状态</a></li>
+                </ul>
             </div>
         </div>
         <div class="col-xs-6">
             <div class="input-group">
-                <input ng-model="ordersList.searchName" type="text" class="form-control" placeholder="商品名">
+                <input ng-model="ordersList.searchName" type="text" class="form-control" placeholder="联系人/手机/订单号">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" ng-click="ordersList.search()" href>搜索</button>
                 </span>
@@ -31,49 +57,57 @@
     <hr class="break-space">
     <div ng-show="ordersList.loading">loading...</div>
     <table ng-table="ordersList.tableParams" ng-init="ordersList.search()" class="table table-hover table-striped">
+    <button type="submit" class="btn btn-default pull-right">
+        <i class="glyphicon glyphicon-export"></i> 导出
+    </button>
         <tr ng-repeat="row in $data">
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
                 <input type="checkbox" ng-model="ordersList.checkboxes.items[row.id]" />
             </td>
+            <td title="'订单号'">
+                #201607082234
+            </td>
             <td title="'商品名'">
                 {{row.goodsName}}
             </td>
-            <td title="'检票时间'">
-                {{row.checkTimeStart}} ~ {{row.checkTimeEnd}}
-            </td>
-            <td title="'检票期限'">
-                前{{row.beforeDays}}天，后{{row.afterDays}}天
-            </td>
-            <td title="'成本价'">
+            <td title="'单价'">
                 ￥{{row.cost}}
             </td>
-            <td title="'有效时间'">
+            <td title="'联系人'">
+                路人甲
+            </td>
+            <td title="'手机号'">
+                1380013800138
+            </td>
+            <td title="'分销商'">
+                驴妈妈
+            </td>
+            <td title="'下单时间'">
+                2016.7.1 15:00
+            </td>
+            <td title="'游玩时间'">
                 {{row.checkDateStart | date:'yyyy.MM.dd'}} ~ {{row.checkDateEnd | date:'yyyy.MM.dd'}}
             </td>
-            <td title="'创建时间'">
-                {{row.createDate | date:'yyyy.MM.dd'}}
+            <td title="'数量'">
+                3
+            </td>
+            <td title="'检票'">
+                2
+            </td>
+            <td title="'退票'">
+                0
+            </td>
+            <td title="'状态'">
+                有效
             </td>
             <td title="'操作'">
-                <small>
-                    <a ng-click="ordersList.changeStatus(row.status)" title="{{ordersList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': ordersList.isOn(row.status), 'btn-warning': !ordersList.isOn(row.status) }" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                        <i ng-class="{ 'glyphicon-ok': ordersList.isOn(row.status), 'glyphicon-lock': !ordersList.isOn(row.status) }" class="glyphicon"></i>
-                        {{ordersList.getStatus(row.status)}}
-                    </a>
-                    
-                    <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
-                        <i class="glyphicon glyphicon-pencil"></i>
-                        编辑
-                    </a>
-                </small>
+                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
+                    <i class="glyphicon glyphicon-list"></i> 明细
+                </a>
             </td>
         </tr>
     </table>
-
     <script type="text/ng-template" id="ng-table/headers/checkbox.html">
         <input type="checkbox" ng-model="ordersList.checkboxes.checked" value="" />
     </script>
-    
-    ordersList
-    <a ui-sref="index">订单中心－订单列表－明细</a>
-    <a href>导出报表提示框</a>
 </div>
