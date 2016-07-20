@@ -9,7 +9,7 @@
       "checkTimeStart": "08:00",
       "checkTimeEnd": "20:00",
       "checkDateStart": "1288323623006",
-      "checkDateEnd": "1288323623006",
+      "checkDateEnd": "1469232000000",
       "beforeDays": 1,
       "afterDays": 2
     }

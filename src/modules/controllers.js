@@ -927,8 +927,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   }]);
 
-  app.controller('goodsEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location',
-    function($scope, $state, $stateParams, $http, $cookies, $location) {
+  app.controller('goodsEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter',
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
       console.log('goodsEdit');
 
       var self = this;
@@ -965,7 +965,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               self.goods = data.goods;
 
               // 有效时间设置
-              // todo
+              var sDate = $filter('date')(data.goods.checkDateStart, 'yyyy-MM-dd');
+              var eDate = $filter('date')(data.goods.checkDateEnd, 'yyyy-MM-dd');
+              $('#rd_dmukgs').val(sDate);
+              $('#check-date-start').val(sDate);
+              $('#rd_qcaxwa').val(eDate);
+              $('#check-date-end').val(eDate);
 
             }else if(data.rescode === 401){
               $location.path('/index');
