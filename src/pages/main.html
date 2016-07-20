@@ -103,13 +103,20 @@
                     </li>
                 </ul>
                 <hr>
-                <a class="font-bold no-underline cursor-default" ui-sref="userList">
+                <a class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-ewgwmo">
                     <i class="glyphicon glyphicon-wrench"></i> 管理员工具
                     <i ng-class="{'glyphicon-chevron-down': $state.includes('admin'), 'glyphicon-chevron-right': !$state.includes('admin')}" class="glyphicon pull-right margin-right-15"></i>
                 </a>
-                <ul ng-class="{in: $state.includes('admin')}">
+                <ul ng-class="{in: $state.includes('admin')}" class="nav nav-stacked collapse" id="rd-ewgwmo">
                     <hr>
+                    <li class="nav-header">
+                        <a ui-sref="userList">
+                            用户管理
+                        </a>
+                    </li>
+
                 </ul>
+                <hr>
             </div>
             <!-- 页面 -->
             <div ui-view="mainFrame.body" class="col-sm-9 col-right page">
