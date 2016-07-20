@@ -64,6 +64,7 @@
       case 'saleList':
       case 'partnerConfig':
       case 'goodsAdd':
+      case 'goodsEdit':
       case 'saleAdd':
       case 'saleEdit':
         $scope.$state = 'goods';
@@ -904,6 +905,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       };
       data = JSON.stringify(data);
       
+      this.addBtnText = "添加中...";
+      this.submitting = true;
+
       $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
           if(data.rescode === 200) {
@@ -923,12 +927,13 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   }]);
 
-  app.controller('goodsEditController', ['$scope', '$state', '$stateParams', 
-    function($scope, $state, $stateParams) {
+  app.controller('goodsEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location',
+    function($scope, $state, $stateParams, $http, $cookies, $location) {
       console.log('goodsEdit');
-      console.log($stateParams.id);
 
       var self = this;
+      self.id = $stateParams.id;
+
       this.init = function() {
         $('.form_date').datetimepicker({
           language:  'zh-CN',
@@ -940,6 +945,81 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           minView: 2,
           forceParse: 0
         });
+
+        // get data
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goodsDetail' + c.extension;
+
+        var data = {
+          "action": "getDetail",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "goodsId": self.id
+        };
+        data = JSON.stringify(data);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              self.goods = data.goods;
+
+              // 有效时间设置
+              // todo
+
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('读取信息失败');
+          });
+      }
+
+      this.btnText = "保存修改";
+      this.submitting = false;
+
+      this.submit = function() {
+
+        // 有效时间 必填
+        if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
+          alert('请输入有效时间');
+          return;
+        }
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+        this.goods.checkDateStart = new Date($('#rd_dmukgs').val()).getTime();
+        this.goods.checkDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+
+        var data = {
+          "action": "modify",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "goods": self.goods
+        };
+        data = JSON.stringify(data);
+        
+        this.addBtnText = "保存中...";
+        this.submitting = true;
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              $location.path('/goodsList');
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              this.btnText = "保存修改";
+              this.submitting = false;
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            this.btnText = "保存修改";
+            this.submitting = false;
+            alert('保存失败，请重试');
+          });
       }
     }
   ]);

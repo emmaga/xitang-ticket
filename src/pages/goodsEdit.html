@@ -1,3 +1,117 @@
-﻿<div ng-controller="goodsEditController as goodsEdit">
-    goodsEdit
+﻿<div ng-controller="goodsEditController as goodsEdit" ng-init="goodsEdit.init()">
+    <a>
+        <strong>
+            <i class="glyphicon glyphicon-user"></i>
+            销售设置
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            商品列表
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            添加商品              
+        </strong>
+    </a>
+    <hr>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="panel panel-default panel-sm">
+                <div class="panel-heading">
+                    <i class="glyphicon glyphicon-wrench pull-right"></i> 商品信息
+                </div>
+                <div class="panel-body">
+                    <form name="goodsEditForm" class="form form-vertical" ng-submit="goodsEditForm.$valid && goodsEdit.submit()">
+                        <label class="font-normal">基本信息</label>
+                        <hr class="hr-half">
+                        <div class="form-group">
+                            <label class="required-info">商品名</label>
+                            <input ng-model="goodsEdit.goods.goodsName" required type="text" class="form-control" placeholder="请输入商品名称">
+                        </div>
+                        <div class="form-group">
+                            <label class="required-info">有效时间</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_dmukgs" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">开始</span>
+                                        <input class="form-control cursor-pointer" size="16" type="text" value="" readonly>
+                                        <input type="hidden" id="rd_dmukgs" value="" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">结束</span>
+                                        <input class="form-control" size="16" type="text" value="" readonly>
+                                        <input type="hidden" id="rd_qcaxwa" value="" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>成本价</label>
+                            <div class="controls input-group">
+                                <span class="input-group-addon">
+                                    ￥
+                                </span>
+                                <input ng-model="goodsEdit.goods.cost" type="text" class="form-control" placeholder="00.00">
+                            </div>
+                        </div>
+                        <hr class="break-space">
+                        <label class="font-normal">检票信息</label>
+                        <hr class="hr-half">
+                        <div class="form-group">
+
+                            <label class="required-info">检票期限</label>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">提前</span>
+                                        <input ng-model="goodsEdit.goods.beforeDays" required type="number" class="form-control" value="0">
+                                        <span class="input-group-addon">天</span>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">推后</span>
+                                        <input ng-model="goodsEdit.goods.afterDays" required type="number" class="form-control" value="0">
+                                        <span class="input-group-addon">天</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="label-explain">默认0天，即此票只能当天使用</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="required-info">检票时间</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">开始</span>
+                                        <input ng-model="goodsEdit.goods.checkTimeStart" required type="text" class="form-control" placeholder="请输入每天检票时间">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">结束</span>
+                                        <input ng-model="goodsEdit.goods.checkTimeEnd" required type="text" class="form-control" placeholder="请输入每天检票时间">
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="label-explain">填写格式为 [时:分] ，如 [17:30]</label>
+                        </div>
+                        <div class="form-group pull-right">
+                            
+                            <div class="controls">
+                                <button ui-sref="goodsList" class="btn btn-default">
+                                    取消
+                                </button>
+                                <button type="submit" class="btn btn-primary" ng-class="{disabled:goodsEdit.submitting}">
+                                    {{goodsEdit.btnText}}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
