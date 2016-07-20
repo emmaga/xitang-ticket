@@ -880,8 +880,17 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       });
     }
 
-    this.addBtnText = "添加";
-    this.submitting = false;
+    self.setSubmit = function (status) {
+      if(status) {
+        self.addBtnText = "添加中...";
+        self.submitting = true;
+      }else {
+        self.addBtnText = "添加";
+        self.submitting = false;
+      }
+    }
+
+    self.setSubmit(false);
 
     this.submit = function() {
 
@@ -893,8 +902,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       var c = $scope.root.config;
       var url = c.requestUrl + '/goods' + c.extension;
       this.goods.status = 'on';
-      this.goods.checkDateStart = new Date($('#rd_dmukgs').val()).getTime();
-      this.goods.checkDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+      this.goods.validDateStart = new Date($('#rd_dmukgs').val()).getTime();
+      this.goods.validDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
 
       var data = {
         "action": "Add",
@@ -904,9 +913,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         "goods": self.goods
       };
       data = JSON.stringify(data);
-      
-      this.addBtnText = "添加中...";
-      this.submitting = true;
+      self.setSubmit(true);
 
       $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
@@ -915,13 +922,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           }else if(data.rescode === 401){
             $location.path('/index');
           }else {
-            this.addBtnText = "添加";
-            this.submitting = false;
+            self.setSubmit(false);
             alert(data.errInfo);
           }  
         }, function errorCallback(response) {
-          this.addBtnText = "添加";
-          this.submitting = false;
+          self.setSubmit(false);
           alert('添加失败，请重试');
         });
     }
@@ -948,7 +953,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
         // get data
         var c = $scope.root.config;
-        var url = c.requestUrl + '/goodsDetail' + c.extension;
+        var url = c.requestUrl + '/goods' + c.extension;
 
         var data = {
           "action": "getDetail",
@@ -965,8 +970,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               self.goods = data.goods;
 
               // 有效时间设置
-              var sDate = $filter('date')(data.goods.checkDateStart, 'yyyy-MM-dd');
-              var eDate = $filter('date')(data.goods.checkDateEnd, 'yyyy-MM-dd');
+              var sDate = $filter('date')(data.goods.validDateStart, 'yyyy-MM-dd');
+              var eDate = $filter('date')(data.goods.validDateEnd, 'yyyy-MM-dd');
               $('#rd_dmukgs').val(sDate);
               $('#check-date-start').val(sDate);
               $('#rd_qcaxwa').val(eDate);
@@ -982,8 +987,17 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           });
       }
 
-      this.btnText = "保存修改";
-      this.submitting = false;
+      self.setSubmit = function (status) {
+        if(status) {
+          this.btnText = "保存中...";
+          this.submitting = true;
+        }else {
+          self.btnText = "保存修改";
+          self.submitting = false;
+        }
+      }
+
+      self.setSubmit(false);
 
       this.submit = function() {
 
@@ -994,8 +1008,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         }
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
-        this.goods.checkDateStart = new Date($('#rd_dmukgs').val()).getTime();
-        this.goods.checkDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+        this.goods.validDateStart = new Date($('#rd_dmukgs').val()).getTime();
+        this.goods.validDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
 
         var data = {
           "action": "modify",
@@ -1005,9 +1019,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "goods": self.goods
         };
         data = JSON.stringify(data);
-        
-        this.addBtnText = "保存中...";
-        this.submitting = true;
+        self.setSubmit(true);
 
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
@@ -1016,13 +1028,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             }else if(data.rescode === 401){
               $location.path('/index');
             }else {
-              this.btnText = "保存修改";
-              this.submitting = false;
+              self.setSubmit(false);
               alert(data.errInfo);
             }  
           }, function errorCallback(response) {
-            this.btnText = "保存修改";
-            this.submitting = false;
+            self.setSubmit(false);
             alert('保存失败，请重试');
           });
       }
@@ -1271,6 +1281,92 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       }
     }
   ]);
+
+  app.controller('saleAddController', ['$scope', '$location', '$cookies', '$http', function($scope, $location, $cookies, $http) {
+    console.log('saleAdd');
+    var self = this;
+
+    this.init = function() {
+      $('.form_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+      });
+      this.initPartnersList();
+      this.initgoodsList();
+    };
+
+    this.initPartnersList = function() {
+      $scope.partners = [
+        {name:'black', shade:'dark'},
+        {name:'white', shade:'light', notAnOption: true},
+        {name:'red', shade:'dark'},
+        {name:'blue', shade:'dark', notAnOption: true},
+        {name:'yellow', shade:'light', notAnOption: false}
+      ];
+    };
+    
+    this.initgoodsList = function() {
+
+    };
+
+    self.setSubmit = function (status) {
+      if(status) {
+        self.addBtnText = "添加中...";
+        self.submitting = true;
+      }else {
+        self.addBtnText = "添加";
+        self.submitting = false;
+      }
+    }
+
+    self.setSubmit(false);
+
+    this.submit = function() {
+
+      // 有效时间 必填
+      if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
+        alert('请输入有效时间');
+        return;
+      }
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/goods' + c.extension;
+      this.goods.status = 'on';
+      this.goods.validDateStart = new Date($('#rd_dmukgs').val()).getTime();
+      this.goods.validDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+
+      var data = {
+        "action": "Add",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "goods": self.goods
+      };
+      data = JSON.stringify(data);
+      
+      self.setSubmit(true);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            $location.path('/goodsList');
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            self.setSubmit(false);
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          self.setSubmit(false);
+          alert('添加失败，请重试');
+        });
+    }
+  }]);
 
   app.controller('saleEditController', ['$scope', '$state', '$stateParams', 
     function($scope, $state, $stateParams) {
