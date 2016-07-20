@@ -1554,26 +1554,155 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         });
     }
   }]);
+  
+  app.controller('saleEditController', ['$scope', '$state', '$stateParams', '$location', '$cookies', '$http', 
+    function($scope,$state, $stateParams, $location, $cookies, $http) {
+    console.log('saleEdit');
+    console.log($stateParams.id);
+    var self = this;
 
-  app.controller('saleEditController', ['$scope', '$state', '$stateParams', 
-    function($scope, $state, $stateParams) {
-      console.log('saleEdit');
-      console.log($stateParams.id);
-      var self = this;
+    this.init = function() {
+      $('.form_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+      });
+      this.initSale();
+      this.initPartnersList();
+      this.initpartnerConfig();
+    };
 
-      this.init = function() {
-        $('.form_date').datetimepicker({
-          language:  'zh-CN',
-          weekStart: 1,
-          todayBtn:  1,
-          autoclose: 1,
-          todayHighlight: 1,
-          startView: 2,
-          minView: 2,
-          forceParse: 0
+    this.initSale = function() {
+      // todo
+    };
+
+    this.initPartnersList = function() {
+
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/partners' + c.extension;
+
+      var data = {
+        "action": "GetList",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "sortBy": "createDate",
+        "orderBy": "desc",
+        "count": 10000,
+        "page": 1,
+        "search": {
+          "partnerName": ""
+        }
+      };
+      data = JSON.stringify(data);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.partners = data.partners.lists;
+            // self.myPartner = self.partners[0];
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取分销商信息失败');
         });
+    };
+    
+    this.initpartnerConfig = function() {
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/goods' + c.extension;
+
+      var data = {
+        "action": "GetList",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "sortBy": "createDate",
+        "orderBy": "desc",
+        "count": 10000,
+        "page": 1,
+        "search": {
+          "goodsName": ""
+        }
+      };
+      data = JSON.stringify(data);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.goods = data.goods.lists;
+            // self.myGoods = self.goods[0];
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取商品信息失败');
+        });
+    };
+
+    self.setSubmit = function (status) {
+      if(status) {
+        self.addBtnText = "添加中...";
+        self.submitting = true;
+      }else {
+        self.addBtnText = "添加";
+        self.submitting = false;
       }
     }
-  ]);
+
+    self.setSubmit(false);
+
+    this.submit = function() {
+
+      // 有效时间 必填
+      if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
+        alert('请输入有效时间');
+        return;
+      }
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/sale' + c.extension;
+      self.sale.status = 'on';
+      self.sale.saleDateStart = new Date($('#rd_dmukgs').val()).getTime();
+      self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+      self.sale.goodsId = self.myGoods.id;
+      self.sale.partnerCode = self.myPartner.partnerCode;
+
+      var data = {
+        "action": "Add",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "sale": self.sale
+      };
+      data = JSON.stringify(data);
+      console.log(data);
+      self.setSubmit(true);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            $location.path('/partnerConfig');
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            self.setSubmit(false);
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          self.setSubmit(false);
+          alert('添加失败，请重试');
+        });
+    }
+  }]);
 
 })();
