@@ -55,7 +55,7 @@
             </td>
             <td title="'操作'">
                 <small>
-                    <a ng-click="exportStatementsList.changeStatus(row.status)" title="{{exportStatementsList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': exportStatementsList.isOn(row.status), 'btn-warning': !exportStatementsList.isOn(row.status) }" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                    <a ng-click="exportStatementsList.changeStatus(row.status)" title="{{exportStatementsList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': exportStatementsList.isOn(row.status), 'btn-warning': !exportStatementsList.isOn(row.status) }" class="btn btn-default btn-xs">
                         <i ng-class="{ 'glyphicon-ok': exportStatementsList.isOn(row.status), 'glyphicon-lock': !exportStatementsList.isOn(row.status) }" class="glyphicon"></i>
                         {{exportStatementsList.getStatus(row.status)}}
                     </a>

@@ -1207,19 +1207,112 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
 
-  app.controller('saleListController', ['$scope', '$http', '$cookies', 'NgTableParams', 
-    function($scope, $http, $cookies, NgTableParams) {
+  app.controller('saleListController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
+    function($scope, $http, $cookies, $location, $window, NgTableParams) {
       console.log('saleList');
       var self = this;
       
       // checkbox
       self.checkboxes = { 'checked': false, items: {} };
       
+      self.getStatus = function(status) {
+        var ret = status === 'on' ? '已启用' : '已禁用';
+        return ret;
+      }
+
+      self.isOn = function(status) {
+        var ret = status === 'on' ? true : false;
+        return ret;
+      }
+
+      self.isChecked = function() {
+        var ret = false;
+        var keepGoing = true;
+        angular.forEach(self.checkboxes.items, function(value, key) {
+          if(keepGoing) {
+            if(value === true){
+              ret = true;
+              keepGoing = false;
+            }
+          }
+        });
+        return ret;
+      }
+
+      self.getStatusAction = function(status) {
+        var ret = status === 'on' ? '禁用' : '启用';
+        return ret;
+      }
+
+      self.delete = function() {
+        if(!confirm('确定删除？')) {
+          return;
+        }
+        
+        var sale = [];
+        angular.forEach(self.checkboxes.items, function(value, key) {
+          if(value === true) {
+            sale.push({"id": key});
+          }
+        });
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/sale' + c.extension;
+        var data = {
+          "action": "delete",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sale": sale
+        };
+        data = JSON.stringify(data);
+        
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              $window.location.reload();
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('删除失败，请重试');
+          });
+      }
+
+      self.changeStatus = function(status) {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/sale' + c.extension;
+        var data = {
+          "action": "changeStatus",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "saleId": 1,
+          "state": status === 'on' ? 'off' : 'on'
+        };
+        data = JSON.stringify(data);
+        
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              alert('启用／禁用 设置成功！');
+              $window.location.reload();
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('设置失败，请重试');
+          });
+      }
+
       // watch for check all checkbox
       $scope.$watch('saleList.checkboxes.checked', function(value) {
           angular.forEach(self.tableData, function(item) {
-              if (angular.isDefined(item.id)) {
-                self.checkboxes.items[item.id] = value;
+              if (angular.isDefined(item.saleId)) {
+                self.checkboxes.items[item.saleId] = value;
               }
           });
       });
@@ -1236,13 +1329,13 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             counts: [15, 30],
             getData: function(params) {
               var paramsUrl = params.url();
-              var searchName = "";
-              if (self.searchName) {
-                searchName = self.searchName;
+              var searchStr = "";
+              if (self.searchStr) {
+                searchStr = self.searchStr;
               }
 
               var c = $scope.root.config;
-              var url = c.requestUrl + '/goods' + c.extension;
+              var url = c.requestUrl + '/sale' + c.extension;
               var data = {
                 "action": "GetList",
                 "account": $cookies.get('account'),
@@ -1253,7 +1346,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
                 "search": {
-                  "goodsName": searchName //完全匹配查询
+                  "searchStr": searchStr //完全匹配查询
                 }
               };
               data = JSON.stringify(data);
@@ -1264,9 +1357,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   if(data.rescode === 200) {
                     self.checkboxes = { 'checked': false, items: {} };
                     self.loading = false;
-                    params.total(data.goods.totalCount);
-                    self.tableData = data.goods.lists;
-                    return data.goods.lists;
+                    params.total(data.sale.totalCount);
+                    self.tableData = data.sale.lists;
+                    return data.sale.lists;
                   }else if(data.rescode === 401){
                     $location.path('/index');
                   }else {
@@ -1445,22 +1538,5 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       }
     }
   ]);
-
-
-
-  app.controller('saleCodeAddController', ['$scope', function($scope) {
-    console.log('saleCodeAdd');
-    var self = this;
-  }]);
-
-  app.controller('saleCodeAppListController', ['$scope', function($scope) {
-    console.log('saleCodeAppList');
-    var self = this;
-  }]);
-
-  app.controller('saleCodeListController', ['$scope', function($scope) {
-    console.log('saleCodeList');
-    var self = this;
-  }]);
 
 })();

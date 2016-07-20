@@ -110,7 +110,7 @@
         }
       })
       .state('saleEdit', {
-        url: '/saleEdit',
+        url: '/saleEdit/{id:[0-9]{1,4}}',
         views: {
           '': {
             templateUrl: 'pages/main.html'

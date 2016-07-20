@@ -55,7 +55,7 @@
             </td>
             <td title="'操作'">
                 <small>
-                    <a ng-click="toBeChecked.changeStatus(row.status)" title="{{toBeChecked.getStatusAction(row.status)}}" ng-class="{ 'btn-success': toBeChecked.isOn(row.status), 'btn-warning': !toBeChecked.isOn(row.status) }" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                    <a ng-click="toBeChecked.changeStatus(row.status)" title="{{toBeChecked.getStatusAction(row.status)}}" ng-class="{ 'btn-success': toBeChecked.isOn(row.status), 'btn-warning': !toBeChecked.isOn(row.status) }" class="btn btn-default btn-xs">
                         <i ng-class="{ 'glyphicon-ok': toBeChecked.isOn(row.status), 'glyphicon-lock': !toBeChecked.isOn(row.status) }" class="glyphicon"></i>
                         {{toBeChecked.getStatus(row.status)}}
                     </a>

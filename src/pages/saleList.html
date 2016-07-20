@@ -14,16 +14,16 @@
                 <a ui-sref="saleAdd" class="btn btn-default" data-page="#page0061">
                     <i class="glyphicon glyphicon-plus"></i> 添加价格
                 </a>
-                <a class="btn btn-default" disabled data-deabledby="0006">
+                <a ng-click="saleList.delete()" ng-class="{disabled: !saleList.isChecked()}" class="btn btn-default" data-deabledby="0006">
                     <i class="glyphicon glyphicon-remove"></i> 删除
                 </a>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="商品/价格/分销商">
+                <input ng-model="saleList.searchStr" type="text" class="form-control" placeholder="商品/价格/分销商">
                 <span class="input-group-btn">
-					<button class="btn btn-default" type="button">搜索</button>
+					<button class="btn btn-default" type="button" ng-click="saleList.search()">搜索</button>
 				</span>
             </div>
         </div>
@@ -33,35 +33,40 @@
     <table ng-table="saleList.tableParams" ng-init="saleList.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
-                <input type="checkbox" ng-model="saleList.checkboxes.items[row.id]" />
+                <input type="checkbox" ng-model="saleList.checkboxes.items[row.saleId]" />
             </td>
             <td title="'商品名'">
-                成人票
+                {{row.goodsName}}
             </td>
             <td title="'分销商'">
-                驴妈妈
+                {{row.partnerName}}
             </td>
             <td title="'价格'">
-                ￥100
+                ￥{{row.price}}
             </td>
 
-            <td title="'预定时间'">
-                当日10:00前
+            <td title="'当天可买票时间时间'">
+                {{row.validTimeStart}} ~ {{row.validTimeEnd}}
             </td>
             
             <td title="'有效时间'">
-                2016.07.01 ~ 2016.08.01
+                {{row.saleDateStart | date:'yyyy.MM.dd'}} ~ {{row.saleDateEnd | date:'yyyy.MM.dd'}}
             </td>
             <td title="'创建时间'">
-                2016.01.01
+                {{row.createDate | date:'yyyy.MM.dd'}}
             </td>
             <td title="'操作'">
-                <a title="禁用" class="btn btn-default btn-xs btn-success" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                    <i class="glyphicon glyphicon-ok"></i> 已启用
-                </a>
-                <a title="编辑" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
-                    <i class="glyphicon glyphicon-pencil"></i> 编辑
-                </a>
+                <small>
+                    <a ng-click="saleList.changeStatus(row.status)" title="{{saleList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': saleList.isOn(row.status), 'btn-warning': !saleList.isOn(row.status) }" class="btn btn-default btn-xs">
+                        <i ng-class="{ 'glyphicon-ok': saleList.isOn(row.status), 'glyphicon-lock': !saleList.isOn(row.status) }" class="glyphicon"></i>
+                        {{saleList.getStatus(row.status)}}
+                    </a>
+                    
+                    <a ui-sref="saleEdit({id:row.saleId})" title="编辑" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                        编辑
+                    </a>
+                </small>
             </td>
         </tr>
     </table>

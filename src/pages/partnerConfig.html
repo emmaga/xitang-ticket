@@ -19,12 +19,12 @@
             
             <td title="'操作'">
                 <small>
-                    <a ng-click="partnerConfig.changeStatus(row.status)" title="{{partnerConfig.getStatusAction(row.status)}}" ng-class="{ 'btn-success': partnerConfig.isOn(row.status), 'btn-warning': !partnerConfig.isOn(row.status) }" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                    <a ng-click="partnerConfig.changeStatus(row.status)" title="{{partnerConfig.getStatusAction(row.status)}}" ng-class="{ 'btn-success': partnerConfig.isOn(row.status), 'btn-warning': !partnerConfig.isOn(row.status) }" class="btn btn-default btn-xs">
                         <i ng-class="{ 'glyphicon-ok': partnerConfig.isOn(row.status), 'glyphicon-lock': !partnerConfig.isOn(row.status) }" class="glyphicon"></i>
                         {{partnerConfig.getStatus(row.status)}}
                     </a>
                     
-                    <a title="编辑" class="btn btn-default btn-xs" ui-sref="saleCodeUpdate({saleCodeID:10})">
+                    <a title="编辑" class="btn btn-default btn-xs">
                         <i class="glyphicon glyphicon-pencil"></i>
                         编辑
                     </a>
