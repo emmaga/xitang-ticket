@@ -181,6 +181,10 @@ tbody th{
   width: 120px;
 }
 
+.fixed-width-7{
+  width: 202px;
+}
+
 .fixed-width-4{
   width: 256px;
 }
@@ -192,6 +196,7 @@ tbody th{
 .fixed-width-6{
   width: 366px;
 }
+
 
 
 .fixed-height-1{
@@ -247,3 +252,10 @@ font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSa
 
 }
 
+.input-group.in-drop{
+  margin:7px;
+}
+
+.illution{
+  pointer-events: none;
+}
