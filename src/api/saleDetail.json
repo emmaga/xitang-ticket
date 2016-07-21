@@ -1,0 +1,18 @@
+{
+    "rescode": 200,
+    "errInfo": "",
+    "sale": {
+      "saleId": 1,
+      "status": "on",
+      "goodsId": 2,
+      "goodsName": "老人票",
+      "partnerCode": "LVMAMA",
+      "partnerName": "驴妈妈",
+      "price": 99.90,
+      "validTimeStart": "08:00",
+      "validTimeEnd": "20:00",
+      "saleDateStart": "1288323623006",
+      "saleDateEnd": "1288323623006",
+      "createDate": "1288323623006"
+    }
+}

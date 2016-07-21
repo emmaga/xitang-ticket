@@ -632,6 +632,19 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       console.log('ordersList');
       var self = this;
 
+      self.init = function() {
+        $('.form_date').datetimepicker({
+          language:  'zh-CN',
+          weekStart: 1,
+          todayBtn:  1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0
+        });
+      }
+
       // checkbox
       self.checkboxes = { 'checked': false, items: {} };
       
@@ -910,9 +923,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var sDate = $filter('date')(data.goods.validDateStart, 'yyyy-MM-dd');
               var eDate = $filter('date')(data.goods.validDateEnd, 'yyyy-MM-dd');
               $('#rd_dmukgs').val(sDate);
-              $('#check-date-start').val(sDate);
+              $('#valid-date-start').val(sDate);
               $('#rd_qcaxwa').val(eDate);
-              $('#check-date-end').val(eDate);
+              $('#valid-date-end').val(eDate);
 
             }else if(data.rescode === 401){
               $location.path('/index');
@@ -1535,7 +1548,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         "sale": self.sale
       };
       data = JSON.stringify(data);
-      console.log(data);
       self.setSubmit(true);
 
       $http.post(url, data).then(function successCallback(response) {
@@ -1555,12 +1567,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   }]);
   
-  app.controller('saleEditController', ['$scope', '$state', '$stateParams', '$location', '$cookies', '$http', 
-    function($scope,$state, $stateParams, $location, $cookies, $http) {
+  app.controller('saleEditController', ['$scope', '$state', '$stateParams', '$location', '$cookies', '$http', '$filter',
+    function($scope,$state, $stateParams, $location, $cookies, $http, $filter) {
     console.log('saleEdit');
-    console.log($stateParams.id);
     var self = this;
-
+    self.id = $stateParams.id;
+    
     this.init = function() {
       $('.form_date').datetimepicker({
         language:  'zh-CN',
@@ -1572,13 +1584,45 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         minView: 2,
         forceParse: 0
       });
-      this.initSale();
+      this.initSaleDetailInfo();
       this.initPartnersList();
       this.initpartnerConfig();
     };
 
-    this.initSale = function() {
-      // todo
+    this.initSaleDetailInfo = function() {
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/saleDetail' + c.extension;
+
+      var data = {
+        "action": "getDetail",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "saleId": self.id
+      };
+      data = JSON.stringify(data);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.sale = data.sale;
+
+            // 有效时间设置
+            var sDate = $filter('date')(data.sale.saleDateStart, 'yyyy-MM-dd');
+            var eDate = $filter('date')(data.sale.saleDateEnd, 'yyyy-MM-dd');
+            $('#rd_dmukgs').val(sDate);
+            $('#sale-date-start').val(sDate);
+            $('#rd_qcaxwa').val(eDate);
+            $('#sale-date-end').val(eDate);
+
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('添加失败，请重试');
+        });
     };
 
     this.initPartnersList = function() {
@@ -1605,7 +1649,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           var data = response.data;
           if(data.rescode === 200) {
             self.partners = data.partners.lists;
-            // self.myPartner = self.partners[0];
+            for (var i = 0; i < self.partners.length; i++) {
+              if(self.partners[i].partnerCode === self.sale.partnerCode) {
+                self.myPartner = self.partners[i];
+                break;
+              }
+            }
           }else if(data.rescode === 401){
             $location.path('/index');
           }else {
@@ -1639,7 +1688,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           var data = response.data;
           if(data.rescode === 200) {
             self.goods = data.goods.lists;
-            // self.myGoods = self.goods[0];
+            for (var i = 0; i < self.goods.length; i++) {
+              if(self.goods[i].id === self.sale.goodsId) {
+                self.myGoods = self.goods[i];
+                break;
+              }
+            }
           }else if(data.rescode === 401){
             $location.path('/index');
           }else {
@@ -1652,10 +1706,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
     self.setSubmit = function (status) {
       if(status) {
-        self.addBtnText = "添加中...";
+        self.addBtnText = "保存中...";
         self.submitting = true;
       }else {
-        self.addBtnText = "添加";
+        self.addBtnText = "保存修改";
         self.submitting = false;
       }
     }
@@ -1678,14 +1732,13 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.sale.partnerCode = self.myPartner.partnerCode;
 
       var data = {
-        "action": "Add",
+        "action": "Modify",
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
         "sale": self.sale
       };
       data = JSON.stringify(data);
-      console.log(data);
       self.setSubmit(true);
 
       $http.post(url, data).then(function successCallback(response) {
@@ -1700,7 +1753,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           }  
         }, function errorCallback(response) {
           self.setSubmit(false);
-          alert('添加失败，请重试');
+          alert('保存失败，请重试');
         });
     }
   }]);
