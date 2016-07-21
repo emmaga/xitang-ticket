@@ -10,67 +10,35 @@
     <hr>
     <div class="row">
         <div class="col-xs-8">
+            
+            
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    全部商品 <span class="caret"></span>
+                    检票状态 <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a>成人票</a></li>
-                    <li><a>儿童票</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a>全部商品</a></li>
-                </ul>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    全部分销商 <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a>驴妈妈</a></li>
-                    <li><a>去哪儿</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a>全部分销商</a></li>
-                </ul>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    全部状态 <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a>有效</a></li>
-                    <li><a>失效</a></li>
+                    <li><a>已检票</a></li>
+                    <li><a>未检票</a></li>
+                    <li><a>检票中</a></li>
+
                     <li role="separator" class="divider"></li>
                     <li><a>全部状态</a></li>
                 </ul>
             </div>
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    下单时间 <span class="caret"></span>
+                    是否过期 <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu fixed-width-7">
-                    <li>
-                        <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
-                            <span class="input-group-addon illution">开始</span>
-                            <input class="form-control illution" size="16" type="text" value="" readonly>
-                            <input type="hidden" id="rd_qcaxwa" value="" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        </div>
-                        <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
-                            <span class="input-group-addon illution">结束</span>
-                            <input class="form-control illution" size="16" type="text" value="" readonly>
-                            <input type="hidden" id="rd_qcaxwa" value="" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        </div>
-
-                    </li>
-                    <li><a>查询</a></li>
+                <ul class="dropdown-menu">
+                    <li><a>未过期</a></li>
+                    <li><a>已过期</a></li>
                     <li role="separator" class="divider"></li>
-                    <li><a>清除</a></li>
+                    <li><a>全部状态</a></li>
                 </ul>
             </div>
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    游玩时间 <span class="caret"></span>
+                    成交日期 <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu fixed-width-7">
                     <li>
@@ -93,10 +61,39 @@
                     <li><a>清除</a></li>
                 </ul>
             </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    游玩日期 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu fixed-width-7">
+                    <li>
+                        <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+                            <span class="input-group-addon illution">开始</span>
+                            <input class="form-control illution" size="16" type="text" value="" readonly>
+                            <input type="hidden" id="rd_qcaxwa" value="" />
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                        <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+                            <span class="input-group-addon illution">结束</span>
+                            <input class="form-control illution" size="16" type="text" value="" readonly>
+                            <input type="hidden" id="rd_qcaxwa" value="" />
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+
+                    </li>
+                    <li><a>查询</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a>清除</a></li>
+                </ul>
+            </div>
+            
+
+
         </div>
         <div class="col-xs-4">
             <div class="input-group">
-                <input ng-model="ordersList.searchName" type="text" class="form-control" placeholder="联系人/手机/订单号">
+                <input ng-model="ordersList.searchName" type="text" class="form-control" placeholder="预订人/手机/订单号x2/分销商/商品名">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" ng-click="ordersList.search()" href>搜索</button>
                 </span>
@@ -116,13 +113,17 @@
             <td title="'订单号'">
                 #201607082234
             </td>
+            <td title="'分销商订单号'">
+                #201607082234
+            </td>
+
             <td title="'商品名'">
                 {{row.goodsName}}
             </td>
             <td title="'单价'">
                 ￥{{row.cost}}
             </td>
-            <td title="'联系人'">
+            <td title="'预订人'">
                 路人甲
             </td>
             <td title="'手机号'">
@@ -131,7 +132,7 @@
             <td title="'分销商'">
                 驴妈妈
             </td>
-            <td title="'下单时间'">
+            <td title="'成交时间'">
                 2016.7.1 15:00
             </td>
             <td title="'游玩时间'">
@@ -140,7 +141,7 @@
             <td title="'数量'">
                 3
             </td>
-            <td title="'检票'">
+            <td title="'已检'">
                 2
             </td>
             <td title="'退票'">
@@ -149,6 +150,7 @@
             <td title="'状态'">
                 有效
             </td>
+
             <td title="'操作'">
                 <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-list"></i> 明细
