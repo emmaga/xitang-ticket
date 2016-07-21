@@ -139,7 +139,7 @@
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "delete",
+          "action": "Delete",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -165,7 +165,7 @@
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "changeStatus",
+          "action": "ChangeStatus",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -222,7 +222,7 @@
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "createDate",
+                "sortBy": "CreateTime",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
@@ -312,7 +312,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "delete",
+          "action": "Delete",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -338,7 +338,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "changeStatus",
+          "action": "ChangeStatus",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -395,7 +395,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "createDate",
+                "sortBy": "CreateTime",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
@@ -495,7 +495,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "delete",
+          "action": "Delete",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -521,7 +521,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "changeStatus",
+          "action": "ChangeStatus",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -578,7 +578,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "createDate",
+                "sortBy": "CreateTime",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
@@ -691,7 +691,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "delete",
+          "action": "Delete",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -717,7 +717,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "changeStatus",
+          "action": "ChangeStatus",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -774,7 +774,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "createDate",
+                "sortBy": "CreateTime",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
@@ -906,7 +906,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var url = c.requestUrl + '/goods' + c.extension;
 
         var data = {
-          "action": "getDetail",
+          "action": "GetDetail",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -962,7 +962,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         this.goods.validDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
 
         var data = {
-          "action": "modify",
+          "action": "Modify",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -1040,7 +1040,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "delete",
+          "action": "Delete",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -1066,7 +1066,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "changeStatus",
+          "action": "ChangeStatus",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -1123,7 +1123,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "createDate",
+                "sortBy": "CreateTime",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
@@ -1208,7 +1208,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/sale' + c.extension;
         var data = {
-          "action": "delete",
+          "action": "Delete",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -1234,7 +1234,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/sale' + c.extension;
         var data = {
-          "action": "changeStatus",
+          "action": "ChangeStatus",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -1291,7 +1291,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "createDate",
+                "sortBy": "CreateTime",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
@@ -1349,7 +1349,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
-          "action": "changeStatus",
+          "action": "ChangeStatus",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -1393,7 +1393,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "createDate",
+                "sortBy": "CreateTime",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
@@ -1454,7 +1454,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
-        "sortBy": "createDate",
+        "sortBy": "CreateTime",
         "orderBy": "desc",
         "count": 10000,
         "page": 1,
@@ -1488,7 +1488,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
-        "sortBy": "createDate",
+        "sortBy": "CreateTime",
         "orderBy": "desc",
         "count": 10000,
         "page": 1,
@@ -1553,7 +1553,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
           if(data.rescode === 200) {
-            $location.path('/partnerConfig');
+            $location.path('/saleList');
           }else if(data.rescode === 401){
             $location.path('/index');
           }else {
@@ -1591,10 +1591,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
     this.initSaleDetailInfo = function() {
       var c = $scope.root.config;
-      var url = c.requestUrl + '/saleDetail' + c.extension;
+      var url = c.requestUrl + '/sale' + c.extension;
 
       var data = {
-        "action": "getDetail",
+        "action": "GetDetail",
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
@@ -1635,7 +1635,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
-        "sortBy": "createDate",
+        "sortBy": "CreateTime",
         "orderBy": "desc",
         "count": 10000,
         "page": 1,
@@ -1674,7 +1674,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
-        "sortBy": "createDate",
+        "sortBy": "CreateTime",
         "orderBy": "desc",
         "count": 10000,
         "page": 1,
@@ -1744,7 +1744,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
           if(data.rescode === 200) {
-            $location.path('/partnerConfig');
+            $location.path('/saleList');
           }else if(data.rescode === 401){
             $location.path('/index');
           }else {
