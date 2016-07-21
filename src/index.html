@@ -12,10 +12,10 @@
     <link rel="stylesheet" type="text/css" href="style/application.css" />
 </head>
 
-<body ng-app="xt-ticket" ng-controller="RootController as root">
+<body ng-app="xt-ticket" ng-controller="RootController as root" ng-init="coverUrlId=2">
     <!-- fullScreen -->
     <div ui-view=""></div>
-    <div ng-include="root.coverUrl"></div>
+    <div ng-init="root.coverParamId = root.coverParamId" ng-include="root.coverUrl"></div>
 
     <script type="text/javascript" src="lib/angular.min.js"></script>
     <script type="text/javascript" src="lib/angular-cookies.min.js"></script>

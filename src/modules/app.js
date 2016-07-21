@@ -213,7 +213,8 @@
 
   app.controller('RootController', function() {
     this.config = config;
-    this.coverUrl = "";
+    this.coverUrl = '';
+    this.coverParamId = '';
   });
 
   var config = {

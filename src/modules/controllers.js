@@ -624,10 +624,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
   app.controller('orderDetailController', ['$scope', function($scope) {
     console.log('orderDetail');
+    console.log($scope.root.coverParamId);
     var self = this;
 
     this.close = function() {
-      $scope.root.coverUrl = "";
+      $scope.root.coverUrl = '';
+      $scope.root.coverParamId = '';
     };
   }]);
 
@@ -810,8 +812,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         );
       }
 
-      self.showDetail = function() {
-        $scope.root.coverUrl = "pages/orderDetail.html";
+      self.showDetail = function(orderId) {
+        $scope.root.coverUrl = 'pages/orderDetail.html';
+        $scope.root.coverParamId = orderId;
       }
     }
   ]);
