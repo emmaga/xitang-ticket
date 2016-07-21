@@ -625,6 +625,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
   app.controller('orderDetailController', ['$scope', function($scope) {
     console.log('orderDetail');
     var self = this;
+
+    this.close = function() {
+      $scope.root.coverUrl = "";
+    };
   }]);
 
   app.controller('ordersListController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
@@ -804,6 +808,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             }
           }
         );
+      }
+
+      self.showDetail = function() {
+        $scope.root.coverUrl = "pages/orderDetail.html";
       }
     }
   ]);

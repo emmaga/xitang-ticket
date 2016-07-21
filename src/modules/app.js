@@ -3,7 +3,8 @@
 (function() {
   var app = angular.module('xt-ticket', [
     'ui.router',
-    'app.controllers'
+    'app.controllers',
+    'app.directive'
   ]);
 
   app.config(function($stateProvider, $urlRouterProvider) {
@@ -212,6 +213,7 @@
 
   app.controller('RootController', function() {
     this.config = config;
+    this.coverUrl = "";
   });
 
   var config = {

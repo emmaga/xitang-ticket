@@ -15,7 +15,8 @@
 <body ng-app="xt-ticket" ng-controller="RootController as root">
     <!-- fullScreen -->
     <div ui-view=""></div>
-    <div ui-view="cover"></div>
+    <div ng-include="root.coverUrl"></div>
+
     <script type="text/javascript" src="lib/angular.min.js"></script>
     <script type="text/javascript" src="lib/angular-cookies.min.js"></script>
     <script type="text/javascript" src="lib/angular-ui-router.js"></script>
@@ -31,6 +32,7 @@
     <script type="text/javascript" src="lib/scripts.js"></script>
     <script type="text/javascript" src="modules/app.js"></script>
     <script type="text/javascript" src="modules/controllers.js"></script>
+    <script type="text/javascript" src="modules/directives.js"></script>
 </body>
 
 </html>
