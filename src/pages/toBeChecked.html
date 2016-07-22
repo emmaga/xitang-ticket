@@ -1,31 +1,75 @@
 ﻿<div ng-controller="toBeCheckedController as toBeChecked">
     <a>
         <strong>
-            <i class="glyphicon glyphicon-usd"></i>
-            销售中心
+            <i class="glyphicon glyphicon-barcode"></i>
+            订单中心
             <i class="glyphicon glyphicon-chevron-right"></i>
-            商品列表         
+            手动检票         
         </strong>
     </a>
     <hr>
     <div class="row">
-        <div class="col-xs-6">
-            <div class="btn-group ">
-                <a class="btn btn-default" ui-sref="goodsAdd">
-                    <i class="glyphicon glyphicon-plus"></i> 添加商品
-                </a>
-                <a ng-click="toBeChecked.delete()" ng-class="{disabled: !toBeChecked.isChecked()}" class="btn btn-default">
-                    <i class="glyphicon glyphicon-remove"></i> 删除
-                </a>
-            </div>
+        
+        
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                成交日期 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu fixed-width-7">
+                <li>
+                    <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+                        <span class="input-group-addon illution">开始</span>
+                        <input class="form-control illution" size="16" type="text" value="" readonly>
+                        <input type="hidden" id="rd_qcaxwa" value="" />
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                    <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
+                        <span class="input-group-addon illution">结束</span>
+                        <input class="form-control illution" size="16" type="text" value="" readonly>
+                        <input type="hidden" id="rd_khaydt" value="" />
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </li>
+                <li><a>查询</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a>清除</a></li>
+            </ul>
         </div>
-        <div class="col-xs-6">
-            <div class="input-group">
-                <input ng-model="toBeChecked.searchName" type="text" class="form-control" placeholder="商品名">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="toBeChecked.search()" href>搜索</button>
-                </span>
-            </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                游玩日期 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu fixed-width-7">
+                <li>
+                    <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
+                        <span class="input-group-addon illution">开始</span>
+                        <input class="form-control illution" size="16" type="text" value="" readonly>
+                        <input type="hidden" id="rd_lptvht" value="" />
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                    <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
+                        <span class="input-group-addon illution">结束</span>
+                        <input class="form-control illution" size="16" type="text" value="" readonly>
+                        <input type="hidden" id="rd_idwdiz" value="" />
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </li>
+                <li><a>查询</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a>清除</a></li>
+            </ul>
+        </div>
+        <hr class="break-space">
+        <div class="input-group flex-box multi-input">
+            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="预订人">
+            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="手机">
+            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="订单号">
+            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="分销商订单号">
+            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="分销商">
+            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="商品名">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="toBeChecked.search()" href>搜索</button>
+            </span>
         </div>
     </div>
     <hr class="break-space">
@@ -35,45 +79,48 @@
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
                 <input type="checkbox" ng-model="toBeChecked.checkboxes.items[row.id]" />
             </td>
+            <td title="'订单号'">
+                #201607082234
+            </td>
+            <td title="'分销商订单号'">
+                #201607082234
+            </td>
             <td title="'商品名'">
                 {{row.goodsName}}
             </td>
-            <td title="'检票时间'">
-                {{row.checkTimeStart}} ~ {{row.checkTimeEnd}}
-            </td>
-            <td title="'检票期限'">
-                前{{row.beforeDays}}天，后{{row.afterDays}}天
-            </td>
-            <td title="'成本价'">
+            <td title="'单价'">
                 ￥{{row.cost}}
             </td>
-            <td title="'有效时间'">
+            <td title="'预订人'">
+                路人甲
+            </td>
+            <td title="'手机号'">
+                1380013800138
+            </td>
+            <td title="'分销商'">
+                驴妈妈
+            </td>
+            <td title="'成交时间'">
+                2016.7.1 15:00
+            </td>
+            <td title="'游玩时间'">
                 {{row.validDateStart | date:'yyyy.MM.dd'}} ~ {{row.validDateEnd | date:'yyyy.MM.dd'}}
             </td>
-            <td title="'创建时间'">
-                {{row.createDate | date:'yyyy.MM.dd'}}
+            <td title="'可检'">
+                3
             </td>
             <td title="'操作'">
-                <small>
-                    <a ng-click="toBeChecked.changeStatus(row.status)" title="{{toBeChecked.getStatusAction(row.status)}}" ng-class="{ 'btn-success': toBeChecked.isOn(row.status), 'btn-warning': !toBeChecked.isOn(row.status) }" class="btn btn-default btn-xs">
-                        <i ng-class="{ 'glyphicon-ok': toBeChecked.isOn(row.status), 'glyphicon-lock': !toBeChecked.isOn(row.status) }" class="glyphicon"></i>
-                        {{toBeChecked.getStatus(row.status)}}
-                    </a>
-                    
-                    <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
-                        <i class="glyphicon glyphicon-pencil"></i>
-                        编辑
-                    </a>
-                </small>
+                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
+                    <i class="glyphicon glyphicon-list"></i> 明细
+                </a>
+                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-primary btn-xs">
+                    <i class="glyphicon glyphicon-check"></i> 检票
+                </a>
+
             </td>
         </tr>
     </table>
-
     <script type="text/ng-template" id="ng-table/headers/checkbox.html">
         <input type="checkbox" ng-model="toBeChecked.checkboxes.checked" value="" />
     </script>
-    
-    toBeChecked
-    <a ui-sref="index">订单中心－手动检票－检票</a>
-    <a ui-sref="index">订单中心－手动检票－明细</a>
 </div>
