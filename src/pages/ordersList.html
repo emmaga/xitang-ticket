@@ -1,15 +1,15 @@
 ﻿<div ng-controller="ordersListController as ordersList" ng-init="ordersList.init()">
     <a>
         <strong>
-            <i class="glyphicon glyphicon-usd"></i>
-            销售中心
+            <i class="glyphicon glyphicon-barcode"></i>
+            订单中心
             <i class="glyphicon glyphicon-chevron-right"></i>
-            商品列表         
+            订单列表         
         </strong>
     </a>
     <hr>
     <div class="row">
-        <div class="controls btn-group">
+        <div class="controls btn-group col-sm-2 col-condensed">
             <label>检票状态</label>
             <select ng-model="ordersList.checkStatus" class="form-control">
                 <option value="all" class="" selected="selected">全部</option>
@@ -18,7 +18,7 @@
                 <option label="检票中" value="checking">检票中</option>
             </select>
         </div>
-        <div class="controls btn-group">
+        <div class="controls btn-group col-sm-2 col-condensed">
             <label>是否过期</label>
             <select ng-model="ordersList.isExpired" class="form-control">
                 <option value="all" class="" selected="selected">全部</option>
@@ -26,7 +26,6 @@
                 <option label="已过期" value="yes">已过期</option>
             </select>
         </div>
-
         <div class="col-sm-2 col-condensed">
             <label>成交时间开始</label>
             <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
@@ -67,32 +66,34 @@
                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
             </div>
         </div>
-        
     </div>
 
 
-        <hr class="break-space">
-        <div class="input-group flex-box multi-input">
-            <input ng-model="ordersList.bookPerson" type="text" class="flex-item form-control" placeholder="预订人">
-            <input ng-model="ordersList.bookMobile" type="text" class="flex-item form-control" placeholder="手机">
-            <input ng-model="ordersList.orderId" type="text" class="flex-item form-control" placeholder="订单号">
-            <input ng-model="ordersList.parterOrderId" type="text" class="flex-item form-control" placeholder="分销商订单号">
-            <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
-            <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
-        </div>
+
+
+    
     <hr class="break-space">
 
-    
-        <button ng-click="ordersList.export()" class="btn btn-default pull-right">
+    <div class="input-group flex-box multi-input">
+        <input ng-model="ordersList.bookPerson" type="text" class="flex-item form-control" placeholder="预订人">
+        <input ng-model="ordersList.bookMobile" type="text" class="flex-item form-control" placeholder="手机">
+        <input ng-model="ordersList.orderId" type="text" class="flex-item form-control" placeholder="订单号">
+        <input ng-model="ordersList.parterOrderId" type="text" class="flex-item form-control" placeholder="分销商订单号">
+        <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
+        <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
+    </div>
+    <hr class="break-space">
+    <div class="controls pull-right">
+        <button ng-click="ordersList.export()" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
         </button>
-            
-        <button class="btn btn-primary" type="submit" ng-click="ordersList.search()" href>
+        <button class="btn btn-primary" ng-click="ordersList.search()" href>
             <i class="glyphicon glyphicon-search"></i>搜索
         </button>
-        
-
-    
+    </div>
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
 
     <div ng-show="ordersList.loading">loading...</div>
     <table ng-table="ordersList.tableParams" ng-init="ordersList.search()" class="table table-hover table-striped">
