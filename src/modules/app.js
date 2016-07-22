@@ -4,7 +4,8 @@
   var app = angular.module('xt-ticket', [
     'ui.router',
     'app.controllers',
-    'app.directive'
+    'app.directive',
+    'app.filters'
   ]);
 
   app.config(function($stateProvider, $urlRouterProvider) {
