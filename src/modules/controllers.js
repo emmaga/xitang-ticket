@@ -671,18 +671,41 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var c = $scope.root.config;
               var url = c.requestUrl + '/orders' + c.extension;
 
-              //如果成交时间为空，默认设置为1个月查询
+              //如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
               if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
 
                 var sDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
                 $('#rd_qcaxwa').val(sDate);
-                //todo
-                //$('#valid-date-start').val(sDate);
+                $('#order-create-date-start').val(sDate);
+
+                var eDate = new Date();
+                eDate.setMonth(eDate.getMonth() - 1);
+                eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
+                $('#rd_khaydt').val(eDate);
+                $('#order-create-date-end').val(eDate);
               }
-              //成交日期
+              // 仅开始时间为空时
+              else if(!$('#rd_qcaxwa').val()) {
+                var d = new Date($('#rd_khaydt').val());
+                d.setMonth(d.getMonth() - 1);
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+                $('#rd_qcaxwa').val(d);
+                $('#order-create-date-start').val(d);
+              }
+              // 仅结束时间为空时
+              else {
+                var d = new Date($('#rd_qcaxwa').val());
+                d.setMonth(d.getMonth() + 1);
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+                $('#rd_khaydt').val(d);
+                $('#order-create-date-end').val(d);
+              }
+
+              //读取成交日期
               self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
               self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
-              //游玩日期
+              
+              //读取游玩日期
               self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
               self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
 
@@ -716,11 +739,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               return $http.post(url, data).then(function successCallback(response) {
                   var data = response.data;
                   if(data.rescode === 200) {
-                    self.checkboxes = { 'checked': false, items: {} };
                     self.loading = false;
-                    params.total(data.goods.totalCount);
-                    self.tableData = data.goods.lists;
-                    return data.goods.lists;
+                    params.total(data.orders.totalCount);
+                    self.tableData = data.orders.lists;
+                    return data.orders.lists;
                   }else if(data.rescode === 401){
                     $location.path('/index');
                   }else {
