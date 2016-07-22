@@ -656,6 +656,89 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         });
       }
 
+      self.export = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/orders' + c.extension;
+
+
+        //如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
+        if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+
+          var sDate = new Date();
+          sDate.setMonth(sDate.getMonth() - 1);
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
+          $('#rd_qcaxwa').val(sDate);
+          $('#order-create-date-start').val(sDate);
+
+          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
+          $('#rd_khaydt').val(eDate);
+          $('#order-create-date-end').val(eDate);
+
+        }
+        // 仅开始时间为空时
+        else if(!$('#rd_qcaxwa').val()) {
+          var d = new Date($('#rd_khaydt').val());
+          d.setMonth(d.getMonth() - 1);
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+          $('#rd_qcaxwa').val(d);
+          $('#order-create-date-start').val(d);
+        }
+        // 仅结束时间为空时
+        else {
+          var d = new Date($('#rd_qcaxwa').val());
+          d.setMonth(d.getMonth() + 1);
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+          $('#rd_khaydt').val(d);
+          $('#order-create-date-end').val(d);
+        }
+
+        //读取成交日期
+        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
+        self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+        
+        //读取游玩日期
+        self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
+        self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+
+        var data = {
+          "action": "Export",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "OrderCreateTime",
+          "orderBy": "desc",
+          "search": {
+            "orderId": self.orderId ? self.orderId : "",
+            "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
+            "bookPerson": self.bookPerson ? self.bookPerson : "",
+            "bookMobile": self.bookMobile ? self.bookMobile : "",
+            "goodsName": self.goodsName ? self.goodsName : "",
+            "checkStatus": self.checkStatus ? self.checkStatus : "all", //checked：已检票，checking：检票中，waiting：待检票
+            "partnerName": self.partnerName ? self.partnerName : "",
+            "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
+            "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
+            "visitDateStart": self.visitDateStart ? self.visitDateStart : "",
+            "visitDateEnd": self.visitDateEnd ? self.visitDateEnd : "",
+            "isExpired": self.isExpired ? self.isExpired : "all"
+          }
+        };
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              if (confirm('导出中，是否到“报表中心－导出列表”中查看？')) {
+                $location.path('/exportStatementsList');
+              }
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('添加失败，请重试');
+          });
+      }
+
       // ngtable
       self.search = function() {
         self.tableParams = new NgTableParams(
@@ -674,15 +757,16 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               //如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
               if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
 
-                var sDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
+                var sDate = new Date();
+                sDate.setMonth(sDate.getMonth() - 1);
+                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
                 $('#rd_qcaxwa').val(sDate);
                 $('#order-create-date-start').val(sDate);
 
-                var eDate = new Date();
-                eDate.setMonth(eDate.getMonth() - 1);
-                eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
+                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
                 $('#rd_khaydt').val(eDate);
                 $('#order-create-date-end').val(eDate);
+
               }
               // 仅开始时间为空时
               else if(!$('#rd_qcaxwa').val()) {
@@ -714,7 +798,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "CreateTime",
+                "sortBy": "OrderCreateTime",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
