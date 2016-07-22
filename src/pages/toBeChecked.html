@@ -113,7 +113,7 @@
                 <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-list"></i> 明细
                 </a>
-                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-primary btn-xs">
+                <a ng-click="toBeChecked.checkDetail(row.id)" title="编辑" class="btn btn-primary btn-xs">
                     <i class="glyphicon glyphicon-check"></i> 检票
                 </a>
 

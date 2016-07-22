@@ -426,6 +426,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           }
         );
       }
+
+      self.checkDetail = function(orderId) {
+        $scope.root.coverUrl = 'pages/check.html';
+        $scope.root.coverParamId = 'orderId';
+      }
     }
   ]);
 
@@ -651,111 +656,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         });
       }
 
-      // checkbox
-      self.checkboxes = { 'checked': false, items: {} };
-      
-      self.getStatus = function(status) {
-        var ret = status === 'on' ? '已启用' : '已禁用';
-        return ret;
-      }
-
-      self.isOn = function(status) {
-        var ret = status === 'on' ? true : false;
-        return ret;
-      }
-
-      self.isChecked = function() {
-        var ret = false;
-        var keepGoing = true;
-        angular.forEach(self.checkboxes.items, function(value, key) {
-          if(keepGoing) {
-            if(value === true){
-              ret = true;
-              keepGoing = false;
-            }
-          }
-        });
-        return ret;
-      }
-
-      self.getStatusAction = function(status) {
-        var ret = status === 'on' ? '禁用' : '启用';
-        return ret;
-      }
-
-      self.delete = function() {
-        if(!confirm('确定删除？')) {
-          return;
-        }
-        
-        var goods = [];
-        angular.forEach(self.checkboxes.items, function(value, key) {
-          if(value === true) {
-            goods.push({"id": key});
-          }
-        });
-        var c = $scope.root.config;
-        var url = c.requestUrl + '/goods' + c.extension;
-        var data = {
-          "action": "Delete",
-          "account": $cookies.get('account'),
-          "token": $cookies.get('token'),
-          "projectName": $cookies.get('projectName'),
-          "goods": goods
-        };
-        data = JSON.stringify(data);
-        
-        $http.post(url, data).then(function successCallback(response) {
-            var data = response.data;
-            if(data.rescode === 200) {
-              $window.location.reload();
-            }else if(data.rescode === 401){
-              $location.path('/index');
-            }else {
-              alert(data.errInfo);
-            }  
-          }, function errorCallback(response) {
-            alert('删除失败，请重试');
-          });
-      }
-
-      self.changeStatus = function(status) {
-        var c = $scope.root.config;
-        var url = c.requestUrl + '/goods' + c.extension;
-        var data = {
-          "action": "ChangeStatus",
-          "account": $cookies.get('account'),
-          "token": $cookies.get('token'),
-          "projectName": $cookies.get('projectName'),
-          "goodsId": 1,
-          "state": status === 'on' ? 'off' : 'on'
-        };
-        data = JSON.stringify(data);
-        
-        $http.post(url, data).then(function successCallback(response) {
-            var data = response.data;
-            if(data.rescode === 200) {
-              alert('启用／禁用 设置成功！');
-              $window.location.reload();
-            }else if(data.rescode === 401){
-              $location.path('/index');
-            }else {
-              alert(data.errInfo);
-            }  
-          }, function errorCallback(response) {
-            alert('设置失败，请重试');
-          });
-      }
-
-      // watch for check all checkbox
-      $scope.$watch('ordersList.checkboxes.checked', function(value) {
-          angular.forEach(self.tableData, function(item) {
-              if (angular.isDefined(item.id)) {
-                self.checkboxes.items[item.id] = value;
-              }
-          });
-      });
-
       // ngtable
       self.search = function() {
         self.tableParams = new NgTableParams(
@@ -768,13 +668,24 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             counts: [15, 30],
             getData: function(params) {
               var paramsUrl = params.url();
-              var searchName = "";
-              if (self.searchName) {
-                searchName = self.searchName;
-              }
-
               var c = $scope.root.config;
-              var url = c.requestUrl + '/goods' + c.extension;
+              var url = c.requestUrl + '/orders' + c.extension;
+
+              //如果成交时间为空，默认设置为1个月查询
+              if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+
+                var sDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
+                $('#rd_qcaxwa').val(sDate);
+                //todo
+                //$('#valid-date-start').val(sDate);
+              }
+              //成交日期
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+              //游玩日期
+              self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
+              self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+
               var data = {
                 "action": "GetList",
                 "account": $cookies.get('account'),
@@ -785,7 +696,18 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
                 "search": {
-                  "goodsName": searchName //完全匹配查询
+                  "orderId": self.orderId ? self.orderId : "",
+                  "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
+                  "bookPerson": self.bookPerson ? self.bookPerson : "",
+                  "bookMobile": self.bookMobile ? self.bookMobile : "",
+                  "goodsName": self.goodsName ? self.goodsName : "",
+                  "checkStatus": self.checkStatus ? self.checkStatus : "all", //checked：已检票，checking：检票中，waiting：待检票
+                  "partnerName": self.partnerName ? self.partnerName : "",
+                  "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
+                  "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
+                  "visitDateStart": self.visitDateStart ? self.visitDateStart : "",
+                  "visitDateEnd": self.visitDateEnd ? self.visitDateEnd : "",
+                  "isExpired": self.isExpired ? self.isExpired : "all"
                 }
               };
               data = JSON.stringify(data);
