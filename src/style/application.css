@@ -41,6 +41,11 @@ footer {
 
 
 /*modified*/
+.modal .list-group-item{
+  border-radius: 0px;
+  border-left: none;
+  border-right: none;
+}
 a:hover{
   text-decoration: none;
 }

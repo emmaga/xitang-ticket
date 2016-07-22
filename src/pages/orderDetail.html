@@ -1,4 +1,125 @@
 ﻿<div ng-controller="orderDetailController as orderDetail">
-    orderDetail
-    <span ng-click="orderDetail.close()">close</span>
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display:block">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button ng-click="orderDetail.close()" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">订单明细</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- info -->
+                    
+                    	<table class="table table-condensed">
+                    		<thead>
+                    			<th>订单信息</th>
+                    			<th></th>
+                    		</thead>
+                    		<tbody>
+                    			<tr>
+                    				<td>订单号</td>
+                    				<td>#123123</td>
+                    			</tr>
+                    			<tr>
+                    				<td>分销商订单号</td>
+                    				<td>#123123</td>
+                    			</tr>
+                    			<tr>
+                    				<td>预定人</td>
+                    				<td>路人甲</td>
+                    			</tr>
+                    			<tr>
+                    				<td>手机</td>
+                    				<td>1380 0000 000</td>
+                    			</tr>
+								<tr>
+                    				<td>游玩日期</td>
+                    				<td>2016.7.1 ~ 2016.7.4</td>
+                    			</tr>
+                    			<tr>
+                    				<td>成交时间</td>
+                    				<td>2016.7.1 15:00</td>
+                    			</tr>
+                    			<tr>
+                    				<td>商品名称</td>
+                    				<td>成人票</td>
+                    			</tr>
+                    			<tr>
+                    				<td>商品代码</td>
+                    				<td>A001</td>
+                    			</tr>
+                    			<tr>
+                    				<td>商品成本价</td>
+                    				<td>￥2</td>
+                    			</tr>
+                    			<tr>
+                    				<td>商品单价</td>
+                    				<td>￥100</td>
+                    			</tr>
+                    			<tr>
+                    				<td>数量</td>
+                    				<td>3</td>
+                    			</tr>
+                    			<tr>
+                    				<td>总价</td>
+                    				<td>￥300</td>
+                    			</tr>
+
+                    		</tbody>
+                    		
+                    		<thead>
+                    			<th>分销商信息</th>
+                    			<th></th>
+                    		</thead>
+                    		<tbody>
+                    			<tr>
+                    				<td>分销商名称</td>
+                    				<td>驴妈妈</td>
+                    			</tr>
+                    			<tr>
+                    				<td>分销商代码</td>
+                    				<td>#ASDF</td>
+                    			</tr>
+                    		</tbody>
+                    	</tbody>
+                    		<thead>
+                    			<th>检票信息</th>
+                    			<th></th>
+                    		</thead>
+                    		<tbody>
+                    			<tr>
+                    				<td>总数</td>
+                    				<td>3</td>
+                    			</tr>
+                    			<tr>
+                    				<td>未检票</td>
+                    				<td>3</td>
+                    			</tr>
+                    			<tr>
+                    				<td>已检票</td>
+                    				<td>0</td>
+                    			</tr>
+                    			<tr>
+                    				<td>退票</td>
+                    				<td>0</td>
+                    			</tr>
+                    			<tr>
+                    				<td>是否过期</td>
+                    				<td>未过期</td>
+                    			</tr>
+                    		</tbody>
+                    	</tbody>
+                    	</table>
+
+
+
+
+                    
+                    <!-- info end -->
+                </div>
+                <div class="modal-footer">
+                    <button ng-click="orderDetail.close()" type="button" class="btn btn-default" data-dismiss="modal">完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

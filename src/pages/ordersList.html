@@ -9,7 +9,6 @@
     </a>
     <hr>
     <div class="row">
-        <div class="col-xs-8">
             
             
             <div class="btn-group">
@@ -90,15 +89,14 @@
             
 
 
-        </div>
-        <div class="col-xs-4">
+        
             <div class="input-group">
                 <input ng-model="ordersList.searchName" type="text" class="form-control" placeholder="预订人/手机/订单号x2/分销商/商品名">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" ng-click="ordersList.search()" href>搜索</button>
                 </span>
             </div>
-        </div>
+        
     </div>
     <hr class="break-space">
     <div ng-show="ordersList.loading">loading...</div>
