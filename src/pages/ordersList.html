@@ -82,12 +82,12 @@
         </div>
         <hr class="break-space">
         <div class="input-group flex-box multi-input">
-            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="预订人">
-            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="手机">
-            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="订单号">
-            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="分销商订单号">
-            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="分销商">
-            <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="商品名">
+            <input ng-model="ordersList.bookPerson" type="text" class="flex-item form-control" placeholder="预订人">
+            <input ng-model="ordersList.bookMobile" type="text" class="flex-item form-control" placeholder="手机">
+            <input ng-model="ordersList.orderId" type="text" class="flex-item form-control" placeholder="订单号">
+            <input ng-model="ordersList.parterOrderId" type="text" class="flex-item form-control" placeholder="分销商订单号">
+            <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
+            <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
             <span class="input-group-btn">
                 <button class="btn btn-default" type="button" ng-click="ordersList.search()" href>搜索</button>
             </span>
@@ -100,56 +100,50 @@
             <i class="glyphicon glyphicon-export"></i> 导出
         </button>
         <tr ng-repeat="row in $data">
-            <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
-                <input type="checkbox" ng-model="ordersList.checkboxes.items[row.id]" />
-            </td>
             <td title="'订单号'">
-                #201607082234
+                {{row.orderId}}
             </td>
             <td title="'分销商订单号'">
-                #201607082234
+                {{row.parterOrderId}}
             </td>
             <td title="'商品名'">
                 {{row.goodsName}}
             </td>
             <td title="'单价'">
-                ￥{{row.cost}}
+                ￥{{row.price}}
             </td>
             <td title="'预订人'">
-                路人甲
+                {{row.bookPerson}}
             </td>
             <td title="'手机号'">
-                1380013800138
+                {{row.bookMobile}}
             </td>
             <td title="'分销商'">
-                驴妈妈
+                {{row.partnerName}}
             </td>
             <td title="'成交时间'">
-                2016.7.1 15:00
+                {{row.orderCreateTime | date:'yyyy.MM.dd hh:mm}}
             </td>
             <td title="'游玩时间'">
-                {{row.validDateStart | date:'yyyy.MM.dd'}} ~ {{row.validDateEnd | date:'yyyy.MM.dd'}}
+                {{row.visitDateStart | date:'yyyy.MM.dd'}} ~ {{row.visitDateEnd | date:'yyyy.MM.dd'}}
             </td>
             <td title="'数量'">
-                3
+                {{row.totalTickets}}
             </td>
             <td title="'已检'">
-                2
+                {{row.checkedTickets}}
             </td>
             <td title="'退票'">
-                0
+                {{row.returnedTickets}}
             </td>
             <td title="'状态'">
-                有效
+                {{row.isExpired}}
             </td>
             <td title="'操作'">
-                <a ng-click="ordersList.showDetail(row.id)" title="编辑" class="btn btn-default btn-xs">
+                <a ng-click="ordersList.showDetail(row.id)" title="明细" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-list"></i> 明细
                 </a>
             </td>
         </tr>
     </table>
-    <script type="text/ng-template" id="ng-table/headers/checkbox.html">
-        <input type="checkbox" ng-model="ordersList.checkboxes.checked" value="" />
-    </script>
 </div>

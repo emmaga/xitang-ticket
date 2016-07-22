@@ -638,8 +638,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     };
   }]);
 
-  app.controller('ordersListController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
-    function($scope, $http, $cookies, $location, $window, NgTableParams) {
+  app.controller('ordersListController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
       console.log('ordersList');
       var self = this;
 
