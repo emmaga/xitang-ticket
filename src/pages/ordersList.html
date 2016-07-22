@@ -8,7 +8,7 @@
         </strong>
     </a>
     <hr>
-    <div class="row">
+    <div class="row" ng-init="ordersList.checkStatus = 'all'; ordersList.isExpired = 'all'">
         <div class="controls btn-group col-sm-2 col-condensed">
             <label>检票状态</label>
             <select ng-model="ordersList.checkStatus" class="form-control">
