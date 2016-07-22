@@ -41,9 +41,22 @@ footer {
 
 
 /*modified*/
-.multi-input{
-  margin-right: 57px;
+.col-condensed{
+  padding-left: 4px;
+  padding-right: 3px;
 }
+
+.col-condensed:first-child{
+  padding-left: 15px;
+}
+
+.col-condensed:last-child{
+  padding-right: 15px;
+}
+
+/*.multi-input{
+  margin-right: 44px;
+}*/
 .multi-input input:not(:nth-last-of-type(1)){
   border-right:none;
 }
@@ -103,7 +116,7 @@ tbody th{
 
 
 .float-left{
-  float: left;
+  float: left !important;
 }
 
 .no-underline{

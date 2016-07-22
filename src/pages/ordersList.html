@@ -10,74 +10,69 @@
     <hr>
     <div class="row">
 
-
-        <div class="controls btn-group">
+   
+        <div class="controls btn-group col-sm-2 col-condensed">
+            <label>检票状态</label>
             <select ng-model="" class="form-control">
-                <option value="" class="" selected="selected">检票状态 / 全部</option>
+                <option value="" class="" selected="selected">全部</option>
                 <option label="已检票" value="">已检票</option>
                 <option label="未检票" value="">未检票</option>
                 <option label="检票中" value="">检票中</option>
             </select>
         </div>
-        <div class="controls btn-group">
+        <div class="controls btn-group  col-sm-2 col-condensed">
+            <label>是否过期</label>
             <select ng-model="" class="form-control">
-                <option value="" class="" selected="selected">是否过期 / 全部</option>
+                <option value="" class="" selected="selected">全部</option>
                 <option label="未过期" value="">未过期</option>
                 <option label="已过期" value="">已过期</option>
             </select>
         </div>
 
-
-
-
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                成交日期 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu fixed-width-7">
-                <li>
-                    <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
-                        <span class="input-group-addon illution">开始</span>
-                        <input id="order-create-date-start" class="form-control illution" size="16" type="text" value="" readonly>
-                        <input type="hidden" id="rd_qcaxwa" value="" />
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    </div>
-                    <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
-                        <span class="input-group-addon illution">结束</span>
-                        <input id="order-create-date-end" class="form-control illution" size="16" type="text" value="" readonly>
-                        <input type="hidden" id="rd_khaydt" value="" />
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    </div>
-                </li>
-                <li><a>查询</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a>清除</a></li>
-            </ul>
+        <div class="col-sm-2 col-condensed">
+            <label>成交时间开始</label>
+            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">开始</span> -->
+                <input id="order-create-date-start" class="form-control" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_qcaxwa" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
         </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                游玩日期 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu fixed-width-7">
-                <li>
-                    <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
-                        <span class="input-group-addon illution">开始</span>
-                        <input class="form-control illution" size="16" type="text" value="" readonly>
-                        <input type="hidden" id="rd_lptvht" value="" />
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    </div>
-                    <div class="input-group date form_date  in-drop" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
-                        <span class="input-group-addon illution">结束</span>
-                        <input class="form-control illution" size="16" type="text" value="" readonly>
-                        <input type="hidden" id="rd_idwdiz" value="" />
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    </div>
-                </li>
-                <li><a>查询</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a>清除</a></li>
-            </ul>
+        <div class="col-sm-2 col-condensed">
+            <label>成交时间结束</label>
+            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">结束</span> -->
+                <input id="order-create-date-end" class="form-control" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_khaydt" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
         </div>
+        <div class="col-sm-2 col-condensed">
+            <label>游玩时间开始</label>
+            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">开始</span> -->
+                <input class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_lptvht" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+        </div>
+        <div class="col-sm-2 col-condensed">
+            <label>游玩时间结束</label>
+            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">结束</span> -->
+                <input class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_idwdiz" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+        </div>
+        
+    </div>
+
+
         <hr class="break-space">
         <div class="input-group flex-box multi-input">
             <input ng-model="ordersList.bookPerson" type="text" class="flex-item form-control" placeholder="预订人">
@@ -86,17 +81,22 @@
             <input ng-model="ordersList.parterOrderId" type="text" class="flex-item form-control" placeholder="分销商订单号">
             <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
             <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ng-click="ordersList.search()" href>搜索</button>
-            </span>
         </div>
-    </div>
     <hr class="break-space">
-    <div ng-show="ordersList.loading">loading...</div>
-    <table ng-table="ordersList.tableParams" ng-init="ordersList.search()" class="table table-hover table-striped">
-        <button type="submit" class="btn btn-default pull-right">
+        <div class="controls pull-right">
+        <button type="submit" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
         </button>
+            
+        <button class="btn btn-primary" type="submit" ng-click="ordersList.search()" href>
+            <i class="glyphicon glyphicon-search"></i>搜索
+        </button>
+        
+
+        </div>
+
+    <div ng-show="ordersList.loading">loading...</div>
+    <table ng-table="ordersList.tableParams" ng-init="ordersList.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
             <td title="'订单号'">
                 {{row.orderId}}
