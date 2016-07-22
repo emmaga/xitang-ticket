@@ -9,29 +9,27 @@
     </a>
     <hr>
     <div class="row">
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                检票状态 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a>已检票</a></li>
-                <li><a>未检票</a></li>
-                <li><a>检票中</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a>全部状态</a></li>
-            </ul>
+
+
+        <div class="controls btn-group">
+            <select ng-model="" class="form-control ng-pristine ng-touched">
+                <option value="" class="" selected="selected">- 检票状态 -</option>
+                <option label="已检票" value="">已检票</option>
+                <option label="未检票" value="">未检票</option>
+                <option label="检票中" value="">检票中</option>
+            </select>
         </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                是否过期 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a>未过期</a></li>
-                <li><a>已过期</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a>全部状态</a></li>
-            </ul>
+        <div class="controls btn-group">
+            <select ng-model="" class="form-control ng-pristine ng-touched">
+                <option value="" class="" selected="selected">- 是否过期 -</option>
+                <option label="未过期" value="">未过期</option>
+                <option label="已过期" value="">已过期</option>
+            </select>
         </div>
+
+
+
+
         <div class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 成交日期 <span class="caret"></span>
