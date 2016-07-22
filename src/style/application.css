@@ -41,6 +41,13 @@ footer {
 
 
 /*modified*/
+.multi-input{
+  margin-right: 57px;
+}
+.multi-input input:not(:nth-last-of-type(1)){
+  border-right:none;
+}
+
 .modal .list-group-item{
   border-radius: 0px;
   border-left: none;
