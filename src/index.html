@@ -6,7 +6,6 @@
     <title>xitang-ticket</title>
     <link rel="stylesheet" type="text/css" href="style/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="style/bootstrap-datetimepicker.min.css" />
-
     <link rel="stylesheet" type="text/css" href="style/ng-table.min.css" />
     <link rel="stylesheet" type="text/css" href="style/LineChart.min.css" />
     <link rel="stylesheet" type="text/css" href="style/application.css" />
@@ -15,8 +14,9 @@
 <body ng-app="xt-ticket" ng-controller="RootController as root">
     <!-- fullScreen -->
     <div ui-view=""></div>
-    <div ng-include="root.coverUrl"></div>
-
+    <div ng-include="root.coverUrl">
+    </div>
+    
     <script type="text/javascript" src="lib/angular.min.js"></script>
     <script type="text/javascript" src="lib/angular-cookies.min.js"></script>
     <script type="text/javascript" src="lib/angular-ui-router.js"></script>
@@ -25,8 +25,6 @@
     <script type="text/javascript" src="lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="lib/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript" src="lib/bootstrap-datetimepicker.zh-CN.js"></script>
-
-    
     <script type="text/javascript" src="lib/d3.min.js"></script>
     <script type="text/javascript" src="lib/LineChart.min.js"></script>
     <script type="text/javascript" src="lib/scripts.js"></script>
