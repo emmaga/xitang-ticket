@@ -627,16 +627,45 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     var self = this;
   }]);
 
-  app.controller('orderDetailController', ['$scope', function($scope) {
-    console.log('orderDetail');
-    console.log($scope.root.coverParamId);
-    var self = this;
+  app.controller('orderDetailController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
+      console.log('orderDetail');
+      var self = this;
+      self.id = $scope.root.coverParamId;
 
-    this.close = function() {
-      $scope.root.coverUrl = '';
-      $scope.root.coverParamId = '';
-    };
-  }]);
+      this.close = function() {
+        $scope.root.coverUrl = '';
+        $scope.root.coverParamId = '';
+      };
+
+      // get data
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/ordersDetail' + c.extension;
+
+      var data = {
+        "action": "GetDetail",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "orderId": self.id
+      };
+      data = JSON.stringify(data);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.orders = data.orders;
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取信息失败');
+        });
+
+    }
+  ]);
 
   app.controller('ordersListController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
     function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {

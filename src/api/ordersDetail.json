@@ -1,0 +1,26 @@
+{
+    "rescode": 200,
+    "errInfo": "",
+    "orders": {
+        "orderId": "1",
+        "parterOrderId": "1",
+        "bookPerson": "Jack",
+        "bookMobile": "13812345678",
+        "goodsName": "西塘成人票",
+        "goodsId": 1,
+        "checkStatus": "checking",
+        "partnerName": "驴妈妈",
+        "partnerCode": "LVMAMA",
+        "orderCreateTime": "1288323623006",
+        "visitDateStart": "1288323623006",
+        "visitDateEnd": "1288323623006",
+        "isExpired": "yes",
+        "price": 99.9,
+        "totalPrice": 999,
+        "cost": 10,
+        "totalTickets": 10,
+        "checkedTickets": 3,
+        "waitingTickets": 5,
+        "returnedTickets": 1
+    }
+}

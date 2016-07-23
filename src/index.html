@@ -14,7 +14,7 @@
 <body ng-app="xt-ticket" ng-controller="RootController as root" ng-init="coverUrlId=2">
     <!-- fullScreen -->
     <div ui-view=""></div>
-    <div ng-include="root.coverUrl">
+    <div ng-include="root.coverUrl" class="autoscroll">
     </div>
     
     <script type="text/javascript" src="lib/angular.min.js"></script>
