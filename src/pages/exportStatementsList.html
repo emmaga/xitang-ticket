@@ -1,24 +1,39 @@
 ﻿<div ng-controller="exportStatementsListController as exportStatementsList">
     <a>
         <strong>
-            <i class="glyphicon glyphicon-usd"></i>
-            销售中心
+            <i class="glyphicon glyphicon-list-alt"></i>
+            报表中心
             <i class="glyphicon glyphicon-chevron-right"></i>
-            商品列表         
+            导出列表         
         </strong>
     </a>
     <hr>
     <div class="row">
+        
         <div class="col-xs-6">
             <div class="btn-group ">
-                <a class="btn btn-default" ui-sref="userAdd">
-                    <i class="glyphicon glyphicon-plus"></i> 添加商品
-                </a>
+                
                 <a ng-click="exportStatementsList.delete()" ng-class="{disabled: !exportStatementsList.isChecked()}" class="btn btn-default">
                     <i class="glyphicon glyphicon-remove"></i> 删除
                 </a>
+
             </div>
+        
+            <div class="controls btn-group col-sm-2 col-condensed">
+                <select ng-model="" class="form-control">
+                    <option value="all" class="" selected="selected">全部类型</option>
+                    <option label="检票报表" value="">检票报表</option>
+                    <option label="营业汇总" value="">营业汇总</option>
+                    <option label="检票员检票报表" value="">检票员检票报表</option>
+                    
+                </select>
+            </div>
+
+
+
+
         </div>
+
         <div class="col-xs-6">
             <div class="input-group">
                 <input ng-model="exportStatementsList.searchName" type="text" class="form-control" placeholder="商品名">
@@ -35,36 +50,45 @@
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
                 <input type="checkbox" ng-model="exportStatementsList.checkboxes.items[row.id]" />
             </td>
-            <td title="'商品名'">
-                {{row.goodsName}}
+            <td title="'文件名'">
+                检票报表_20160701_120100[]
             </td>
-            <td title="'检票时间'">
-                {{row.checkTimeStart}} ~ {{row.checkTimeEnd}}
+            
+         
+            
+            <td title="'报表类型'">
+                检票报表
             </td>
-            <td title="'检票期限'">
-                前{{row.beforeDays}}天，后{{row.afterDays}}天
+<td title="'导出条件'">
+                blablala
             </td>
-            <td title="'成本价'">
-                ￥{{row.cost}}
-            </td>
-            <td title="'有效时间'">
-                {{row.validDateStart | date:'yyyy.MM.dd'}} ~ {{row.validDateEnd | date:'yyyy.MM.dd'}}
-            </td>
+
+
+            
             <td title="'创建时间'">
-                {{row.createDate | date:'yyyy.MM.dd'}}
+                2016.07.01 15:00:00
             </td>
+            
+            <td title="'导出人'">
+                root
+            </td>
+
+
+            
+            <td title="'状态'">
+                
+                已导出/导出中.../失败
+            </td>
+
+
             <td title="'操作'">
-                <small>
-                    <a ng-click="exportStatementsList.changeStatus(row.status)" title="{{exportStatementsList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': exportStatementsList.isOn(row.status), 'btn-warning': !exportStatementsList.isOn(row.status) }" class="btn btn-default btn-xs">
-                        <i ng-class="{ 'glyphicon-ok': exportStatementsList.isOn(row.status), 'glyphicon-lock': !exportStatementsList.isOn(row.status) }" class="glyphicon"></i>
-                        {{exportStatementsList.getStatus(row.status)}}
-                    </a>
-                    
-                    <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
-                        <i class="glyphicon glyphicon-pencil"></i>
-                        编辑
-                    </a>
-                </small>
+            
+                
+                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-primary btn-xs">
+                    <i class="glyphicon glyphicon-download"></i>
+                    下载
+                </a>
+                
             </td>
         </tr>
     </table>
