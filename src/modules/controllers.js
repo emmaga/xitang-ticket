@@ -266,6 +266,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       console.log('toBeChecked');
       var self = this;
 
+      self.showDetail = function(orderId) {
+        $scope.root.coverUrl = 'pages/orderDetail.html';
+        $scope.root.coverParamId = orderId;
+      }
+
       // ngtable
       self.search = function() {
         self.tableParams = new NgTableParams(
@@ -280,45 +285,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var paramsUrl = params.url();
               var c = $scope.root.config;
               var url = c.requestUrl + '/orders' + c.extension;
-
-              //如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
-              if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
-
-                var sDate = new Date();
-                sDate.setMonth(sDate.getMonth() - 1);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
-                $('#rd_qcaxwa').val(sDate);
-                $('#order-create-date-start').val(sDate);
-
-                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
-                $('#rd_khaydt').val(eDate);
-                $('#order-create-date-end').val(eDate);
-
-              }
-              // 仅开始时间为空时
-              else if(!$('#rd_qcaxwa').val()) {
-                var d = new Date($('#rd_khaydt').val());
-                d.setMonth(d.getMonth() - 1);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
-                $('#rd_qcaxwa').val(d);
-                $('#order-create-date-start').val(d);
-              }
-              // 仅结束时间为空时
-              else {
-                var d = new Date($('#rd_qcaxwa').val());
-                d.setMonth(d.getMonth() + 1);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
-                $('#rd_khaydt').val(d);
-                $('#order-create-date-end').val(d);
-              }
-
-              //读取成交日期
-              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
-              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
-              
-              //读取游玩日期
-              self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
-              self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
 
               var data = {
                 "action": "GetWaitingList",
@@ -366,15 +332,77 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
 
-  app.controller('checkController', ['$scope', function($scope) {
-    console.log('check');
-    var self = this;
-  }]);
+  app.controller('checkController', ['$scope', '$http', '$cookies', '$location', '$state', '$stateParams', 
+    function($scope, $http, $cookies, $location, $state, $stateParams) {
+      console.log('check');
+      var self = this;
+      self.id = $scope.root.coverParamId;
 
-  app.controller('checkDetailController', ['$scope', function($scope) {
-    console.log('checkDetail');
-    var self = this;
-  }]);
+      this.close = function() {
+        $scope.root.coverUrl = '';
+        $scope.root.coverParamId = '';
+      };
+
+      this.check = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/orders' + c.extension;
+
+        var data = {
+          "action": "Check",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "orderId": self.id,
+          "checkNumber": 2,  //检票数量
+          "userName": $cookies.get('userName')
+        };
+        data = JSON.stringify(data);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              alert('检票成功')
+              self.close();
+              $state.reload();
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('检票可能失败，请返回“手动检票”列表复查。');
+          });
+      };
+
+      this.init = function() {
+        // get data
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/orders' + c.extension;
+
+        var data = {
+          "action": "GetCheckDetail",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "orderId": self.id
+        };
+        data = JSON.stringify(data);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              self.orders = data.orders;
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('读取信息失败');
+          });
+      }
+    }
+  ]);
 
   app.controller('checkDetailStatementController', ['$scope', function($scope) {
     console.log('checkDetailStatement');

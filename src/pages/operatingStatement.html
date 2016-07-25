@@ -1,4 +1,87 @@
-﻿<div ng-controller="operatingStatementController as operatingStatement">
-    operatingStatement
-    <a ui-sref="index">导出报表提示框</a>
+﻿<div ng-controller="operatingStatementController as operatingStatement" class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">Groups with summary row</h2>
+       <div class="bs-callout bs-callout-info">
+            <h4>Overview</h4>
+            <p>Because ngTable layers it's functionality onto standard html table markup, you have the freedom to include whatever you want in that markup. In this demo we use that freedom to add a summary row to each group</p>
+          </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6" ng-controller="demoController as demo">
+      <h3>ngTable directive</h3>
+      <table ng-table="demo.tableParams" class="table table-condensed table-bordered table-hover">
+        <colgroup>
+          <col width="60%" />
+          <col width="20%" />
+          <col width="20%" />
+        </colgroup>
+        <tr class="ng-table-group" ng-repeat-start="group in $groups">
+          <td colspan="3">
+            <a href="" ng-click="group.$hideRows = !group.$hideRows">
+              <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+              <strong>{{ group.value }}</strong>
+            </a>
+          </td>
+        </tr>
+        <tr ng-hide="group.$hideRows" ng-repeat="user in group.data">
+          <td sortable="'country'" data-title="'Country'" groupable="'country'" ng-if="false">
+            {{user.country}}
+          </td>
+          <td sortable="'name'" data-title="'Name'" groupable="'name'">
+            {{user.name}}
+          </td>
+          <td sortable="'age'" data-title="'Age'">
+            {{user.age}}
+          </td>
+          <td sortable="'money'" data-title="'Money'">
+            {{user.money}}
+          </td>
+        </tr>
+        <tr ng-repeat-end>
+            <td class="text-success text-right"><strong>Summary:</strong></td>
+            <td><em>{{demo.sum(group.data, "age")}}</em></td>
+            <td><em>{{demo.sum(group.data, "money")}}</em></td>
+        </tr>
+        <tfoot ng-if="demo.isLastPage()">
+          <tr>
+            <td class="text-success text-right"><strong>Grant Total:</strong></td>
+            <td><em>{{demo.totalAge}}</em></td>
+            <td><em>{{demo.totalMoney}}</em></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="col-md-6" ng-controller="dynamicDemoController as demo">
+      <h3>ngTableDynamic directive</h3>
+      <table ng-table-dynamic="demo.tableParams with demo.cols" class="table table-condensed table-bordered table-hover">
+        <colgroup>
+          <col width="60%" />
+          <col width="20%" />
+          <col width="20%" />
+        </colgroup>
+        <tr class="ng-table-group" ng-repeat-start="group in $groups">
+          <td>
+            <a href="" ng-click="group.$hideRows = !group.$hideRows">
+              <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+              <strong>{{ group.value }}</strong>
+            </a>
+          </td>
+          <td><em>{{demo.sum(group.data, "age")}}</em></td>
+          <td><em>{{demo.sum(group.data, "money")}}</em></td>
+        </tr>
+        <tr ng-hide="group.$hideRows" ng-repeat="user in group.data" ng-repeat-end>
+          <td ng-repeat="col in $columns">{{user[col.field]}}</td>
+        </tr>
+        <tfoot ng-if="demo.isLastPage()">
+          <tr>
+            <td class="text-success text-right"><strong>Grant Total:</strong></td>
+            <td><em>{{demo.totalAge}}</em></td>
+            <td><em>{{demo.totalMoney}}</em></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
 </div>

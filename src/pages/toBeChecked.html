@@ -45,22 +45,22 @@
                 {{row.bookMobile}}
             </td>
             <td title="'总数'">
-                {{row.partnerName}}
+                {{row.totalTickets}}
             </td>
             <td title="'已检'">
-                2016.7.1 15:00
+                {{row.checkedTickets}}
             </td>
             <td title="'已退'">
-                {{row.validDateStart | date:'yyyy.MM.dd'}} ~ {{row.validDateEnd | date:'yyyy.MM.dd'}}
+                {{row.returnedTickets}}
             </td>
             <td title="'可检'">
-                3
+                {{row.waitingTickets}}
             </td>
             <td title="'操作'">
-                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
+                <a ng-click="toBeChecked.showDetail(row.id)" title="明细" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-list"></i> 明细
                 </a>
-                <a ng-click="toBeChecked.checkDetail(row.id)" title="编辑" class="btn btn-primary btn-xs">
+                <a ng-show="row.waitingTickets > 0" ng-click="toBeChecked.checkDetail(row.id)" title="编辑" class="btn btn-primary btn-xs">
                     <i class="glyphicon glyphicon-check"></i> 检票
                 </a>
             </td>

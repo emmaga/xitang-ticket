@@ -18,8 +18,8 @@
           "isExpired": "yes",
           "price": 99.9,
           "totalTickets": 9,
-          "checkedTickets": 3,
-          "waitingTickets": 5,
+          "checkedTickets": 7,
+          "waitingTickets": 1,
           "returnedTickets": 1
         },
         {
