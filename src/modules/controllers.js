@@ -587,6 +587,23 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       console.log('operatingStatement');
       var self = this;
 
+      self.sum = function(data, field){
+        console.log(data);
+        var t = 0;
+        for (var i = 0; i < data.length; i++) {
+          t += data[i][field];
+        }
+        return t;
+      };
+
+      self.isLastPage = function() {
+        return self.tableParams.page() === totalPages();
+      }
+
+      function totalPages(){
+        return Math.ceil(self.tableParams.total() / self.tableParams.count());
+      }
+
       // ngtable
       self.search = function() {
         self.tableParams = new NgTableParams(
@@ -629,6 +646,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.loading = false;
                     params.total(data.lists.totalCount);
                     self.tableData = data.lists.lists;
+                    self.totalTotalOrders = data.lists.totalTotalOrders;
+                    self.totalCheckedTickets = data.lists.totalCheckedTickets;
+                    self.totalCheckedPrice = data.lists.totalCheckedPrice;
                     return data.lists.lists;
                   }else if(data.rescode === 401){
                     $location.path('/index');

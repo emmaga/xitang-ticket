@@ -2,7 +2,10 @@
     "rescode": 200,
     "errInfo": "",
     "lists": {
-      "totalCount": 200,
+      "totalCount": 2,
+      "totalTotalOrders": 19,
+      "totalCheckedTickets": 16,
+      "totalCheckedPrice": 1600,
       "lists": [
         {
           "partnerCode": "LVMAMA",

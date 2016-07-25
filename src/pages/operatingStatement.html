@@ -37,7 +37,7 @@
             </a>
           </td>
         </tr>
-        <tr ng-hide="group.$hideRows" ng-repeat="row in group.data" ng-repeat-end>
+        <tr ng-hide="group.$hideRows" ng-repeat="row in group.data">
             <td data-title="'分销商'" groupable="'partnerCode'" ng-if="false">
                 {{row.partnerCode}}
             </td>
@@ -57,6 +57,22 @@
                 {{row.checkedPrice}}
             </td>
         </tr>
+        <tr ng-repeat-end>
+            <td class="text-success text-left"><strong>小计：</strong></td>
+            <td></td>
+            <td><em>{{operatingStatement.sum(group.data, "totalOrders")}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "checkedTickets")}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "checkedPrice")}}</em></td>
+        </tr>
+        <tfoot ng-if="operatingStatement.isLastPage()">
+          <tr>
+            <td class="text-success text-left"><strong>总计：</strong></td>
+             <td></td>
+            <td><em>{{operatingStatement.totalTotalOrders}}</em></td>
+            <td><em>{{operatingStatement.totalCheckedTickets}}</em></td>
+            <td><em>{{operatingStatement.totalCheckedPrice}}</em></td>
+          </tr>
+        </tfoot>
     </table>
     
 </div>
