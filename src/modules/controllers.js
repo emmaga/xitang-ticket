@@ -587,8 +587,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       console.log('operatingStatement');
       var self = this;
 
-      
-
       // ngtable
       self.search = function() {
         self.tableParams = new NgTableParams(
@@ -596,7 +594,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             page: 1, 
             count: 15,
             url: '',
-            group: "cost"
+            group: "partnerName"
           }, 
           {
             counts: [15, 30],
@@ -629,9 +627,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   var data = response.data;
                   if(data.rescode === 200) {
                     self.loading = false;
-                    params.total(data.goods.totalCount);
-                    self.tableData = data.goods.lists;
-                    return data.goods.lists;
+                    params.total(data.lists.totalCount);
+                    self.tableData = data.lists.lists;
+                    return data.lists.lists;
                   }else if(data.rescode === 401){
                     $location.path('/index');
                   }else {

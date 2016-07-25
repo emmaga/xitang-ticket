@@ -22,12 +22,15 @@
     <div ng-show="operatingStatement.loading">loading...</div>
     <table ng-table="operatingStatement.tableParams" ng-init="operatingStatement.search()" class="table table-hover table-striped">
         <colgroup>
-          <col width="60%" />
-          <col width="20%" />
-          <col width="20%" />
+          <col width="40%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="15%" />
         </colgroup>
         <tr class="ng-table-group" ng-repeat-start="group in $groups">
-          <td colspan="3">
+          <td colspan="6">
             <a href="" ng-click="group.$hideRows = !group.$hideRows">
               <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
               <strong>{{ group.value }}</strong>
@@ -35,23 +38,23 @@
           </td>
         </tr>
         <tr ng-hide="group.$hideRows" ng-repeat="row in group.data" ng-repeat-end>
-            <td sortable="'成本价'" data-title="'成本价'" groupable="'cost'" ng-if="false">
-                {{row.cost}}
+            <td data-title="'分销商'" groupable="'partnerCode'" ng-if="false">
+                {{row.partnerCode}}
             </td>
             <td data-title="'商品名'">
                 {{row.goodsName}}
             </td>
-            <td data-title="'检票时间'">
-                {{row.checkTimeStart}} ~ {{row.checkTimeEnd}}
+            <td data-title="'单价'">
+                {{row.price}}
             </td>
-            <td data-title="'检票期限'">
-                前{{row.beforeDays}}天，后{{row.afterDays}}天
+            <td data-title="'订单总数'">
+                {{row.totalOrders}}
             </td>
-            <td data-title="'有效时间'">
-                {{row.validDateStart | date:'yyyy.MM.dd'}} ~ {{row.validDateEnd | date:'yyyy.MM.dd'}}
+            <td data-title="'已检数量'">
+                {{row.checkedTickets}}
             </td>
-            <td data-title="'创建时间'">
-                {{row.createDate | date:'yyyy.MM.dd'}}
+            <td data-title="'已检金额'">
+                {{row.checkedPrice}}
             </td>
         </tr>
     </table>

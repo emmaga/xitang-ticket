@@ -1,47 +1,38 @@
 {
     "rescode": 200,
     "errInfo": "",
-    "goods": {
+    "lists": {
       "totalCount": 200,
       "lists": [
         {
-          "id": 1,
-          "status": "on",
+          "partnerCode": "LVMAMA",
+          "partnerName": "驴妈妈",
+          "goodsId": 1,
           "goodsName": "西塘成人票",
-          "cost": 80,
-          "checkTimeStart": "08:00",
-          "checkTimeEnd": "20:00",
-          "validDateStart": "1288323623006",
-          "validDateEnd": "1288323623006",
-          "createDate": "1288323623006",
-          "beforeDays": 1,
-          "afterDays": 2
+          "price": 100,
+          "totalOrders": 3,
+          "checkedTickets": 2,
+          "checkedPrice": 200
         },
         {
-          "id": 2,
-          "status": "off",
-          "goodsName": "西塘老人票",
-          "cost": 80,
-          "checkTimeStart": "08:00",
-          "checkTimeEnd": "20:00",
-          "validDateStart": "1288323623006",
-          "validDateEnd": "1288323623006",
-          "createDate": "1288323623006",
-          "beforeDays": 1,
-          "afterDays": 2
+          "partnerCode": "LVMAMA",
+          "partnerName": "驴妈妈",
+          "goodsId": 2,
+          "goodsName": "西塘老年票",
+          "price": 100,
+          "totalOrders": 3,
+          "checkedTickets": 2,
+          "checkedPrice": 200
         },
         {
-          "id": 3,
-          "status": "off",
+          "partnerCode": "TONGCHENG",
+          "partnerName": "同程",
+          "goodsId": 1,
           "goodsName": "西塘成人票",
-          "cost": 70,
-          "checkTimeStart": "08:00",
-          "checkTimeEnd": "20:00",
-          "validDateStart": "1288323623006",
-          "validDateEnd": "1288323623006",
-          "createDate": "1288323623006",
-          "beforeDays": 1,
-          "afterDays": 2
+          "price": 100,
+          "totalOrders": 13,
+          "checkedTickets": 12,
+          "checkedPrice": 1200
         }
       ]
     }
