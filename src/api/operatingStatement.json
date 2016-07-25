@@ -1,0 +1,48 @@
+{
+    "rescode": 200,
+    "errInfo": "",
+    "goods": {
+      "totalCount": 200,
+      "lists": [
+        {
+          "id": 1,
+          "status": "on",
+          "goodsName": "西塘成人票",
+          "cost": 80,
+          "checkTimeStart": "08:00",
+          "checkTimeEnd": "20:00",
+          "validDateStart": "1288323623006",
+          "validDateEnd": "1288323623006",
+          "createDate": "1288323623006",
+          "beforeDays": 1,
+          "afterDays": 2
+        },
+        {
+          "id": 2,
+          "status": "off",
+          "goodsName": "西塘老人票",
+          "cost": 80,
+          "checkTimeStart": "08:00",
+          "checkTimeEnd": "20:00",
+          "validDateStart": "1288323623006",
+          "validDateEnd": "1288323623006",
+          "createDate": "1288323623006",
+          "beforeDays": 1,
+          "afterDays": 2
+        },
+        {
+          "id": 3,
+          "status": "off",
+          "goodsName": "西塘成人票",
+          "cost": 70,
+          "checkTimeStart": "08:00",
+          "checkTimeEnd": "20:00",
+          "validDateStart": "1288323623006",
+          "validDateEnd": "1288323623006",
+          "createDate": "1288323623006",
+          "beforeDays": 1,
+          "afterDays": 2
+        }
+      ]
+    }
+}
