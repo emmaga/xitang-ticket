@@ -8,56 +8,11 @@
         </strong>
     </a>
     <hr>
-    <div class="row">
-        <div class="col-sm-2 col-condensed">
-            <label>成交时间开始</label>
-            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
-                <!-- <span class="input-group-addon ">开始</span> -->
-                <input id="order-create-date-start" class="form-control" size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_qcaxwa" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-        </div>
-        <div class="col-sm-2 col-condensed">
-            <label>成交时间结束</label>
-            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
-                <!-- <span class="input-group-addon ">结束</span> -->
-                <input id="order-create-date-end" class="form-control" size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_khaydt" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-        </div>
-        <div class="col-sm-2 col-condensed">
-            <label>游玩时间开始</label>
-            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
-                <!-- <span class="input-group-addon ">开始</span> -->
-                <input class="form-control " size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_lptvht" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-        </div>
-        <div class="col-sm-2 col-condensed">
-            <label>游玩时间结束</label>
-            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
-                <!-- <span class="input-group-addon ">结束</span> -->
-                <input class="form-control " size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_idwdiz" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-        </div>
-    </div>
-    <hr class="break-space">
     <div class="input-group flex-box multi-input">
-        <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="预订人">
-        <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="手机">
-        <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="订单号">
-        <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="分销商订单号">
-        <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="分销商">
-        <input ng-model="ordersList.searchName" type="text" class="flex-item form-control" placeholder="商品名">
+        <input ng-model="toBeChecked.bookPerson" type="text" class="flex-item form-control" placeholder="预订人">
+        <input ng-model="toBeChecked.bookMobile" type="text" class="flex-item form-control" placeholder="手机">
+        <input ng-model="toBeChecked.orderId" type="text" class="flex-item form-control" placeholder="订单号">
+        <input ng-model="toBeChecked.parterOrderId" type="text" class="flex-item form-control" placeholder="分销商订单号">
     </div>
     <hr class="break-space">
     <div class="controls pull-right">
@@ -71,29 +26,26 @@
     <div ng-show="toBeChecked.loading">loading...</div>
     <table ng-table="toBeChecked.tableParams" ng-init="toBeChecked.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
-            <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
-                <input type="checkbox" ng-model="toBeChecked.checkboxes.items[row.id]" />
-            </td>
             <td title="'订单号'">
-                #201607082234
+                {{row.orderId}}
             </td>
             <td title="'分销商订单号'">
-                #201607082234
+                {{row.parterOrderId}}
             </td>
             <td title="'商品名'">
                 {{row.goodsName}}
             </td>
             <td title="'单价'">
-                ￥{{row.cost}}
+                ￥{{row.price}}
             </td>
             <td title="'预订人'">
-                路人甲
+                {{row.bookPerson}}
             </td>
             <td title="'手机号'">
-                1380013800138
+                {{row.bookMobile}}
             </td>
             <td title="'分销商'">
-                驴妈妈
+                {{row.partnerName}}
             </td>
             <td title="'成交时间'">
                 2016.7.1 15:00
