@@ -41,6 +41,12 @@ footer {
 
 
 /*modified*/
+
+.login-msg{
+  width: 100%;
+  text-align: center;
+}
+
 .col-condensed{
   padding-left: 4px;
   padding-right: 3px;
