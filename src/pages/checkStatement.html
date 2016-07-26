@@ -34,7 +34,7 @@
         <label>检票时间开始</label>
         <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_lptvht">
             <!-- <span class="input-group-addon ">开始</span> -->
-            <input class="form-control " size="16" type="text" value="" readonly>
+            <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
             <input type="hidden" id="rd_lptvht" value="" />
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
@@ -44,7 +44,7 @@
         <label>检票时间结束</label>
         <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_idwdiz">
             <!-- <span class="input-group-addon ">结束</span> -->
-            <input class="form-control " size="16" type="text" value="" readonly>
+            <input id="check-date-end" class="form-control " size="16" type="text" value="" readonly>
             <input type="hidden" id="rd_idwdiz" value="" />
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
@@ -55,8 +55,8 @@
     </div>
     <hr class="break-space-lg">
     <div class="input-group flex-box multi-input">
-        <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
-        <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
+        <input ng-model="checkStatement.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
+        <input ng-model="checkStatement.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
     </div>
     <hr class="break-space">
     <div class="controls pull-right">
@@ -96,8 +96,8 @@
             <td data-title="'单价'">
                 {{row.price}}
             </td>
-            <td data-title="'订单总数'">
-                {{row.totalOrders}}
+            <td data-title="'门票总数'">
+                {{row.totalTickets}}
             </td>
             <td data-title="'已检数量'">
                 {{row.checkedTickets}}
@@ -109,7 +109,7 @@
         <tr ng-repeat-end>
             <td class="text-success text-left"><strong>小计：</strong></td>
             <td></td>
-            <td><em>{{checkStatement.sum(group.data, "totalOrders")}}</em></td>
+            <td><em>{{checkStatement.sum(group.data, "totalTickets")}}</em></td>
             <td><em>{{checkStatement.sum(group.data, "checkedTickets")}}</em></td>
             <td><em>{{checkStatement.sum(group.data, "checkedPrice")}}</em></td>
         </tr>
@@ -117,7 +117,7 @@
           <tr>
             <td class="text-success text-left"><strong>总计：</strong></td>
              <td></td>
-            <td><em>{{checkStatement.totalTotalOrders}}</em></td>
+            <td><em>{{checkStatement.totalTotalTickets}}</em></td>
             <td><em>{{checkStatement.totalCheckedTickets}}</em></td>
             <td><em>{{checkStatement.totalCheckedPrice}}</em></td>
           </tr>

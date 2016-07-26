@@ -548,22 +548,21 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
 
-  app.controller('checkStatementController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
-    function($scope, $http, $cookies, $location, $window, NgTableParams) {
+  app.controller('checkStatementController', ['$scope', '$http', '$cookies', '$location', '$window', '$filter', 'NgTableParams', 
+    function($scope, $http, $cookies, $location, $window, $filter, NgTableParams) {
       console.log('checkStatement');
       var self = this;
 
       self.init = function() {
         $('.form_datetime').datetimepicker({
-          // format: 'dd MM yyyy - hh:ii',
           language:  'zh-CN',
           weekStart: 1,
-        todayBtn:  1,
-    autoclose: 1,
-    todayHighlight: 1,
-    startView: 2,
-    forceParse: 0,
-        showMeridian: 1
+          todayBtn:  1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          forceParse: 0,
+          showMeridian: 1
         });
       }
 
@@ -596,26 +595,66 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             counts: [15, 30],
             getData: function(params) {
               var paramsUrl = params.url();
-              var searchName = "";
-              if (self.searchName) {
-                searchName = self.searchName;
-              }
 
               var c = $scope.root.config;
-              var url = c.requestUrl + '/operatingStatement' + c.extension;
+              var url = c.requestUrl + '/statement' + c.extension;
+
+              //如果检票时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
+              if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
+
+                var sDate = new Date();
+                sDate.setMonth(sDate.getMonth() - 1);
+                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd hh:mm:ss');
+                $('#rd_lptvht').val(sDate);
+                $('#check-date-start').val(sDate);
+
+                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd hh:mm:ss');
+                $('#rd_idwdiz').val(eDate);
+                $('#check-date-end').val(eDate);
+
+              }
+              // 仅开始时间为空时
+              else if(!$('#rd_lptvht').val()) {
+                var d = new Date($('#rd_idwdiz').val());
+                d.setMonth(d.getMonth() - 1);
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd hh:mm:ss');
+                $('#rd_lptvht').val(d);
+                $('#check-date-start').val(d);
+              }
+              // 仅结束时间为空时
+              else {
+                var d = new Date($('#rd_lptvht').val());
+                d.setMonth(d.getMonth() + 1);
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd hh:mm:ss');
+                $('#rd_idwdiz').val(d);
+                $('#check-date-end').val(d);
+              }
+
+              //读取成交日期
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+              
+              //读取检票日期
+              self.checkDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
+              self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+
               var data = {
-                "action": "GetList",
+                "action": "GetCheckStatement",
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "CreateTime",
-                "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
                 "search": {
-                  "goodsName": searchName //完全匹配查询
+                  "goodsName": self.goodsName ? self.goodsName : "",
+                  "partnerName": self.partnerName ? self.partnerName : "",
+                  "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
+                  "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
+                  "checkDateStart": self.checkDateStart ? self.checkDateStart : "",
+                  "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : ""
                 }
               };
+
               data = JSON.stringify(data);
               self.loading = true;
               
@@ -625,7 +664,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.loading = false;
                     params.total(data.lists.totalCount);
                     self.tableData = data.lists.lists;
-                    self.totalTotalOrders = data.lists.totalTotalOrders;
+                    self.totalTotalTickets = data.lists.totalTotalTickets;
                     self.totalCheckedTickets = data.lists.totalCheckedTickets;
                     self.totalCheckedPrice = data.lists.totalCheckedPrice;
                     return data.lists.lists;
@@ -650,7 +689,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       var self = this;
 
       self.sum = function(data, field){
-        console.log(data);
         var t = 0;
         for (var i = 0; i < data.length; i++) {
           t += data[i][field];
