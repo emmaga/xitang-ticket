@@ -1,10 +1,10 @@
 ﻿<div ng-controller="userListController as userList">
     <a>
         <strong>
-            <i class="glyphicon glyphicon-usd"></i>
-            销售中心
+            <i class="glyphicon glyphicon-wrench"></i>
+            管理员工具
             <i class="glyphicon glyphicon-chevron-right"></i>
-            商品列表         
+            用户管理       
         </strong>
     </a>
     <hr>
@@ -12,7 +12,7 @@
         <div class="col-xs-6">
             <div class="btn-group ">
                 <a class="btn btn-default" ui-sref="userAdd">
-                    <i class="glyphicon glyphicon-plus"></i> 添加商品
+                    <i class="glyphicon glyphicon-plus"></i> 添加用户
                 </a>
                 <a ng-click="userList.delete()" ng-class="{disabled: !userList.isChecked()}" class="btn btn-default">
                     <i class="glyphicon glyphicon-remove"></i> 删除
@@ -35,23 +35,23 @@
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
                 <input type="checkbox" ng-model="userList.checkboxes.items[row.id]" />
             </td>
-            <td title="'商品名'">
-                {{row.goodsName}}
+            <td title="'用户名'">
+                root
             </td>
-            <td title="'检票时间'">
-                {{row.checkTimeStart}} ~ {{row.checkTimeEnd}}
+            <td title="'角色'">
+                超级管理员
             </td>
-            <td title="'检票期限'">
-                前{{row.beforeDays}}天，后{{row.afterDays}}天
+            <td title="'真实姓名'">
+                张三
             </td>
-            <td title="'成本价'">
-                ￥{{row.cost}}
+            <td title="'邮箱'">
+                abc@xyz.com
             </td>
-            <td title="'有效时间'">
-                {{row.validDateStart | date:'yyyy.MM.dd'}} ~ {{row.validDateEnd | date:'yyyy.MM.dd'}}
+            <td title="'性别'">
+                男
             </td>
-            <td title="'创建时间'">
-                {{row.createDate | date:'yyyy.MM.dd'}}
+            <td title="'手机'">
+                13500000000
             </td>
             <td title="'操作'">
                 <small>
@@ -64,6 +64,10 @@
                         <i class="glyphicon glyphicon-pencil"></i>
                         编辑
                     </a>
+                    <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon-user"></i>
+                        修改角色
+                    </a>
                 </small>
             </td>
         </tr>
@@ -72,9 +76,4 @@
     <script type="text/ng-template" id="ng-table/headers/checkbox.html">
         <input type="checkbox" ng-model="userList.checkboxes.checked" value="" />
     </script>
-
-    userList
-    <a ui-sref="index">管理员工具－用户管理－添加</a>
-    <a ui-sref="index">管理员工具－用户管理－编辑</a>
-    <a ui-sref="index">管理员工具－用户管理－配角色</a>
 </div>
