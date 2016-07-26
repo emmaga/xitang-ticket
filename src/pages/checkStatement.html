@@ -8,55 +8,47 @@
         </strong>
     </a>
     <hr>
-
-
-
-    
-        <div class="col-sm-2 col-condensed">
-            <label>成交时间开始</label>
-            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
-                <!-- <span class="input-group-addon ">开始</span> -->
-                <input id="order-create-date-start" class="form-control" size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_qcaxwa" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-        </div>
-        <div class="col-sm-2 col-condensed">
-            <label>成交时间结束</label>
-            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
-                <!-- <span class="input-group-addon ">结束</span> -->
-                <input id="order-create-date-end" class="form-control" size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_khaydt" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-        </div>
-        <div class="col-sm-2 col-condensed">
-            <label>检票时间开始</label>
-            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
-                <!-- <span class="input-group-addon ">开始</span> -->
-                <input class="form-control " size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_lptvht" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-        </div>
-        <div class="col-sm-2 col-condensed">
-            <label>检票时间结束</label>
-            <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
-                <!-- <span class="input-group-addon ">结束</span> -->
-                <input class="form-control " size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_idwdiz" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
+    <div class="col-sm-2 col-condensed">
+        <label>成交时间开始</label>
+        <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+            <!-- <span class="input-group-addon ">开始</span> -->
+            <input id="order-create-date-start" class="form-control" size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_qcaxwa" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
         </div>
     </div>
-
+    <div class="col-sm-2 col-condensed">
+        <label>成交时间结束</label>
+        <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
+            <!-- <span class="input-group-addon ">结束</span> -->
+            <input id="order-create-date-end" class="form-control" size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_khaydt" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+    </div>
+    <div class="col-sm-2 col-condensed">
+        <label>检票时间开始</label>
+        <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
+            <!-- <span class="input-group-addon ">开始</span> -->
+            <input class="form-control " size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_lptvht" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+    </div>
+    <div class="col-sm-2 col-condensed">
+        <label>检票时间结束</label>
+        <div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
+            <!-- <span class="input-group-addon ">结束</span> -->
+            <input class="form-control " size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_idwdiz" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+    </div>
     <hr class="break-space-lg">
-
-
     <div class="input-group flex-box multi-input">
         <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
         <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
@@ -70,12 +62,9 @@
             <i class="glyphicon glyphicon-search"></i>搜索
         </button>
     </div>
-
-
-<hr class="break-space-double">
     <hr class="break-space-double">
     <hr class="break-space-double">
-
+    <hr class="break-space-double">
     <div ng-show="ordersList.loading">loading...</div>
     <table ng-table="ordersList.tableParams" ng-init="ordersList.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
@@ -125,6 +114,4 @@
             </td>
         </tr>
     </table>
-
-
 </div>
