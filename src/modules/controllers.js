@@ -582,6 +582,82 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         return Math.ceil(self.tableParams.total() / self.tableParams.count());
       }
 
+      self.export = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/statement' + c.extension;
+
+        //如果检票时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
+        if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
+
+          var sDate = new Date();
+          sDate.setMonth(sDate.getMonth() - 1);
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd hh:mm:ss');
+          $('#rd_lptvht').val(sDate);
+          $('#check-date-start').val(sDate);
+
+          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd hh:mm:ss');
+          $('#rd_idwdiz').val(eDate);
+          $('#check-date-end').val(eDate);
+
+        }
+        // 仅开始时间为空时
+        else if(!$('#rd_lptvht').val()) {
+          var d = new Date($('#rd_idwdiz').val());
+          d.setMonth(d.getMonth() - 1);
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd hh:mm:ss');
+          $('#rd_lptvht').val(d);
+          $('#check-date-start').val(d);
+        }
+        // 仅结束时间为空时
+        else {
+          var d = new Date($('#rd_lptvht').val());
+          d.setMonth(d.getMonth() + 1);
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd hh:mm:ss');
+          $('#rd_idwdiz').val(d);
+          $('#check-date-end').val(d);
+        }
+
+        //读取成交日期
+        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
+        self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+        
+        //读取检票日期
+        self.checkDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
+        self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+
+        var data = {
+          "action": "GetCheckStatement",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "count": paramsUrl.count, //一页显示数量
+          "page": paramsUrl.page,   //当前页
+          "search": {
+            "goodsName": self.goodsName ? self.goodsName : "",
+            "partnerName": self.partnerName ? self.partnerName : "",
+            "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
+            "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
+            "checkDateStart": self.checkDateStart ? self.checkDateStart : "",
+            "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : ""
+          }
+        };
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              if (confirm('导出中，是否到“报表中心－导出列表”中查看？')) {
+                $location.path('/exportStatementsList');
+              }
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('导出失败，请重试');
+          });
+      };
+
       // ngtable
       self.search = function() {
         self.tableParams = new NgTableParams(
@@ -902,7 +978,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               alert(data.errInfo);
             }  
           }, function errorCallback(response) {
-            alert('添加失败，请重试');
+            alert('导出失败，请重试');
           });
       }
 
