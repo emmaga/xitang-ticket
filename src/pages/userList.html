@@ -54,25 +54,15 @@
                 13500000000
             </td>
             <td title="'操作'">
-                <small>
-                    <a ng-click="userList.changeStatus(row.status)" title="{{userList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': userList.isOn(row.status), 'btn-warning': !userList.isOn(row.status) }" class="btn btn-default btn-xs">
-                        <i ng-class="{ 'glyphicon-ok': userList.isOn(row.status), 'glyphicon-lock': !userList.isOn(row.status) }" class="glyphicon"></i>
-                        {{userList.getStatus(row.status)}}
-                    </a>
-                    
-                    <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
-                        <i class="glyphicon glyphicon-pencil"></i>
-                        编辑
-                    </a>
-                    <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
-                        <i class="glyphicon glyphicon-user"></i>
-                        修改角色
-                    </a>
-                </small>
+                <a ng-click="userList.changeStatus(row.status)" title="{{userList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': userList.isOn(row.status), 'btn-warning': !userList.isOn(row.status) }" class="btn btn-default btn-xs">
+                    <i ng-class="{ 'glyphicon-ok': userList.isOn(row.status), 'glyphicon-lock': !userList.isOn(row.status) }" class="glyphicon"></i> {{userList.getStatus(row.status)}}
+                </a>
+                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
+                    <i class="glyphicon glyphicon-pencil"></i> 编辑
+                </a>
             </td>
         </tr>
     </table>
-
     <script type="text/ng-template" id="ng-table/headers/checkbox.html">
         <input type="checkbox" ng-model="userList.checkboxes.checked" value="" />
     </script>
