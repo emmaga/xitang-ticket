@@ -1,16 +1,18 @@
-﻿<div ng-controller="operatingStatementController as operatingStatement" class="container-fluid">
+﻿<div ng-controller="operatingStatementController as operatingStatement" ng-init="operatingStatement.init()">
     <a>
         <strong>
-            <i class="glyphicon glyphicon-usd"></i>
-            销售中心
+            <i class="glyphicon glyphicon-list-alt"></i>
+            报表中心
             <i class="glyphicon glyphicon-chevron-right"></i>
-            商品列表         
+            检票报表
         </strong>
     </a>
     <hr>
+
+
     <div class="col-sm-2 col-condensed">
         <label>成交时间开始</label>
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_qcaxwa">
             <!-- <span class="input-group-addon ">开始</span> -->
             <input id="order-create-date-start" class="form-control" size="16" type="text" value="" readonly>
             <input type="hidden" id="rd_qcaxwa" value="" />
@@ -20,7 +22,7 @@
     </div>
     <div class="col-sm-2 col-condensed">
         <label>成交时间结束</label>
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
+        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_khaydt">
             <!-- <span class="input-group-addon ">结束</span> -->
             <input id="order-create-date-end" class="form-control" size="16" type="text" value="" readonly>
             <input type="hidden" id="rd_khaydt" value="" />
@@ -30,7 +32,7 @@
     </div>
     <div class="col-sm-2 col-condensed">
         <label>游玩时间开始</label>
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
+        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_lptvht">
             <!-- <span class="input-group-addon ">开始</span> -->
             <input class="form-control " size="16" type="text" value="" readonly>
             <input type="hidden" id="rd_lptvht" value="" />
@@ -40,25 +42,28 @@
     </div>
     <div class="col-sm-2 col-condensed">
         <label>游玩时间结束</label>
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
+        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_idwdiz">
             <!-- <span class="input-group-addon ">结束</span> -->
             <input class="form-control " size="16" type="text" value="" readonly>
             <input type="hidden" id="rd_idwdiz" value="" />
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
         </div>
+
+
+
     </div>
     <hr class="break-space-lg">
     <div class="input-group flex-box multi-input">
-        <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
-        <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
+        <input ng-model="operatingStatement.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
+        <input ng-model="operatingStatement.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
     </div>
     <hr class="break-space">
     <div class="controls pull-right">
-        <button ng-click="checkStatement.export()" class="btn btn-default">
+        <button ng-click="operatingStatement.export()" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
         </button>
-        <button class="btn btn-primary" ng-click="checkStatement.search()" href>
+        <button class="btn btn-primary" ng-click="operatingStatement.search()" href>
             <i class="glyphicon glyphicon-search"></i>搜索
         </button>
     </div>
@@ -66,7 +71,7 @@
     <hr class="break-space-double">
     <hr class="break-space-double">
     <hr class="break-space-double">
-    
+
     <div ng-show="operatingStatement.loading">loading...</div>
     <table ng-table="operatingStatement.tableParams" ng-init="operatingStatement.search()" class="table table-hover table-striped">
         <colgroup>
@@ -95,8 +100,8 @@
             <td data-title="'单价'">
                 {{row.price}}
             </td>
-            <td data-title="'订单总数'">
-                {{row.totalOrders}}
+            <td data-title="'门票总数'">
+                {{row.totalTickets}}
             </td>
             <td data-title="'已检数量'">
                 {{row.checkedTickets}}
@@ -108,7 +113,7 @@
         <tr ng-repeat-end>
             <td class="text-success text-left"><strong>小计：</strong></td>
             <td></td>
-            <td><em>{{operatingStatement.sum(group.data, "totalOrders")}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "totalTickets")}}</em></td>
             <td><em>{{operatingStatement.sum(group.data, "checkedTickets")}}</em></td>
             <td><em>{{operatingStatement.sum(group.data, "checkedPrice")}}</em></td>
         </tr>
@@ -116,11 +121,10 @@
           <tr>
             <td class="text-success text-left"><strong>总计：</strong></td>
              <td></td>
-            <td><em>{{operatingStatement.totalTotalOrders}}</em></td>
+            <td><em>{{operatingStatement.totalTotalTickets}}</em></td>
             <td><em>{{operatingStatement.totalCheckedTickets}}</em></td>
             <td><em>{{operatingStatement.totalCheckedPrice}}</em></td>
           </tr>
         </tfoot>
     </table>
-    
 </div>

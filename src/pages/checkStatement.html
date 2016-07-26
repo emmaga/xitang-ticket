@@ -14,7 +14,7 @@
         <label>成交时间开始</label>
         <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_qcaxwa">
             <!-- <span class="input-group-addon ">开始</span> -->
-            <input id="order-create-date-start" class="form-control" size="16" type="text" value="" readonly>
+            <input class="form-control" size="16" type="text" value="" readonly>
             <input type="hidden" id="rd_qcaxwa" value="" />
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
@@ -24,7 +24,7 @@
         <label>成交时间结束</label>
         <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_khaydt">
             <!-- <span class="input-group-addon ">结束</span> -->
-            <input id="order-create-date-end" class="form-control" size="16" type="text" value="" readonly>
+            <input class="form-control" size="16" type="text" value="" readonly>
             <input type="hidden" id="rd_khaydt" value="" />
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
@@ -67,7 +67,11 @@
             <i class="glyphicon glyphicon-search"></i>搜索
         </button>
     </div>
-    <hr class="break-space">
+
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+
     <div ng-show="checkStatement.loading">loading...</div>
     <table ng-table="checkStatement.tableParams" ng-init="checkStatement.search()" class="table table-hover table-striped">
         <colgroup>
