@@ -1,0 +1,42 @@
+{
+    "rescode": 200,
+    "errInfo": "",
+    "lists": {
+      "totalCount": 2,
+      "totalTotalTickets": 19,
+      "totalCheckedTickets": 16,
+      "totalCheckedPrice": 1600,
+      "lists": [
+        {
+          "partnerCode": "LVMAMA",
+          "partnerName": "驴妈妈",
+          "goodsId": 1,
+          "goodsName": "西塘成人票",
+          "price": 100,
+          "totalTickets": 3,
+          "checkedTickets": 2,
+          "checkedPrice": 200
+        },
+        {
+          "partnerCode": "LVMAMA",
+          "partnerName": "驴妈妈",
+          "goodsId": 2,
+          "goodsName": "西塘老年票",
+          "price": 100,
+          "totalTickets": 3,
+          "checkedTickets": 2,
+          "checkedPrice": 200
+        },
+        {
+          "partnerCode": "TONGCHENG",
+          "partnerName": "同程",
+          "goodsId": 1,
+          "goodsName": "西塘成人票",
+          "price": 100,
+          "totalTickets": 13,
+          "checkedTickets": 12,
+          "checkedPrice": 1200
+        }
+      ]
+    }
+}

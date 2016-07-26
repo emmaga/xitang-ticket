@@ -548,10 +548,100 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
 
-  app.controller('checkStatementController', ['$scope', function($scope) {
-    console.log('checkStatement');
-    var self = this;
-  }]);
+  app.controller('checkStatementController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
+    function($scope, $http, $cookies, $location, $window, NgTableParams) {
+      console.log('checkStatement');
+      var self = this;
+
+      self.init = function() {
+        $('.form_datetime').datetimepicker({
+          language:  'zh-CN',
+          weekStart: 1,
+          todayBtn:  1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0
+        });
+      }
+
+      self.sum = function(data, field){
+        var t = 0;
+        for (var i = 0; i < data.length; i++) {
+          t += data[i][field];
+        }
+        return t;
+      };
+
+      self.isLastPage = function() {
+        return self.tableParams.page() === totalPages();
+      }
+
+      function totalPages(){
+        return Math.ceil(self.tableParams.total() / self.tableParams.count());
+      }
+
+      // ngtable
+      self.search = function() {
+        self.tableParams = new NgTableParams(
+          {
+            page: 1, 
+            count: 15,
+            url: '',
+            group: "partnerName"
+          }, 
+          {
+            counts: [15, 30],
+            getData: function(params) {
+              var paramsUrl = params.url();
+              var searchName = "";
+              if (self.searchName) {
+                searchName = self.searchName;
+              }
+
+              var c = $scope.root.config;
+              var url = c.requestUrl + '/operatingStatement' + c.extension;
+              var data = {
+                "action": "GetList",
+                "account": $cookies.get('account'),
+                "token": $cookies.get('token'),
+                "projectName": $cookies.get('projectName'),
+                "sortBy": "CreateTime",
+                "orderBy": "desc",
+                "count": paramsUrl.count, //一页显示数量
+                "page": paramsUrl.page,   //当前页
+                "search": {
+                  "goodsName": searchName //完全匹配查询
+                }
+              };
+              data = JSON.stringify(data);
+              self.loading = true;
+              
+              return $http.post(url, data).then(function successCallback(response) {
+                  var data = response.data;
+                  if(data.rescode === 200) {
+                    self.loading = false;
+                    params.total(data.lists.totalCount);
+                    self.tableData = data.lists.lists;
+                    self.totalTotalOrders = data.lists.totalTotalOrders;
+                    self.totalCheckedTickets = data.lists.totalCheckedTickets;
+                    self.totalCheckedPrice = data.lists.totalCheckedPrice;
+                    return data.lists.lists;
+                  }else if(data.rescode === 401){
+                    $location.path('/index');
+                  }else {
+                    alert(data.errInfo);
+                  }  
+                }, function errorCallback(response) {
+                  alert('加载失败，请重试');
+                });
+            }
+          }
+        );
+      };
+    }
+  ]);
 
   app.controller('operatingStatementController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
     function($scope, $http, $cookies, $location, $window, NgTableParams) {
