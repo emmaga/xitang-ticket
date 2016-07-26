@@ -1,4 +1,53 @@
 ﻿<div ng-controller="checkDetailStatementController as checkDetailStatement">
-    checkDetailStatement
-    <a ui-sref="index">导出报表提示框</a>
+    <a>
+        <strong>
+            <i class="glyphicon glyphicon-list-alt"></i>
+            报表中心
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            检票员检票报表
+        </strong>
+    </a>
+    <hr>
+
+
+    
+    <div class="col-sm-3 col-condensed">
+        <label>检票时间开始</label>
+        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_lptvht">
+            <!-- <span class="input-group-addon ">开始</span> -->
+            <input class="form-control " size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_lptvht" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-condensed">
+        <label>检票时间结束</label>
+        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_idwdiz">
+            <!-- <span class="input-group-addon ">结束</span> -->
+            <input class="form-control " size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_idwdiz" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+
+
+
+    </div>
+    <hr class="break-space-lg">
+    <div class="input-group flex-box multi-input">
+        <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
+        <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
+        <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="分销商订单号">
+		<input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="检票员">
+    </div>
+    <hr class="break-space">
+    <div class="controls pull-right">
+        <button ng-click="checkStatement.export()" class="btn btn-default">
+            <i class="glyphicon glyphicon-export"></i> 导出
+        </button>
+        <button class="btn btn-primary" ng-click="checkStatement.search()" href>
+            <i class="glyphicon glyphicon-search"></i>搜索
+        </button>
+    </div>
 </div>
