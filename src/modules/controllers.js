@@ -626,12 +626,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
 
         var data = {
-          "action": "GetCheckStatement",
+          "action": "ExportCheckStatement",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
-          "count": paramsUrl.count, //一页显示数量
-          "page": paramsUrl.page,   //当前页
+          "exportPerson": $cookies.get('userName'),
           "search": {
             "goodsName": self.goodsName ? self.goodsName : "",
             "partnerName": self.partnerName ? self.partnerName : "",
