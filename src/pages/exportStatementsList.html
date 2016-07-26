@@ -18,29 +18,6 @@
                 </a>
 
             </div>
-        
-            <div class="controls btn-group col-sm-2 col-condensed">
-                <select ng-model="" class="form-control">
-                    <option value="all" class="" selected="selected">全部类型</option>
-                    <option label="检票报表" value="">检票报表</option>
-                    <option label="营业汇总" value="">营业汇总</option>
-                    <option label="检票员检票报表" value="">检票员检票报表</option>
-                    
-                </select>
-            </div>
-
-
-
-
-        </div>
-
-        <div class="col-xs-6">
-            <div class="input-group">
-                <input ng-model="exportStatementsList.searchName" type="text" class="form-control" placeholder="商品名">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="exportStatementsList.search()" href>搜索</button>
-                </span>
-            </div>
         </div>
     </div>
     <hr class="break-space">
@@ -51,44 +28,27 @@
                 <input type="checkbox" ng-model="exportStatementsList.checkboxes.items[row.id]" />
             </td>
             <td title="'文件名'">
-                检票报表_20160701_120100[]
+                {{row.fileName}}
             </td>
-            
-         
-            
-            <td title="'报表类型'">
-                检票报表
+            <td title="'查询条件'">
+                {{row.query}}
             </td>
-<td title="'查询条件'">
-                blablala
-            </td>
-
-
-            
             <td title="'创建时间'">
-                2016.07.01 15:00:00
+                {{row.exportTime | date:"yyyy.MM.dd hh:mm:ss"}}
             </td>
             
             <td title="'导出人'">
-                root
+                {{row.exportPerson}}
             </td>
-
-
-            
             <td title="'状态'">
-                
-                已导出/导出中.../失败
+                {{exportStatementsList.getStatus(row.status)}}
             </td>
 
-
-            <td title="'操作'">
-            
-                
-                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-primary btn-xs">
+            <td title="'操作'">                
+                <a download="{{row.fileName}}" href="{{row.downloadUrl}}" ng-show="exportStatementsList.canDownload(row.status)" title="下载" class="btn btn-primary btn-xs">
                     <i class="glyphicon glyphicon-download"></i>
                     下载
                 </a>
-                
             </td>
         </tr>
     </table>
@@ -96,7 +56,5 @@
     <script type="text/ng-template" id="ng-table/headers/checkbox.html">
         <input type="checkbox" ng-model="exportStatementsList.checkboxes.checked" value="" />
     </script>
-    
-    exportStatementsList
-    <a ui-sref="index">导出报表提示框</a>
+
 </div>

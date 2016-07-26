@@ -1,0 +1,27 @@
+{
+    "rescode": 200,
+    "errInfo": "",
+    "statements": {
+      "totalCount": 200,
+      "lists": [
+        {
+          "id": 1,
+          "fileName": "订单列表_20160701_120109.xls",
+          "exportPerson": "张三",
+          "exportTime": "1288323623006",
+          "query": "xxxxxx",
+          "status": "1",
+          "downloadUrl": "http://localhost/xitang-ticket/src/api/营业汇总.xlsx"
+        },
+        {
+          "id": 2,
+          "fileName": "订单列表_20160701_120109.xls",
+          "exportPerson": "张三",
+          "exportTime": "1288323623006",
+          "query": "xxxxxx",
+          "status": "0",
+          "downloadUrl": "http://xxxxxx"
+        }
+      ]
+    }
+}
