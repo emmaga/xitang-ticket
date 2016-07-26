@@ -555,6 +555,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       self.init = function() {
         $('.form_datetime').datetimepicker({
+          format: 'dd MM yyyy - hh:ii',
           language:  'zh-CN',
           weekStart: 1,
           todayBtn:  1,
