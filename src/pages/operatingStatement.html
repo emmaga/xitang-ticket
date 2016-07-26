@@ -8,17 +8,65 @@
         </strong>
     </a>
     <hr>
-    <div class="row">
-        <div class="col-xs-6">
-            <div class="input-group">
-                <input ng-model="operatingStatement.searchName" type="text" class="form-control" placeholder="商品名">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="operatingStatement.search()" href>搜索</button>
-                </span>
-            </div>
+    <div class="col-sm-2 col-condensed">
+        <label>成交时间开始</label>
+        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+            <!-- <span class="input-group-addon ">开始</span> -->
+            <input id="order-create-date-start" class="form-control" size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_qcaxwa" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
         </div>
     </div>
+    <div class="col-sm-2 col-condensed">
+        <label>成交时间结束</label>
+        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
+            <!-- <span class="input-group-addon ">结束</span> -->
+            <input id="order-create-date-end" class="form-control" size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_khaydt" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+    </div>
+    <div class="col-sm-2 col-condensed">
+        <label>游玩时间开始</label>
+        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
+            <!-- <span class="input-group-addon ">开始</span> -->
+            <input class="form-control " size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_lptvht" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+    </div>
+    <div class="col-sm-2 col-condensed">
+        <label>游玩时间结束</label>
+        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
+            <!-- <span class="input-group-addon ">结束</span> -->
+            <input class="form-control " size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_idwdiz" value="" />
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+    </div>
+    <hr class="break-space-lg">
+    <div class="input-group flex-box multi-input">
+        <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
+        <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
+    </div>
     <hr class="break-space">
+    <div class="controls pull-right">
+        <button ng-click="checkStatement.export()" class="btn btn-default">
+            <i class="glyphicon glyphicon-export"></i> 导出
+        </button>
+        <button class="btn btn-primary" ng-click="checkStatement.search()" href>
+            <i class="glyphicon glyphicon-search"></i>搜索
+        </button>
+    </div>
+
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    
     <div ng-show="operatingStatement.loading">loading...</div>
     <table ng-table="operatingStatement.tableParams" ng-init="operatingStatement.search()" class="table table-hover table-striped">
         <colgroup>
