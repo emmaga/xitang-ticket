@@ -6,6 +6,8 @@
       "totalTotalTickets": 19,
       "totalCheckedTickets": 16,
       "totalCheckedPrice": 1600,
+      "totalWaitingTickets": 3,
+      "totalReturnedTickets": 0,
       "lists": [
         {
           "partnerCode": "LVMAMA",
@@ -14,17 +16,21 @@
           "goodsName": "西塘成人票",
           "price": 100,
           "totalTickets": 3,
-          "checkedTickets": 2,
+          "waitingTickets": 1, 
+          "returnedTickets": 0, 
+          "checkedTickets": 2, 
           "checkedPrice": 200
         },
         {
           "partnerCode": "LVMAMA",
           "partnerName": "驴妈妈",
           "goodsId": 2,
-          "goodsName": "西塘老年票",
+          "goodsName": "西塘老人票",
           "price": 100,
           "totalTickets": 3,
-          "checkedTickets": 2,
+          "waitingTickets": 1, 
+          "returnedTickets": 0, 
+          "checkedTickets": 2, 
           "checkedPrice": 200
         },
         {
@@ -33,9 +39,11 @@
           "goodsId": 1,
           "goodsName": "西塘成人票",
           "price": 100,
-          "totalTickets": 13,
-          "checkedTickets": 12,
-          "checkedPrice": 1200
+          "totalTickets": 3,
+          "waitingTickets": 1, 
+          "returnedTickets": 0, 
+          "checkedTickets": 2, 
+          "checkedPrice": 200
         }
       ]
     }

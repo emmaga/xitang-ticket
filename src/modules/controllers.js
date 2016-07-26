@@ -794,7 +794,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       self.export = function() {
         var c = $scope.root.config;
-        var url = c.requestUrl + '/operatingStatement' + c.extension;
+        var url = c.requestUrl + '/statement' + c.extension;
 
         //如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
         if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
@@ -832,11 +832,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
         
         //读取游玩日期
-        self.checkDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
-        self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+        self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
+        self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
 
         var data = {
-          "action": "ExportCheckStatement",
+          "action": "ExportOperatingStatement",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -846,8 +846,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             "partnerName": self.partnerName ? self.partnerName : "",
             "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
             "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
-            "checkDateStart": self.checkDateStart ? self.checkDateStart : "",
-            "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : ""
+            "visitDateStart": self.visitDateStart ? self.visitDateStart : "",
+            "visitDateEnd": self.visitDateEnd ? self.visitDateEnd : ""
           }
         };
 
@@ -882,7 +882,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var paramsUrl = params.url();
 
               var c = $scope.root.config;
-              var url = c.requestUrl + '/operatingStatement' + c.extension;
+              var url = c.requestUrl + '/statement' + c.extension;
 
               //如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
               if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
@@ -920,8 +920,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
               
               //读取游玩日期
-              self.checkDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
-              self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+              self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
+              self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
 
               var data = {
                 "action": "GetCheckStatement",
@@ -935,8 +935,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "partnerName": self.partnerName ? self.partnerName : "",
                   "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
                   "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
-                  "checkDateStart": self.checkDateStart ? self.checkDateStart : "",
-                  "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : ""
+                  "visitDateStart": self.visitDateStart ? self.visitDateStart : "",
+                  "visitDateEnd": self.visitDateEnd ? self.visitDateEnd : ""
                 }
               };
 
@@ -951,6 +951,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.tableData = data.lists.lists;
                     self.totalTotalTickets = data.lists.totalTotalTickets;
                     self.totalCheckedTickets = data.lists.totalCheckedTickets;
+                    self.totalReturnedTickets = data.lists.totalReturnedTickets;
+                    self.totalWaitingTickets = data.lists.totalWaitingTickets;
                     self.totalCheckedPrice = data.lists.totalCheckedPrice;
                     return data.lists.lists;
                   }else if(data.rescode === 401){

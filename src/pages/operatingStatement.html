@@ -75,7 +75,8 @@
     <div ng-show="operatingStatement.loading">loading...</div>
     <table ng-table="operatingStatement.tableParams" ng-init="operatingStatement.search()" class="table table-hover table-striped">
         <colgroup>
-          <col width="40%" />
+          <col width="30%" />
+          <col width="15%" />
           <col width="15%" />
           <col width="15%" />
           <col width="15%" />
@@ -83,7 +84,7 @@
           <col width="15%" />
         </colgroup>
         <tr class="ng-table-group" ng-repeat-start="group in $groups">
-          <td colspan="6">
+          <td colspan="7">
             <a href="" ng-click="group.$hideRows = !group.$hideRows">
               <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
               <strong>{{ group.value }}</strong>
@@ -103,6 +104,12 @@
             <td data-title="'门票总数'">
                 {{row.totalTickets}}
             </td>
+            <td data-title="'待检数量'">
+                {{row.waitingTickets}}
+            </td>
+            <td data-title="'退票数量'">
+                {{row.returnedTickets}}
+            </td>
             <td data-title="'已检数量'">
                 {{row.checkedTickets}}
             </td>
@@ -114,6 +121,8 @@
             <td class="text-success text-left"><strong>小计：</strong></td>
             <td></td>
             <td><em>{{operatingStatement.sum(group.data, "totalTickets")}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "waitingTickets")}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "returnedTickets")}}</em></td>
             <td><em>{{operatingStatement.sum(group.data, "checkedTickets")}}</em></td>
             <td><em>{{operatingStatement.sum(group.data, "checkedPrice")}}</em></td>
         </tr>
@@ -122,6 +131,8 @@
             <td class="text-success text-left"><strong>总计：</strong></td>
              <td></td>
             <td><em>{{operatingStatement.totalTotalTickets}}</em></td>
+            <td><em>{{operatingStatement.totalWaitingTickets}}</em></td>
+            <td><em>{{operatingStatement.totalReturnedTickets}}</em></td>
             <td><em>{{operatingStatement.totalCheckedTickets}}</em></td>
             <td><em>{{operatingStatement.totalCheckedPrice}}</em></td>
           </tr>
