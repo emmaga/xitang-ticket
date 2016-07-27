@@ -8,25 +8,23 @@
         </strong>
     </a>
     <hr>
-
-
     
     <div class="col-sm-3 col-condensed">
         <label>检票时间开始</label>
-        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_lptvht">
+        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_qcaxwa">
             <!-- <span class="input-group-addon ">开始</span> -->
-            <input class="form-control " size="16" type="text" value="" readonly>
-            <input type="hidden" id="rd_lptvht" value="" />
+            <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_qcaxwa" value="" />
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             
         </div>
     </div>
     <div class="col-sm-3 col-condensed">
         <label>检票时间结束</label>
-        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_idwdiz">
+        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="rd_khaydt">
             <!-- <span class="input-group-addon ">结束</span> -->
-            <input class="form-control " size="16" type="text" value="" readonly>
-            <input type="hidden" id="rd_idwdiz" value="" />
+            <input id="check-date-end" class="form-control " size="16" type="text" value="" readonly>
+            <input type="hidden" id="rd_khaydt" value="" />
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             
         </div>
@@ -36,10 +34,10 @@
     </div>
     <hr class="break-space-lg">
     <div class="input-group flex-box multi-input">
-        <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
-        <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
-        <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="分销商订单号">
-		<input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="检票员">
+        <input ng-model="checkDetailStatement.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
+        <input ng-model="checkDetailStatement.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
+        <input ng-model="checkDetailStatement.parterOrderId" type="text" class="flex-item form-control" placeholder="分销商订单号">
+		<input ng-model="checkDetailStatement.checkPerson" type="text" class="flex-item form-control" placeholder="检票员">
     </div>
     <hr class="break-space">
     <div class="controls pull-right">
@@ -50,4 +48,76 @@
             <i class="glyphicon glyphicon-search"></i>搜索
         </button>
     </div>
+
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+
+    <div ng-show="checkDetailStatement.loading">loading...</div>
+    <table ng-table="checkDetailStatement.tableParams" ng-init="checkDetailStatement.search()" class="table table-hover table-striped">
+        <colgroup>
+          <col width="30%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="15%" />
+        </colgroup>
+        <tr class="ng-table-group" ng-repeat-start="group in $groups">
+          <td colspan="7">
+            <a href="" ng-click="group.$hideRows = !group.$hideRows">
+              <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+              <strong>{{ group.value }}</strong>
+            </a>
+          </td>
+        </tr>
+        <tr ng-hide="group.$hideRows" ng-repeat="row in group.data">
+            <td data-title="'分销商'" groupable="'partnerCode'" ng-if="false">
+                {{row.partnerCode}}
+            </td>
+            <td data-title="'商品名'">
+                {{row.goodsName}}
+            </td>
+            <td data-title="'单价'">
+                {{row.price}}
+            </td>
+            <td data-title="'门票总数'">
+                {{row.totalTickets}}
+            </td>
+            <td data-title="'待检数量'">
+                {{row.waitingTickets}}
+            </td>
+            <td data-title="'退票数量'">
+                {{row.returnedTickets}}
+            </td>
+            <td data-title="'已检数量'">
+                {{row.checkedTickets}}
+            </td>
+            <td data-title="'已检金额'">
+                {{row.checkedPrice}}
+            </td>
+        </tr>
+        <tr ng-repeat-end>
+            <td class="text-success text-left"><strong>小计：</strong></td>
+            <td></td>
+            <td><em>{{checkDetailStatement.sum(group.data, "totalTickets")}}</em></td>
+            <td><em>{{checkDetailStatement.sum(group.data, "waitingTickets")}}</em></td>
+            <td><em>{{checkDetailStatement.sum(group.data, "returnedTickets")}}</em></td>
+            <td><em>{{checkDetailStatement.sum(group.data, "checkedTickets")}}</em></td>
+            <td><em>{{checkDetailStatement.sum(group.data, "checkedPrice")}}</em></td>
+        </tr>
+        <tfoot ng-if="checkDetailStatement.isLastPage()">
+          <tr>
+            <td class="text-success text-left"><strong>总计：</strong></td>
+             <td></td>
+            <td><em>{{checkDetailStatement.totalTotalTickets}}</em></td>
+            <td><em>{{checkDetailStatement.totalWaitingTickets}}</em></td>
+            <td><em>{{checkDetailStatement.totalReturnedTickets}}</em></td>
+            <td><em>{{checkDetailStatement.totalCheckedTickets}}</em></td>
+            <td><em>{{checkDetailStatement.totalCheckedPrice}}</em></td>
+          </tr>
+        </tfoot>
+    </table>
+
 </div>

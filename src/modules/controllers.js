@@ -404,10 +404,211 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
 
-  app.controller('checkDetailStatementController', ['$scope', function($scope) {
-    console.log('checkDetailStatement');
-    var self = this;
-  }]);
+  app.controller('checkDetailStatementController', ['$scope', '$http', '$cookies', '$location', '$window', '$filter', 'NgTableParams', 
+    function($scope, $http, $cookies, $location, $window, $filter, NgTableParams) {
+      console.log('operatingStatement');
+      var self = this;
+
+      self.init = function() {
+        $('.form_datetime').datetimepicker({
+          language:  'zh-CN',
+          weekStart: 1,
+          todayBtn:  1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          forceParse: 0,
+          showMeridian: 1
+        });
+      }
+
+      self.sum = function(data, field){
+        var t = 0;
+        for (var i = 0; i < data.length; i++) {
+          t += data[i][field];
+        }
+        return t;
+      };
+
+      self.isLastPage = function() {
+        return self.tableParams.page() === totalPages();
+      }
+
+      function totalPages(){
+        return Math.ceil(self.tableParams.total() / self.tableParams.count());
+      }
+
+      self.export = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/checkDetailStatement' + c.extension;
+
+        //如果检票时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
+        if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+
+          var sDate = new Date();
+          sDate.setMonth(sDate.getMonth() - 1);
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd hh:mm:ss');
+          $('#rd_qcaxwa').val(sDate);
+          $('#check-date-start').val(sDate);
+
+          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd hh:mm:ss');
+          $('#rd_khaydt').val(eDate);
+          $('#check-date-end').val(eDate);
+
+        }
+        // 仅开始时间为空时
+        else if(!$('#rd_qcaxwa').val()) {
+          var d = new Date($('#rd_khaydt').val());
+          d.setMonth(d.getMonth() - 1);
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd hh:mm:ss');
+          $('#rd_qcaxwa').val(d);
+          $('#check-date-start').val(d);
+        }
+        // 仅结束时间为空时
+        else if(!$('#rd_khaydt').val()) {
+          var d = new Date($('#rd_qcaxwa').val());
+          d.setMonth(d.getMonth() + 1);
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd hh:mm:ss');
+          $('#rd_khaydt').val(d);
+          $('#check-date-end').val(d);
+        }
+
+        //读取成交日期
+        self.checkDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
+        self.checkDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+      
+        var data = {
+          "action": "ExportcheckDetailStatement",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "exportPerson": $cookies.get('userName'),
+          "search": {
+            "goodsName": self.goodsName ? self.goodsName : "",
+            "partnerName": self.partnerName ? self.partnerName : "",
+            "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
+            "orderId": self.orderId ? self.orderId : "",
+            "checkPerson": self.checkPerson ? self.checkPerson : "",
+            "checkDateStart": self.checkDateStart ? self.checkDateStart : "", //检票日期开始
+            "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "" //检票日期结束
+          }
+        };
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              if (confirm('导出中，是否到“报表中心－导出列表”中查看？')) {
+                $location.path('/exportStatementsList');
+              }
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('导出失败，请重试');
+          });
+      };
+
+      // ngtable
+      self.search = function() {
+        self.tableParams = new NgTableParams(
+          {
+            page: 1, 
+            count: 15,
+            url: '',
+            group: "partnerName"
+          }, 
+          {
+            counts: [15, 30],
+            getData: function(params) {
+              var paramsUrl = params.url();
+
+              var c = $scope.root.config;
+              var url = c.requestUrl + '/checkDetailStatement' + c.extension;
+
+              //如果检票时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
+              if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+
+                var sDate = new Date();
+                sDate.setMonth(sDate.getMonth() - 1);
+                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd hh:mm:ss');
+                $('#rd_qcaxwa').val(sDate);
+                $('#check-date-start').val(sDate);
+
+                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd hh:mm:ss');
+                $('#rd_khaydt').val(eDate);
+                $('#check-date-end').val(eDate);
+
+              }
+              // 仅开始时间为空时
+              else if(!$('#rd_qcaxwa').val()) {
+                var d = new Date($('#rd_khaydt').val());
+                d.setMonth(d.getMonth() - 1);
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd hh:mm:ss');
+                $('#rd_qcaxwa').val(d);
+                $('#check-date-start').val(d);
+              }
+              // 仅结束时间为空时
+              else if(!$('#rd_khaydt').val()) {
+                var d = new Date($('#rd_qcaxwa').val());
+                d.setMonth(d.getMonth() + 1);
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd hh:mm:ss');
+                $('#rd_khaydt').val(d);
+                $('#check-date-end').val(d);
+              }
+
+              //读取成交日期
+              self.checkDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
+              self.checkDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+            
+              var data = {
+                "action": "GetCheckStatement",
+                "account": $cookies.get('account'),
+                "token": $cookies.get('token'),
+                "projectName": $cookies.get('projectName'),
+                "count": paramsUrl.count, //一页显示数量
+                "page": paramsUrl.page,   //当前页
+                "search": {
+                  "goodsName": self.goodsName ? self.goodsName : "",
+                  "partnerName": self.partnerName ? self.partnerName : "",
+                  "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
+                  "orderId": self.orderId ? self.orderId : "",
+                  "checkPerson": self.checkPerson ? self.checkPerson : "",
+                  "checkDateStart": self.checkDateStart ? self.checkDateStart : "", //检票日期开始
+                  "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "" //检票日期结束
+                }
+              };
+
+              data = JSON.stringify(data);
+              self.loading = true;
+              
+              return $http.post(url, data).then(function successCallback(response) {
+                  var data = response.data;
+                  if(data.rescode === 200) {
+                    self.loading = false;
+                    params.total(data.lists.totalCount);
+                    self.tableData = data.lists.lists;
+                    self.totalTotalTickets = data.lists.totalTotalTickets;
+                    self.totalCheckedTickets = data.lists.totalCheckedTickets;
+                    self.totalReturnedTickets = data.lists.totalReturnedTickets;
+                    self.totalWaitingTickets = data.lists.totalWaitingTickets;
+                    self.totalCheckedPrice = data.lists.totalCheckedPrice;
+                    return data.lists.lists;
+                  }else if(data.rescode === 401){
+                    $location.path('/index');
+                  }else {
+                    alert(data.errInfo);
+                  }  
+                }, function errorCallback(response) {
+                  alert('加载失败，请重试');
+                });
+            }
+          }
+        );
+      };
+    }
+  ]);
 
   app.controller('exportStatementsListController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
     function($scope, $http, $cookies, $location, $window, NgTableParams) {
@@ -969,7 +1170,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       };
     }
   ]);
-
+  
   app.controller('orderDetailController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 
     function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
       console.log('orderDetail');

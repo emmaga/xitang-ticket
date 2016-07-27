@@ -1,0 +1,41 @@
+{
+    "rescode": 200,
+    "errInfo": "",
+    "lists": {
+      "totalCount": 2,
+      "totalCheckedTickets": 16,
+      "totalCheckedPrice": 1600,
+      "lists": [
+        {
+          "partnerCode": "LVMAMA",
+          "partnerName": "驴妈妈",
+          "goodsId": 1,
+          "goodsName": "西塘成人票",
+          "bookPerson": "Jack",
+          "bookMobile": "13812345678",
+          "parterOrderId": "1",
+          "orderId": "1",
+          "price": 100,
+          "checkedTickets": 2,
+          "checkedPrice": 200,
+          "checkTime": "1288323623006",
+          "checkPerson": "张三"
+        },
+        {
+          "partnerCode": "LVMAMA",
+          "partnerName": "驴妈妈",
+          "goodsId": 2,
+          "goodsName": "西塘老人票",
+          "bookPerson": "Jack",
+          "bookMobile": "13812345678",
+          "parterOrderId": "1",
+          "orderId": "1",
+          "price": 100,
+          "checkedTickets": 2,
+          "checkedPrice": 200,
+          "checkTime": "1288323623006",
+          "checkPerson": "张三"
+        }
+      ]
+    }
+}
