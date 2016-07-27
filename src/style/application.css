@@ -41,6 +41,10 @@ footer {
 
 
 /*modified*/
+.modal{
+  overflow-y: auto;
+  background-color: rgba(0,0,0,.55);
+}
 .overflow-ellipsis{
   white-space: nowrap;
   text-overflow: ellipsis;
