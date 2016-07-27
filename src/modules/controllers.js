@@ -3,18 +3,20 @@
 (function() {
   var app = angular.module('app.controllers', ['ngCookies', 'ngTable']);
 
-  app.controller('loginController', ['$scope', '$location', '$http', '$cookies', 
-    function($scope, $location, $http, $cookies) {
+  app.controller('loginController', ['$scope', '$location', '$http', '$cookies', '$filter', 
+    function($scope, $location, $http, $cookies, $filter) {
       console.log('login');
       var self = this;
 
       this.login = function() {
         var c = $scope.root.config;
         var url = c.requestUrl + '/login' + c.extension;
+        var password = $filter('md5_32_lowerCase')(this.password);
+        console.log(password);
         var data = {
           "action": "GetToken",
           "account": this.account,
-          "password": this.password,
+          "password": password,
           "projectName": this.projectName
         };
         data = JSON.stringify(data);
@@ -41,7 +43,7 @@
   app.controller('mainController', ['$scope', '$location', '$cookies', '$state', function($scope, $location, $cookies, $state) {
     console.log('main');
 
-    if ($cookies.get('token') === "") {
+    if (!$cookies.get('token')) {
       $location.path('/index');
     }
 
