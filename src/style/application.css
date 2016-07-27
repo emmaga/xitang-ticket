@@ -41,6 +41,12 @@ footer {
 
 
 /*modified*/
+.ng-table-group-header{
+  display: none
+}
+th[ng-init]{
+  border-top: none !important
+}
 .modal{
   overflow-y: auto;
   background-color: rgba(0,0,0,.55);
