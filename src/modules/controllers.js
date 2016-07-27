@@ -589,10 +589,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.loading = false;
                     params.total(data.lists.totalCount);
                     self.tableData = data.lists.lists;
-                    self.totalTotalTickets = data.lists.totalTotalTickets;
                     self.totalCheckedTickets = data.lists.totalCheckedTickets;
-                    self.totalReturnedTickets = data.lists.totalReturnedTickets;
-                    self.totalWaitingTickets = data.lists.totalWaitingTickets;
                     self.totalCheckedPrice = data.lists.totalCheckedPrice;
                     return data.lists.lists;
                   }else if(data.rescode === 401){

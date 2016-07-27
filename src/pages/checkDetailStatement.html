@@ -1,4 +1,4 @@
-﻿<div ng-controller="checkDetailStatementController as checkDetailStatement">
+﻿<div ng-controller="checkDetailStatementController as checkDetailStatement" ng-init="checkDetailStatement.init()">
     <a>
         <strong>
             <i class="glyphicon glyphicon-list-alt"></i>
@@ -41,10 +41,10 @@
     </div>
     <hr class="break-space">
     <div class="controls pull-right">
-        <button ng-click="checkStatement.export()" class="btn btn-default">
+        <button ng-click="checkDetailStatement.export()" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
         </button>
-        <button class="btn btn-primary" ng-click="checkStatement.search()" href>
+        <button class="btn btn-primary" ng-click="checkDetailStatement.search()" href>
             <i class="glyphicon glyphicon-search"></i>搜索
         </button>
     </div>
@@ -56,16 +56,19 @@
     <div ng-show="checkDetailStatement.loading">loading...</div>
     <table ng-table="checkDetailStatement.tableParams" ng-init="checkDetailStatement.search()" class="table table-hover table-striped">
         <colgroup>
-          <col width="30%" />
-          <col width="15%" />
-          <col width="15%" />
-          <col width="15%" />
-          <col width="15%" />
-          <col width="15%" />
-          <col width="15%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
         </colgroup>
         <tr class="ng-table-group" ng-repeat-start="group in $groups">
-          <td colspan="7">
+          <td colspan="10">
             <a href="" ng-click="group.$hideRows = !group.$hideRows">
               <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
               <strong>{{ group.value }}</strong>
@@ -79,43 +82,58 @@
             <td data-title="'商品名'">
                 {{row.goodsName}}
             </td>
+            <td data-title="'联系人'">
+                {{row.bookPerson}}
+            </td>
+            <td data-title="'联系电话'">
+                {{row.bookMobile}}
+            </td>
+            <td data-title="'分销商订单号'">
+                {{row.parterOrderId}}
+            </td>
+            <td data-title="'订单号'">
+                {{row.orderId}}
+            </td>
             <td data-title="'单价'">
                 {{row.price}}
             </td>
-            <td data-title="'门票总数'">
-                {{row.totalTickets}}
-            </td>
-            <td data-title="'待检数量'">
-                {{row.waitingTickets}}
-            </td>
-            <td data-title="'退票数量'">
-                {{row.returnedTickets}}
-            </td>
-            <td data-title="'已检数量'">
+            <td data-title="'检票数量'">
                 {{row.checkedTickets}}
             </td>
-            <td data-title="'已检金额'">
+            <td data-title="'检票金额'">
                 {{row.checkedPrice}}
+            </td>
+            <td data-title="'检票时间'">
+                {{row.checkTime | date:'yyyy.MM.dd hh:mm:ss'}}
+            </td>
+            <td data-title="'检票员'">
+                {{row.checkPerson}}
             </td>
         </tr>
         <tr ng-repeat-end>
             <td class="text-success text-left"><strong>小计：</strong></td>
             <td></td>
-            <td><em>{{checkDetailStatement.sum(group.data, "totalTickets")}}</em></td>
-            <td><em>{{checkDetailStatement.sum(group.data, "waitingTickets")}}</em></td>
-            <td><em>{{checkDetailStatement.sum(group.data, "returnedTickets")}}</em></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td><em>{{checkDetailStatement.sum(group.data, "checkedTickets")}}</em></td>
             <td><em>{{checkDetailStatement.sum(group.data, "checkedPrice")}}</em></td>
+            <td></td>
+            <td></td>
         </tr>
         <tfoot ng-if="checkDetailStatement.isLastPage()">
           <tr>
             <td class="text-success text-left"><strong>总计：</strong></td>
-             <td></td>
-            <td><em>{{checkDetailStatement.totalTotalTickets}}</em></td>
-            <td><em>{{checkDetailStatement.totalWaitingTickets}}</em></td>
-            <td><em>{{checkDetailStatement.totalReturnedTickets}}</em></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td><em>{{checkDetailStatement.totalCheckedTickets}}</em></td>
             <td><em>{{checkDetailStatement.totalCheckedPrice}}</em></td>
+            <td></td>
+            <td></td>
           </tr>
         </tfoot>
     </table>
