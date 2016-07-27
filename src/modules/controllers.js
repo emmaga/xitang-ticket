@@ -29,6 +29,9 @@
               $cookies.put('account', data.account);
               $cookies.put('userName', data.userName);
               $cookies.put('projectName', data.projectName);
+              $cookies.put('roleId', data.roleId);
+              $cookies.put('roleName', data.roleName);
+              $cookies.put('userId', data.userId);
               $location.path('/ordersList');
             }else {
               self.msg = data.errInfo;
