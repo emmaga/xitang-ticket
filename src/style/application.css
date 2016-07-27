@@ -41,6 +41,10 @@ footer {
 
 
 /*modified*/
+.overflow-ellipsis{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 .login-msg{
   width: 100%;
