@@ -27,7 +27,7 @@
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
                 <input type="checkbox" ng-model="exportStatementsList.checkboxes.items[row.id]" />
             </td>
-            <td title="'文件名'">
+            <td title="'文件名'" style="min-width:15em">
                 {{row.fileName}}
             </td>
             <td title="'查询条件'" style="word-break:break-all">
@@ -37,10 +37,10 @@
                 {{row.exportTime | date:"yyyy.MM.dd hh:mm:ss"}}
             </td>
             
-            <td title="'导出人'">
+            <td title="'导出人'" style="min-width:6em">
                 {{row.exportPerson}}
             </td>
-            <td title="'状态'">
+            <td title="'状态'" style="min-width:6em">
                 {{exportStatementsList.getStatus(row.status)}}
             </td>
 
