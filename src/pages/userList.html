@@ -55,10 +55,10 @@
                 <a ng-click="userList.changeStatus(row.status)" title="{{userList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': userList.isOn(row.status), 'btn-warning': !userList.isOn(row.status) }" class="btn btn-default btn-xs">
                     <i ng-class="{ 'glyphicon-ok': userList.isOn(row.status), 'glyphicon-lock': !userList.isOn(row.status) }" class="glyphicon"></i> {{userList.getStatus(row.status)}}
                 </a>
-                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
+                <a ui-sref="userEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-pencil"></i> 编辑
                 </a>
-                <a ui-sref="goodsEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
+                <a ui-sref="userPasswordReset({id:row.id})" title="重置密码" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-wrench"></i> 重置密码
                 </a>
 

@@ -34,6 +34,17 @@
           }
         }
       })
+      .state('personalPasswordEdit', {
+        url: '/personalPasswordEdit',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@personalPasswordEdit': {
+            templateUrl: 'pages/personalPasswordEdit.html'
+          }
+        }
+      })
       .state('ordersList', {
         url: '/ordersList',
         views: {
@@ -196,6 +207,28 @@
           },
           'mainFrame.body@userAdd': {
             templateUrl: 'pages/userAdd.html'
+          }
+        }
+      })
+      .state('userEdit', {
+        url: '/userEdit/{id:[0-9]{1,4}}',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@userEdit': {
+            templateUrl: 'pages/userEdit.html'
+          }
+        }
+      })
+      .state('userPasswordReset', {
+        url: '/userPasswordReset/{id:[0-9]{1,4}}',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@userPasswordReset': {
+            templateUrl: 'pages/userPasswordReset.html'
           }
         }
       })
