@@ -433,23 +433,13 @@
       self.setSubmit(false);
 
       this.submit = function() {
-
-        // 有效时间 必填
-        if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
-          alert('请输入有效时间');
-          return;
-        }
-        var c = $scope.root.config;
-        var url = c.requestUrl + '/goods' + c.extension;
-        this.goods.validDateStart = new Date($('#rd_dmukgs').val()).getTime();
-        this.goods.validDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
-
+        self.user.roleId = self.myRole.id;
         var data = {
           "action": "Modify",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
-          "goods": self.goods
+          "user": self.user
         };
         data = JSON.stringify(data);
         self.setSubmit(true);
@@ -457,7 +447,7 @@
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
-              $location.path('/goodsList');
+              $location.path('/userList');
             }else if(data.rescode === 401){
               $location.path('/index');
             }else {
