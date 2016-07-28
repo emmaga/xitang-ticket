@@ -1675,10 +1675,88 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
 
-  app.controller('personalInfoController', ['$scope', function($scope) {
-    console.log('personalInfo');
-    var self = this;
-  }]);
+  app.controller('personalInfoController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', '$window',
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter, $window) {
+      console.log('personalInfo');
+
+      var self = this;
+      self.id = $cookies.get('userId');
+
+      self.init = function() {
+        self.setSubmit(false);
+
+        // get data
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/userDetail' + c.extension;
+
+        var data = {
+          "action": "GetDetail",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "userId": self.id
+        };
+        data = JSON.stringify(data);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              self.user = data.user;
+              // 更新导航栏和cookies的用户名
+              $scope.main.userName = data.user.userName;
+              $cookies.put('userName', data.user.userName);
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('读取信息失败');
+          });        
+      };
+
+      self.setSubmit = function (status) {
+        if(status) {
+          this.btnText = "保存中...";
+          this.submitting = true;
+        }else {
+          self.btnText = "保存修改";
+          self.submitting = false;
+        }
+      }
+
+      self.submit = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/users' + c.extension;
+
+        var data = {
+          "action": "Modify",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "user": self.user
+        };
+        data = JSON.stringify(data);
+        self.setSubmit(true);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              alert('保存成功');
+              $window.location.reload();
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              self.setSubmit(false);
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            self.setSubmit(false);
+            alert('保存失败，请重试');
+          });
+      }
+    }
+  ]);
 
   app.controller('goodsAddController', ['$scope', '$location', '$cookies', '$http', function($scope, $location, $cookies, $http) {
     console.log('goodsAdd');

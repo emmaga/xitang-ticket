@@ -5,8 +5,9 @@
       "id":2,
       "account": "lisi",
       "status": "on",
-      "userName": "张三",
+      "userName": "张三丰",
       "mobile": "13812345678",
-      "roleId": 2
+      "roleId": 2,
+      "roleName": "超级管理员"
     }
 }
