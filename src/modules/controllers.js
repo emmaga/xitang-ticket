@@ -269,7 +269,7 @@
 
     this.initRolesList = function() {
       var c = $scope.root.config;
-      var url = c.requestUrl + '/roles' + c.extension;
+      var url = c.requestUrl + '/users' + c.extension;
 
       var data = {
         "action": "GetRoleList",
@@ -346,6 +346,60 @@
     console.log('applyRoles');
     var self = this;
   }]);
+  
+  app.controller('userPasswordResetController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter',
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
+      console.log('userPasswordReset');
+
+      var self = this;
+      self.id = $stateParams.id;
+
+      self.setSubmit = function (status) {
+        if(status) {
+          this.btnText = "重置中...";
+          this.submitting = true;
+        }else {
+          self.btnText = "重置密码";
+          self.submitting = false;
+        }
+      }
+
+      self.setSubmit(false);
+
+      self.submit = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/users' + c.extension;
+        var data = {
+          "action": "modifyPassword",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "myUserId": $cookies.get('userId'),
+          "modifyUserId": self.id,
+          "myPassword":$filter('md5_32_lowerCase')(self.myPassword),
+          "newPassword":$filter('md5_32_lowerCase')(self.newPassword)
+        };
+        data = JSON.stringify(data);
+        self.setSubmit(true);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              alert('重置成功');
+              $location.path('/userList');
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              self.setSubmit(false);
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            self.setSubmit(false);
+            alert('重置失败，请重试');
+          });
+      };
+    }
+  ]);
 
   app.controller('userEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter',
     function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
@@ -356,7 +410,7 @@
 
       self.setRoleList = function() {
         var c = $scope.root.config;
-        var url = c.requestUrl + '/roles' + c.extension;
+        var url = c.requestUrl + '/users' + c.extension;
 
         var data = {
           "action": "GetList",
@@ -391,7 +445,7 @@
       this.init = function() {
         // get data
         var c = $scope.root.config;
-        var url = c.requestUrl + '/userDetail' + c.extension;
+        var url = c.requestUrl + '/users' + c.extension;
 
         var data = {
           "action": "GetDetail",
@@ -433,7 +487,10 @@
       self.setSubmit(false);
 
       this.submit = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/users' + c.extension;
         self.user.roleId = self.myRole.id;
+
         var data = {
           "action": "Modify",
           "account": $cookies.get('account'),
