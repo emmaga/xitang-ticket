@@ -1,0 +1,12 @@
+{
+    "rescode": 200,
+    "errInfo": "",
+    "user": {
+      "id":2,
+      "account": "lisi",
+      "status": "on",
+      "userName": "张三",
+      "mobile": "13812345678",
+      "roleId": 2
+    }
+}

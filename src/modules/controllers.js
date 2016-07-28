@@ -136,20 +136,20 @@
           return;
         }
         
-        var goods = [];
+        var users = [];
         angular.forEach(self.checkboxes.items, function(value, key) {
           if(value === true) {
-            goods.push({"id": key});
+            users.push({"id": key});
           }
         });
         var c = $scope.root.config;
-        var url = c.requestUrl + '/goods' + c.extension;
+        var url = c.requestUrl + '/users' + c.extension;
         var data = {
           "action": "Delete",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
-          "goods": goods
+          "users": users
         };
         data = JSON.stringify(data);
         
@@ -169,13 +169,13 @@
 
       self.changeStatus = function(status) {
         var c = $scope.root.config;
-        var url = c.requestUrl + '/goods' + c.extension;
+        var url = c.requestUrl + '/users' + c.extension;
         var data = {
           "action": "ChangeStatus",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
-          "goodsId": 1,
+          "userId": 1,
           "state": status === 'on' ? 'off' : 'on'
         };
         data = JSON.stringify(data);
@@ -222,19 +222,16 @@
               }
 
               var c = $scope.root.config;
-              var url = c.requestUrl + '/goods' + c.extension;
+              var url = c.requestUrl + '/users' + c.extension;
               var data = {
                 "action": "GetList",
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
                 "sortBy": "CreateTime",
-                "orderBy": "desc",
+                "orderBy": "asc",
                 "count": paramsUrl.count, //一页显示数量
-                "page": paramsUrl.page,   //当前页
-                "search": {
-                  "goodsName": searchName //完全匹配查询
-                }
+                "page": paramsUrl.pages
               };
               data = JSON.stringify(data);
               self.loading = true;
@@ -244,9 +241,9 @@
                   if(data.rescode === 200) {
                     self.checkboxes = { 'checked': false, items: {} };
                     self.loading = false;
-                    params.total(data.goods.totalCount);
-                    self.tableData = data.goods.lists;
-                    return data.goods.lists;
+                    params.total(data.users.totalCount);
+                    self.tableData = data.users.lists;
+                    return data.users.lists;
                   }else if(data.rescode === 401){
                     $location.path('/index');
                   }else {
@@ -349,6 +346,131 @@
     console.log('applyRoles');
     var self = this;
   }]);
+
+  app.controller('userEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter',
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
+      console.log('userEdit');
+
+      var self = this;
+      self.id = $stateParams.id;
+
+      self.setRoleList = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/roles' + c.extension;
+
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "count": 10000,
+          "page": 1
+        };
+        data = JSON.stringify(data);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              self.roles = data.roles.lists;
+              for (var i = 0; i < self.roles.length; i++) {
+                if(self.roles[i].id === self.user.roleId) {
+                  self.myRole = self.roles[i];
+                  break;
+                }
+              }
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('读取角色信息失败');
+          });
+      };
+
+      this.init = function() {
+        // get data
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/userDetail' + c.extension;
+
+        var data = {
+          "action": "GetDetail",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "userId": self.id
+        };
+        data = JSON.stringify(data);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              self.user = data.user;
+
+              //角色设置
+              self.setRoleList();
+
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('读取信息失败');
+          });
+      }
+
+      self.setSubmit = function (status) {
+        if(status) {
+          this.btnText = "保存中...";
+          this.submitting = true;
+        }else {
+          self.btnText = "保存修改";
+          self.submitting = false;
+        }
+      }
+
+      self.setSubmit(false);
+
+      this.submit = function() {
+
+        // 有效时间 必填
+        if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
+          alert('请输入有效时间');
+          return;
+        }
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+        this.goods.validDateStart = new Date($('#rd_dmukgs').val()).getTime();
+        this.goods.validDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+
+        var data = {
+          "action": "Modify",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "goods": self.goods
+        };
+        data = JSON.stringify(data);
+        self.setSubmit(true);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              $location.path('/goodsList');
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              self.setSubmit(false);
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            self.setSubmit(false);
+            alert('保存失败，请重试');
+          });
+      }
+    }
+  ]);
 
 app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
     function($scope, $http, $cookies, $location, $window, NgTableParams) {

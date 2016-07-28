@@ -1,15 +1,31 @@
 {
     "rescode": 200,
     "errInfo": "",
-    "roles": {
+    "users": {
       "totalCount": 200,
       "lists": [
         {
           "id": 1,
+          "account": "admin",
+          "status": "on",
+          "userName": "",
+          "mobile": "",
           "roleName": "超级管理员"
         },
         {
           "id": 2,
+          "account": "zhangsan",
+          "status": "off",
+          "userName": "张三",
+          "mobile": "13812345678",
+          "roleName": "超级管理员"
+        },
+        {
+          "id": 3,
+          "account": "lisi",
+          "status": "on",
+          "userName": "李四",
+          "mobile": "13812345678",
           "roleName": "票务"
         }
       ]

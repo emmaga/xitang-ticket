@@ -1,44 +1,42 @@
-﻿<div ng-controller="userEditController as userEdit">
+﻿<div ng-controller="userEditController as userEdit" ng-init="userEdit.init()">
     <a>
         <strong>
             <i class="glyphicon glyphicon-wrench"></i>
             管理员工具
             <i class="glyphicon glyphicon-chevron-right"></i>
-            用户信息编辑         
+            用户信息编辑           
         </strong>
     </a>
     <hr>
-	<div class="row">
+    <div class="row">
         <div class="col-lg-6 col-md-12">
             <div class="panel panel-default panel-sm">
                 <div class="panel-heading">
                     用户信息
                 </div>
                 <div class="panel-body">
-                    <form class="form form-vertical">
+                    <form name="userEditForm" class="form form-vertical" ng-submit="userEditForm.$valid && userEdit.submit()">
                         <div class="control-group">
-                            <label class="">用户名</label>
-                            <p>admin</p>
+                            <label class="required-info">帐号</label>
+                            <div class="controls">
+                                <input ng-model="userEdit.user.account" type="text" class="form-control" placeholder="请输入帐号" required>
+                            </div>
                         </div>
+                        
                         <hr class="break-space">
                         <div class="control-group">
                             <label class="">角色</label>
                             <div class="controls">
-                                <select class="form-control">
-                                    <option>- 请选择角色 -</option>
-                                    <option>超级管理员</option>
-                                    <option>检票员</option>
-                                    <option>财务</option>
-                                
+                                <select required ng-model="userEdit.myRole" class="form-control" ng-options="role.roleName for role in userEdit.roles">
+                                    <option value="">- 请选择角色 -</option>
                                 </select>
                             </div>
                         </div>
                         <hr class="break-space">
-                        
                         <div class="control-group">
                             <label class="required-info">真实姓名称</label>
                             <div class="controls">
-                                <input type="text" class="form-control" value="某人">
+                                <input ng-model="userEdit.user.userName" type="text" class="form-control" placeholder="请输入真实姓名"required>
                             </div>
                         </div>
                         <hr class="break-space">
@@ -46,19 +44,19 @@
                         <div class="control-group">
                             <label class="required-info">手机</label>
                             <div class="controls">
-                                <input type="text" class="form-control" value="13800000000">
+                                <input ng-model="userEdit.user.mobile" type="text" class="form-control" placeholder="请输入手机号" required>
                             </div>
                         </div>
                         <hr class="break-space">
-                       
+                        
                         <div class="control-group">
                             <label></label>
                             <div class="controls pull-right">
-                                <button type="submit" class="btn btn-primary">
-                                    保存修改
-                                </button>
-                                <button type="submit" class="btn btn-default">
+                                <button ui-sref="userList" class="btn btn-default">
                                     取消
+                                </button>
+                                <button type="submit" class="btn btn-primary" ng-class="{disabled:userEdit.submitting}">
+                                    {{userEdit.btnText}}
                                 </button>
                             </div>
                         </div>
@@ -67,8 +65,4 @@
             </div>
         </div>
     </div>
-
-
-
-
 </div>

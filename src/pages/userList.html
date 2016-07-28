@@ -19,14 +19,6 @@
                 </a>
             </div>
         </div>
-        <div class="col-xs-6">
-            <div class="input-group">
-                <input ng-model="userList.searchName" type="text" class="form-control" placeholder="商品名">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="userList.search()" href>搜索</button>
-                </span>
-            </div>
-        </div>
     </div>
     <hr class="break-space">
     <div ng-show="userList.loading">loading...</div>
@@ -35,31 +27,30 @@
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
                 <input type="checkbox" ng-model="userList.checkboxes.items[row.id]" />
             </td>
-            <td title="'用户名'">
-                root
+            <td title="'账号'">
+                {{row.account}}
             </td>
             <td title="'角色'">
-                超级管理员
+                {{row.roleName}}
             </td>
             <td title="'真实姓名'">
-                张三
+                {{row.userName}}
             </td>
            
            
             <td title="'手机'">
-                13500000000
+                {{row.mobile}}
             </td>
             <td title="'操作'">
-                <a ng-click="userList.changeStatus(row.status)" title="{{userList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': userList.isOn(row.status), 'btn-warning': !userList.isOn(row.status) }" class="btn btn-default btn-xs">
+                <a ng-show="row.account!=='admin'" ng-click="userList.changeStatus(row.status)" title="{{userList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': userList.isOn(row.status), 'btn-warning': !userList.isOn(row.status) }" class="btn btn-default btn-xs">
                     <i ng-class="{ 'glyphicon-ok': userList.isOn(row.status), 'glyphicon-lock': !userList.isOn(row.status) }" class="glyphicon"></i> {{userList.getStatus(row.status)}}
                 </a>
-                <a ui-sref="userEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
+                <a ng-show="row.account!=='admin'" ui-sref="userEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-pencil"></i> 编辑
                 </a>
                 <a ui-sref="userPasswordReset({id:row.id})" title="重置密码" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-wrench"></i> 重置密码
                 </a>
-
             </td>
         </tr>
     </table>
