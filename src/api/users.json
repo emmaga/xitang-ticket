@@ -1,0 +1,17 @@
+{
+    "rescode": 200,
+    "errInfo": "",
+    "roles": {
+      "totalCount": 200,
+      "lists": [
+        {
+          "id": 1,
+          "roleName": "超级管理员"
+        },
+        {
+          "id": 2,
+          "roleName": "票务"
+        }
+      ]
+    }
+}

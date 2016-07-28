@@ -82,6 +82,7 @@
         break;
       case 'userList':
       case 'userAdd':
+      case 'userEdit':
         $scope.$state = 'admin';
         break;  
     }
@@ -260,6 +261,89 @@
       }
     }
   ]);
+  
+  app.controller('userAddController', ['$scope', '$location', '$cookies', '$http', function($scope, $location, $cookies, $http) {
+    console.log('userAdd');
+    var self = this;
+
+    self.init = function() {
+      this.initRolesList();
+    };
+
+    this.initRolesList = function() {
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/roles' + c.extension;
+
+      var data = {
+        "action": "GetRoleList",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "count": 10000,
+        "page": 1
+      };
+      data = JSON.stringify(data);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.roles = data.roles.lists;
+            // self.roles = self.roles[0];
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取角色信息失败');
+        });
+    };
+
+    self.setSubmit = function (status) {
+      if(status) {
+        self.addBtnText = "添加中...";
+        self.submitting = true;
+      }else {
+        self.addBtnText = "添加";
+        self.submitting = false;
+      }
+    }
+
+    self.setSubmit(false);
+
+    this.submit = function() {
+
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/users' + c.extension;
+      this.user.status = 'on';
+      self.user.roleId = self.myRole.id;
+
+      var data = {
+        "action": "Add",
+        "account": $cookies.get('account'),
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "user": self.user
+      };
+      data = JSON.stringify(data);
+      self.setSubmit(true);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            $location.path('/userList');
+          }else if(data.rescode === 401){
+            $location.path('/index');
+          }else {
+            self.setSubmit(false);
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          self.setSubmit(false);
+          alert('添加失败，请重试');
+        });
+    }
+  }]);
 
   app.controller('applyRolesController', ['$scope', function($scope) {
     console.log('applyRoles');
