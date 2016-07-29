@@ -23,7 +23,7 @@
             
             <td title="'操作'">
                 <small>
-                    <a ng-click="partnerConfig.changeStatus(row.status)" title="{{partnerConfig.getStatusAction(row.status)}}" ng-class="{ 'btn-success': partnerConfig.isOn(row.status), 'btn-warning': !partnerConfig.isOn(row.status) }" class="btn btn-default btn-xs">
+                    <a ng-click="partnerConfig.changeStatus(row.status, row.partnerCode)" title="{{partnerConfig.getStatusAction(row.status)}}" ng-class="{ 'btn-success': partnerConfig.isOn(row.status), 'btn-warning': !partnerConfig.isOn(row.status) }" class="btn btn-default btn-xs">
                         <i ng-class="{ 'glyphicon-ok': partnerConfig.isOn(row.status), 'glyphicon-lock': !partnerConfig.isOn(row.status) }" class="glyphicon"></i>
                         {{partnerConfig.getStatus(row.status)}}
                     </a>

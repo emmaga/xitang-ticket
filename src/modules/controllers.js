@@ -175,7 +175,7 @@
           });
       }
 
-      self.changeStatus = function(status) {
+      self.changeStatus = function(status, id) {
         var c = $scope.root.config;
         var url = c.requestUrl + '/users' + c.extension;
         var data = {
@@ -183,7 +183,7 @@
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
-          "userId": 1,
+          "userId": id,
           "state": status === 'on' ? 'off' : 'on'
         };
         data = JSON.stringify(data);
@@ -2078,7 +2078,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           });
       }
 
-      self.changeStatus = function(status) {
+      self.changeStatus = function(status, id) {
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
@@ -2086,7 +2086,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
-          "goodsId": 1,
+          "goodsId": id,
           "state": status === 'on' ? 'off' : 'on'
         };
         data = JSON.stringify(data);
@@ -2246,7 +2246,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           });
       }
 
-      self.changeStatus = function(status) {
+      self.changeStatus = function(status, id) {
         var c = $scope.root.config;
         var url = c.requestUrl + '/sale' + c.extension;
         var data = {
@@ -2254,7 +2254,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
-          "saleId": 1,
+          "saleId": id,
           "state": status === 'on' ? 'off' : 'on'
         };
         data = JSON.stringify(data);
@@ -2361,7 +2361,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         return ret;
       }
 
-      self.changeStatus = function(status) {
+      self.changeStatus = function(status, id) {
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         var data = {
@@ -2369,7 +2369,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
-          "goodsId": 1,
+          "partnerCode": id,
           "state": status === 'on' ? 'off' : 'on'
         };
         data = JSON.stringify(data);

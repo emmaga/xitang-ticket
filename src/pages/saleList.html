@@ -57,7 +57,7 @@
             </td>
             <td title="'操作'">
                 <small>
-                    <a ng-click="saleList.changeStatus(row.status)" title="{{saleList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': saleList.isOn(row.status), 'btn-warning': !saleList.isOn(row.status) }" class="btn btn-default btn-xs">
+                    <a ng-click="saleList.changeStatus(row.status, row.saleId)" title="{{saleList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': saleList.isOn(row.status), 'btn-warning': !saleList.isOn(row.status) }" class="btn btn-default btn-xs">
                         <i ng-class="{ 'glyphicon-ok': saleList.isOn(row.status), 'glyphicon-lock': !saleList.isOn(row.status) }" class="glyphicon"></i>
                         {{saleList.getStatus(row.status)}}
                     </a>

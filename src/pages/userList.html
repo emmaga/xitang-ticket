@@ -42,7 +42,7 @@
                 {{row.mobile}}
             </td>
             <td title="'操作'">
-                <a ng-show="row.account!=='admin'" ng-click="userList.changeStatus(row.status)" title="{{userList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': userList.isOn(row.status), 'btn-warning': !userList.isOn(row.status) }" class="btn btn-default btn-xs">
+                <a ng-show="row.account!=='admin'" ng-click="userList.changeStatus(row.status, row.id)" title="{{userList.getStatusAction(row.status)}}" ng-class="{ 'btn-success': userList.isOn(row.status), 'btn-warning': !userList.isOn(row.status) }" class="btn btn-default btn-xs">
                     <i ng-class="{ 'glyphicon-ok': userList.isOn(row.status), 'glyphicon-lock': !userList.isOn(row.status) }" class="glyphicon"></i> {{userList.getStatus(row.status)}}
                 </a>
                 <a ng-show="row.account!=='admin'" ui-sref="userEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
