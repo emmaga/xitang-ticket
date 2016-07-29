@@ -5,7 +5,8 @@
     'ui.router',
     'app.controllers',
     'app.directive',
-    'app.filters'
+    'app.filters',
+    'app.services'
   ]);
 
   app.config(function($stateProvider, $urlRouterProvider) {

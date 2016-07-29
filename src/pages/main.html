@@ -1,4 +1,4 @@
-<div ng-controller="mainController as main">
+<div ng-controller="mainController as main" ng-init="main.init()">
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -37,11 +37,11 @@
                     <i class="glyphicon glyphicon-dashboard"></i> 系统总览
                 </a> -->
                 <!-- <hr> -->
-                <a class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-uxxvlg">
+                <a ng-show="main.auth('orders')" class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-uxxvlg">
                     <i class="glyphicon glyphicon-barcode"></i> 订单中心
                     <i ng-class="{'glyphicon-chevron-down': $state.includes('orders'), 'glyphicon-chevron-right': !$state.includes('orders')}" class="glyphicon pull-right margin-right-15"></i>
                 </a>
-                <ul ng-class="{in: $state.includes('orders')}" class="nav nav-stacked collapse" id="rd-uxxvlg">
+                <ul ng-show="main.auth('orders')" ng-class="{in: $state.includes('orders')}" class="nav nav-stacked collapse" id="rd-uxxvlg">
                     <hr>
                     <li class="nav-header">
                         <a ui-sref="ordersList">
@@ -54,12 +54,12 @@
                             </a>
                     </li>
                 </ul>
-                <hr>
-                <a class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-neqdko">
+                <hr ng-show="main.auth('orders')">
+                <a ng-show="main.auth('goods')" class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-neqdko">
                     <i class="glyphicon glyphicon-usd"></i> 销售中心
                     <i ng-class="{'glyphicon-chevron-down': $state.includes('goods'), 'glyphicon-chevron-right': !$state.includes('goods')}" class="glyphicon pull-right margin-right-15"></i>
                 </a>
-                <ul ng-class="{in: $state.includes('goods')}" class="nav nav-stacked collapse " id="rd-neqdko">
+                <ul ng-show="main.auth('goods')" ng-class="{in: $state.includes('goods')}" class="nav nav-stacked collapse " id="rd-neqdko">
                     <hr>
                     <li class="nav-header">
                         <a  ui-sref="goodsList">
@@ -77,12 +77,12 @@
                         </a>
                     </li>
                 </ul>
-                <hr>
-                <a class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-tosgxq">
+                <hr ng-show="main.auth('goods')">
+                <a ng-show="main.auth('statement')" class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-tosgxq">
                     <i class="glyphicon glyphicon-list-alt"></i> 报表中心
                     <i ng-class="{'glyphicon-chevron-down': $state.includes('statement'), 'glyphicon-chevron-right': !$state.includes('statement')}" class="glyphicon pull-right margin-right-15"></i>
                 </a>
-                <ul ng-class="{in: $state.includes('statement')}" class="nav nav-stacked collapse" id="rd-tosgxq">
+                <ul ng-show="main.auth('statement')" ng-class="{in: $state.includes('statement')}" class="nav nav-stacked collapse" id="rd-tosgxq">
                     <hr>
                     <li class="nav-header">
                         <a ui-sref="checkStatement">
@@ -105,12 +105,12 @@
                             </a>
                     </li>
                 </ul>
-                <hr>
-                <a class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-ewgwmo">
+                <hr ng-show="main.auth('statement')">
+                <a ng-show="main.auth('admin')" class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-ewgwmo">
                     <i class="glyphicon glyphicon-wrench"></i> 管理员工具
                     <i ng-class="{'glyphicon-chevron-down': $state.includes('admin'), 'glyphicon-chevron-right': !$state.includes('admin')}" class="glyphicon pull-right margin-right-15"></i>
                 </a>
-                <ul ng-class="{in: $state.includes('admin')}" class="nav nav-stacked collapse" id="rd-ewgwmo">
+                <ul ng-show="main.auth('admin')" ng-class="{in: $state.includes('admin')}" class="nav nav-stacked collapse" id="rd-ewgwmo">
                     <hr>
                     <li class="nav-header">
                         <a ui-sref="userList">
@@ -119,7 +119,7 @@
                     </li>
 
                 </ul>
-                <hr>
+                <hr ng-show="main.auth('admin')">
             </div>
             <!-- 页面 -->
             <div ui-view="mainFrame.body" class="col-sm-9 col-right page">

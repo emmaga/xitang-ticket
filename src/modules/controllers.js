@@ -32,6 +32,7 @@
               $cookies.put('roleId', data.roleId);
               $cookies.put('roleName', data.roleName);
               $cookies.put('userId', data.userId);
+              // todo 权限
               $location.path('/ordersList');
             }else {
               self.msg = data.errInfo;
@@ -43,49 +44,56 @@
     }
   ]);
 
-  app.controller('mainController', ['$scope', '$location', '$cookies', '$state', function($scope, $location, $cookies, $state) {
+  app.controller('mainController', ['$scope', '$location', '$cookies', '$state','auth', function($scope, $location, $cookies, $state, auth) {
     console.log('main');
 
     if (!$cookies.get('token')) {
       $location.path('/index');
     }
 
-    this.userName = $cookies.get('userName');
+    this.auth = function(authName) { return auth($cookies.get('roleId'), authName) };
+
+    this.init = function() {
+      this.userName = $cookies.get('userName');
+      var stateName = $state.current.name;
+      $scope.$state = '';
+
+      switch (stateName) {
+        case 'ordersList':
+        case 'toBeChecked':
+          $scope.$state = 'orders';
+          break;
+        case 'goodsList':
+        case 'saleList':
+        case 'partnerConfig':
+        case 'goodsAdd':
+        case 'goodsEdit':
+        case 'saleAdd':
+        case 'saleEdit':
+          $scope.$state = 'goods';
+          break;  
+        case 'exportStatementsList':
+        case 'checkDetailStatement':
+        case 'operatingStatement':
+        case 'checkStatement':
+          $scope.$state = 'statement';
+          break;
+        case 'userList':
+        case 'userAdd':
+        case 'userEdit':
+          $scope.$state = 'admin';
+          break;  
+      }
+      if( !this.auth($scope.$state) ) {
+        alert('抱歉，您无权限访问该页面');
+        this.logout();
+      }
+    };
 
     this.logout = function() {
       $cookies.put('token', '');
       $location.path('/index');
     };
-
-    var stateName = $state.current.name;
-    $scope.$state = '';
-
-    switch (stateName) {
-      case 'ordersList':
-      case 'toBeChecked':
-        $scope.$state = 'orders';
-        break;
-      case 'goodsList':
-      case 'saleList':
-      case 'partnerConfig':
-      case 'goodsAdd':
-      case 'goodsEdit':
-      case 'saleAdd':
-      case 'saleEdit':
-        $scope.$state = 'goods';
-        break;  
-      case 'exportStatementsList':
-      case 'checkDetailStatement':
-      case 'operatingStatement':
-      case 'checkStatement':
-        $scope.$state = 'statement';
-        break;
-      case 'userList':
-      case 'userAdd':
-      case 'userEdit':
-        $scope.$state = 'admin';
-        break;  
-    }
 
   }]);
 
@@ -1755,6 +1763,68 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             alert('保存失败，请重试');
           });
       }
+    }
+  ]);
+
+  app.controller('personalPasswordEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter',
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
+      console.log('personalPasswordEdit');
+
+      var self = this;
+      self.id = $cookies.get('userId');
+
+      self.setSubmit = function (status) {
+        if(status) {
+          this.btnText = "保存中...";
+          this.submitting = true;
+        }else {
+          self.btnText = "保存修改";
+          self.submitting = false;
+        }
+      }
+
+      self.setSubmit(false);
+
+      self.submit = function() {
+
+        //判断2次密码输入是否一致
+        if(self.newPassword2 !== self.newPassword) {
+          alert('新密码不一致');
+          return;
+        }
+
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/users' + c.extension;
+        var data = {
+          "action": "modifyPassword",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "myUserId": $cookies.get('userId'),
+          "modifyUserId": self.id,
+          "myPassword":$filter('md5_32_lowerCase')(self.myPassword),
+          "newPassword":$filter('md5_32_lowerCase')(self.newPassword)
+        };
+        data = JSON.stringify(data);
+        self.setSubmit(true);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              alert('保存成功，请重新登录');
+              $cookies.put('token', '');              
+              $location.path('/index');
+            }else if(data.rescode === 401){
+              $location.path('/index');
+            }else {
+              self.setSubmit(false);
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            self.setSubmit(false);
+            alert('保存失败，请重试');
+          });
+      };
     }
   ]);
 

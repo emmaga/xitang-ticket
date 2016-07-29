@@ -48,7 +48,7 @@
                 <a ng-show="row.account!=='admin'" ui-sref="userEdit({id:row.id})" title="编辑" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-pencil"></i> 编辑
                 </a>
-                <a ui-sref="userPasswordReset({id:row.id})" title="重置密码" class="btn btn-default btn-xs">
+                <a ng-show="row.account!=='admin'" ui-sref="userPasswordReset({id:row.id})" title="重置密码" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-wrench"></i> 重置密码
                 </a>
             </td>
