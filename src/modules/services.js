@@ -5,10 +5,10 @@
   
   app.service('auth', function() {
     return function(roleId, authName) {
+      
       //roleId 1:超级管理员 2:票务
       //auth orders, goods, statement, admin
       var ret = false;
-
       
       if(roleId == 1) {
         ret = true;
