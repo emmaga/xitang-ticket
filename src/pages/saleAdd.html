@@ -29,20 +29,20 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="required-info"></label>
+                            <label class="required-info">分销商</label>
                             <div class="controls">
                                 <select required ng-model="saleAdd.myPartner" class="form-control" ng-options="partner.partnerName for partner in saleAdd.partners">
                                     <option value="">- 请选择分销商 -</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>价格</label>
+                        <div class="form-group required-info">
+                            <label>单价</label>
                             <div class="controls input-group">
                                 <span class="input-group-addon">
 									￥
 								</span>
-                                <input ng-model="saleAdd.sale.price" type="text" class="form-control" placeholder="00.00">
+                                <input ng-model="saleAdd.sale.price" type="text" class="form-control" placeholder="00.00" required>
                             </div>
                         </div>
                         <div class="form-group">

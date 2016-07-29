@@ -5,7 +5,7 @@
     "account": "root",
     "userName": "张三",
     "projectName":"xitang",
-    "roleId": 2,
+    "roleId": 1,
     "roleName": "超级管理员",
     "userId": 2
 }

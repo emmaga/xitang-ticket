@@ -21,7 +21,7 @@
         </div>
         <div class="col-sm-6">
             <div class="input-group">
-                <input ng-model="saleList.searchStr" type="text" class="form-control" placeholder="商品/价格/分销商">
+                <input ng-model="saleList.searchStr" type="text" class="form-control" placeholder="商品/单价/分销商">
                 <span class="input-group-btn">
 					<button class="btn btn-default" type="button" ng-click="saleList.search()">搜索</button>
 				</span>
@@ -41,7 +41,7 @@
             <td title="'分销商'">
                 {{row.partnerName}}
             </td>
-            <td title="'价格'">
+            <td title="'单价'">
                 ￥{{row.price}}
             </td>
 
