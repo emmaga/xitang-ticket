@@ -206,7 +206,8 @@
       // watch for check all checkbox
       $scope.$watch('userList.checkboxes.checked', function(value) {
           angular.forEach(self.tableData, function(item) {
-              if (angular.isDefined(item.id)) {
+              // admin不能被删除
+              if (angular.isDefined(item.id) && item.account!=='admin') {
                 self.checkboxes.items[item.id] = value;
               }
           });
