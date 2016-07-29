@@ -673,7 +673,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
   app.controller('checkDetailStatementController', ['$scope', '$http', '$cookies', '$location', '$window', '$filter', 'NgTableParams', 
     function($scope, $http, $cookies, $location, $window, $filter, NgTableParams) {
-      console.log('operatingStatement');
+      console.log('checkDetailStatement');
       var self = this;
 
       self.init = function() {
@@ -707,7 +707,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       self.export = function() {
         var c = $scope.root.config;
-        var url = c.requestUrl + '/checkDetailStatement' + c.extension;
+        var url = c.requestUrl + '/statement' + c.extension;
 
         //如果检票时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
         if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
@@ -792,7 +792,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var paramsUrl = params.url();
 
               var c = $scope.root.config;
-              var url = c.requestUrl + '/checkDetailStatement' + c.extension;
+              var url = c.requestUrl + '/statement' + c.extension;
 
               //如果检票时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
               if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
@@ -1696,7 +1696,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
         // get data
         var c = $scope.root.config;
-        var url = c.requestUrl + '/userDetail' + c.extension;
+        var url = c.requestUrl + '/users' + c.extension;
 
         var data = {
           "action": "GetDetail",
