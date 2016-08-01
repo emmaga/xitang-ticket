@@ -12,7 +12,7 @@
         var c = $scope.root.config;
         var url = c.requestUrl + '/login' + c.extension;
         var password = $filter('md5_32_lowerCase')(this.password);
-        console.log(password);
+        
         var data = {
           "action": "GetToken",
           "account": this.account,
