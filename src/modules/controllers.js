@@ -1629,7 +1629,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               //读取游玩日期
               self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' 00:00:00').getTime() : '';
               self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' 23:59:59').getTime() : '';
-              
+
               var data = {
                 "action": "GetList",
                 "account": $cookies.get('account'),
@@ -1654,7 +1654,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "isExpired": self.isExpired ? self.isExpired : "all"
                 }
               };
-              data = JSON.stringify(data);console.log(data);
+              data = JSON.stringify(data);
               self.loading = true;
               
               return $http.post(url, data).then(function successCallback(response) {
