@@ -237,10 +237,10 @@
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "CreateTime",
+                "sortBy": "UserCreateTime",
                 "orderBy": "asc",
                 "count": paramsUrl.count, //一页显示数量
-                "page": paramsUrl.pages
+                "page": paramsUrl.page
               };
               data = JSON.stringify(data);
               self.loading = true;
@@ -422,7 +422,7 @@
         var url = c.requestUrl + '/users' + c.extension;
 
         var data = {
-          "action": "GetList",
+          "action": "GetRoleList",
           "account": $cookies.get('account'),
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
@@ -692,7 +692,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.sum = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
-          t += data[i][field];
+          t += parseFloat(data[i][field]);
         }
         return t;
       };
@@ -982,7 +982,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "CreateTime",
+                "sortBy": "ExportTime",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page
@@ -1034,7 +1034,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.sum = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
-          t += data[i][field];
+          t += parseFloat(data[i][field]);
         }
         return t;
       };
@@ -1244,7 +1244,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.sum = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
-          t += data[i][field];
+          t += parseFloat(data[i][field]);
         }
         return t;
       };
@@ -1530,13 +1530,13 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         }
 
         //读取成交日期
-        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
-        self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
+        self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
         
         //读取游玩日期
-        self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
-        self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
-
+        self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' 00:00:00').getTime() : '';
+        self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' 23:59:59').getTime() : '';
+        
         var data = {
           "action": "Export",
           "account": $cookies.get('account'),
@@ -1623,13 +1623,13 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               }
 
               //读取成交日期
-              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
-              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
               
               //读取游玩日期
-              self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
-              self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
-
+              self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' 00:00:00').getTime() : '';
+              self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' 23:59:59').getTime() : '';
+              
               var data = {
                 "action": "GetList",
                 "account": $cookies.get('account'),
@@ -1654,7 +1654,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "isExpired": self.isExpired ? self.isExpired : "all"
                 }
               };
-              data = JSON.stringify(data);
+              data = JSON.stringify(data);console.log(data);
               self.loading = true;
               
               return $http.post(url, data).then(function successCallback(response) {
