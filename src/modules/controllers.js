@@ -594,7 +594,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       self.checkDetail = function(orderId) {
         $scope.root.coverUrl = 'pages/check.html';
-        $scope.root.coverParamId = 'orderId';
+        $scope.root.coverParamId = orderId;
       }
     }
   ]);
@@ -620,7 +620,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "token": $cookies.get('token'),
           "projectName": $cookies.get('projectName'),
           "orderId": self.id,
-          "checkNumber": 2,  //检票数量
+          "checkNumber": self.orders.checkNumber,  //检票数量
           "userName": $cookies.get('userName')
         };
         data = JSON.stringify(data);
@@ -1647,8 +1647,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "goodsName": self.goodsName ? self.goodsName : "",
                   "checkStatus": self.checkStatus ? self.checkStatus : "all", //checked：已检票，checking：检票中，waiting：待检票
                   "partnerName": self.partnerName ? self.partnerName : "",
-                  "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
-                  "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
+                  "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart+"" : "", //成交日期开始
+                  "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd+"" : "", //成交日期结束
                   "visitDateStart": self.visitDateStart ? self.visitDateStart : "",
                   "visitDateEnd": self.visitDateEnd ? self.visitDateEnd : "",
                   "isExpired": self.isExpired ? self.isExpired : "all"
@@ -1933,7 +1933,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
-              self.goods = data.goods;
+              var d = data.goods;
+              d.cost = parseFloat(d.cost);
+              self.goods = d;
 
               // 有效时间设置
               var sDate = $filter('date')(data.goods.validDateStart, 'yyyy-MM-dd');
@@ -2409,7 +2411,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
-                "sortBy": "CreateTime",
+                "sortBy": "CreateDate",
                 "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
@@ -2470,7 +2472,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
-        "sortBy": "CreateTime",
+        "sortBy": "CreateDate",
         "orderBy": "desc",
         "count": 10000,
         "page": 1,
@@ -2651,7 +2653,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
-        "sortBy": "CreateTime",
+        "sortBy": "CreateDate",
         "orderBy": "desc",
         "count": 10000,
         "page": 1,
