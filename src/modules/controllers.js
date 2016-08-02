@@ -2345,7 +2345,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
   
   app.controller('partnerConfigController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
     function($scope, $http, $cookies, $location, $window, NgTableParams) {
-      console.log('partnerConfig');
       var self = this;
       
       self.getStatus = function(status) {
@@ -2365,7 +2364,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       self.changeStatus = function(status, id) {
         var c = $scope.root.config;
-        var url = c.requestUrl + '/goods' + c.extension;
+        var url = c.requestUrl + '/partners' + c.extension;
         var data = {
           "action": "ChangeStatus",
           "account": $cookies.get('account'),
@@ -2375,7 +2374,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "state": status === 'on' ? 'off' : 'on'
         };
         data = JSON.stringify(data);
-        
+        console.log(data);
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
@@ -2552,7 +2551,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       }
       var c = $scope.root.config;
       var url = c.requestUrl + '/sale' + c.extension;
-      self.sale.status = 'on';
+      self.sale.state = 'on';
       self.sale.saleDateStart = new Date($('#rd_dmukgs').val()).getTime();
       self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
       self.sale.goodsId = self.myGoods.id;
@@ -2567,7 +2566,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       };
       data = JSON.stringify(data);
       self.setSubmit(true);
-
+      console.log(data);
       $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
           if(data.rescode === 200) {
@@ -2603,8 +2602,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         forceParse: 0
       });
       this.initSaleDetailInfo();
-      this.initPartnersList();
-      this.initpartnerConfig();
     };
 
     this.initSaleDetailInfo = function() {
@@ -2623,7 +2620,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
           if(data.rescode === 200) {
-            self.sale = data.sale;
+            var d = data.sale;
+            d.price = parseFloat(d.price);
+            self.sale = d;
 
             // 有效时间设置
             var sDate = $filter('date')(data.sale.saleDateStart, 'yyyy-MM-dd');
@@ -2633,13 +2632,17 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             $('#rd_qcaxwa').val(eDate);
             $('#sale-date-end').val(eDate);
 
+
+            self.initPartnersList();
+            self.initpartnerConfig();
+
           }else if(data.rescode === 401){
             $location.path('/index');
           }else {
             alert(data.errInfo);
           }  
         }, function errorCallback(response) {
-          alert('添加失败，请重试');
+          alert('加载失败，请重试');
         });
     };
 
