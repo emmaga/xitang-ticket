@@ -830,7 +830,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               self.checkDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
             
               var data = {
-                "action": "GetCheckStatement",
+                "action": "GetcheckDetailStatement",
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
@@ -1389,7 +1389,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
 
               var data = {
-                "action": "GetCheckStatement",
+                "action": "GetOperatingStatement",
                 "account": $cookies.get('account'),
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
