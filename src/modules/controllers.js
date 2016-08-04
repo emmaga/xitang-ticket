@@ -1868,8 +1868,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       var c = $scope.root.config;
       var url = c.requestUrl + '/goods' + c.extension;
       this.goods.status = 'on';
-      this.goods.validDateStart = new Date($('#rd_dmukgs').val()).getTime();
-      this.goods.validDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+
+      this.goods.validDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
+      this.goods.validDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
 
       var data = {
         "action": "Add",
@@ -1976,8 +1977,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         }
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
-        this.goods.validDateStart = new Date($('#rd_dmukgs').val()).getTime();
-        this.goods.validDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+        this.goods.validDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
+        this.goods.validDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
 
         var data = {
           "action": "Modify",
@@ -2552,8 +2553,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       var c = $scope.root.config;
       var url = c.requestUrl + '/sale' + c.extension;
       self.sale.state = 'on';
-      self.sale.saleDateStart = new Date($('#rd_dmukgs').val()).getTime();
-      self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+      self.sale.saleDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
+      self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
       self.sale.goodsId = self.myGoods.id;
       self.sale.partnerCode = self.myPartner.partnerCode;
 
@@ -2747,8 +2748,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       var c = $scope.root.config;
       var url = c.requestUrl + '/sale' + c.extension;
       self.sale.status = 'on';
-      self.sale.saleDateStart = new Date($('#rd_dmukgs').val()).getTime();
-      self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val()).getTime();
+      self.sale.saleDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
+      self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
       self.sale.goodsId = self.myGoods.id;
       self.sale.partnerCode = self.myPartner.partnerCode;
 
