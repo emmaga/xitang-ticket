@@ -18,6 +18,27 @@
     }
   });
 
+  app.filter('checkStatus', function() {
+    return function(input) {
+      var ret;
+      switch (input){
+        case 'checked':
+          ret = '已检票';
+          break;
+        case 'checking':
+          ret = '部分检票中';
+          break;
+        case 'waiting':
+          ret = '待检票';
+          break;
+        case 'refund':
+          ret = '已退票';
+          break;
+      }
+      return ret;
+    }
+  });
+
   app.filter('md5_32_lowerCase', function() {
     return function(input) {
       //http://www.w3cfuns.com/notes/16004/86522da7b1c4a12e721fe91bea7b9f47.html
