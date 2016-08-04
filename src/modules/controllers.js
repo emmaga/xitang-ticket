@@ -1872,6 +1872,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         return;
       }
 
+      // 成本价默认0.00
+      if(!this.goods.cost) {
+        this.goods.cost = 0.00;
+      }
+
       var c = $scope.root.config;
       var url = c.requestUrl + '/goods' + c.extension;
       this.goods.status = 'on';
@@ -1994,6 +1999,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         if($('#checkTimeStart').val() == '' || $('#checkTimeEnd').val() == '') {
           alert('请输入检票开始时间和结束时间');
           return;
+        }
+
+        // 成本价默认0.00
+        if(!this.goods.cost) {
+          this.goods.cost = 0.00;
         }
 
         var c = $scope.root.config;
