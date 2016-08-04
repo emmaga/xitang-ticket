@@ -1865,12 +1865,22 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         alert('请输入有效时间');
         return;
       }
+
+      // 检票时间 必填
+      if($('#checkTimeEnd').val() == '' || $('#checkTimeStart').val() == '') {
+        alert('请输入检票开始时间和结束时间');
+        return;
+      }
+
       var c = $scope.root.config;
       var url = c.requestUrl + '/goods' + c.extension;
       this.goods.status = 'on';
 
       this.goods.validDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
       this.goods.validDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
+
+      this.goods.checkTimeStart = $('#checkTimeStart').val();
+      this.goods.checkTimeEnd = $('#checkTimeEnd').val();
 
       var data = {
         "action": "Add",
@@ -1946,6 +1956,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               $('#rd_qcaxwa').val(eDate);
               $('#valid-date-end').val(eDate);
 
+              // 检票时间设置
+              $('#checkTimeEnd').val(data.goods.checkTimeEnd);
+              $('#checkTimeStart').val(data.goods.checkTimeStart);
+
             }else if(data.rescode === 401){
               $location.path('/index');
             }else {
@@ -1975,10 +1989,20 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           alert('请输入有效时间');
           return;
         }
+
+        // 检票时间 必填
+        if($('#checkTimeStart').val() == '' || $('#checkTimeEnd').val() == '') {
+          alert('请输入检票开始时间和结束时间');
+          return;
+        }
+
         var c = $scope.root.config;
         var url = c.requestUrl + '/goods' + c.extension;
         this.goods.validDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
         this.goods.validDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
+
+        this.goods.checkTimeStart = $('#checkTimeStart').val();
+        this.goods.checkTimeEnd = $('#checkTimeEnd').val();
 
         var data = {
           "action": "Modify",
@@ -2550,11 +2574,21 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         alert('请输入有效时间');
         return;
       }
+
+      // 当天可买票时间 必填
+      if($('#validTimeEnd').val() == '' || $('#validTimeStart').val() == '') {
+        alert('请输入当天可买票时间');
+        return;
+      }
+
       var c = $scope.root.config;
       var url = c.requestUrl + '/sale' + c.extension;
       self.sale.state = 'on';
       self.sale.saleDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
       self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
+      self.sale.validTimeStart = $('#validTimeStart').val();
+      self.sale.validTimeEnd = $('#validTimeEnd').val();
+
       self.sale.goodsId = self.myGoods.id;
       self.sale.partnerCode = self.myPartner.partnerCode;
 
@@ -2633,6 +2667,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             $('#rd_qcaxwa').val(eDate);
             $('#sale-date-end').val(eDate);
 
+            // 当天可买票时间设置
+            $('#validTimeStart').val(data.sale.validTimeStart);
+            $('#validTimeEnd').val(data.sale.validTimeEnd);
 
             self.initPartnersList();
             self.initpartnerConfig();
@@ -2745,11 +2782,20 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         alert('请输入有效时间');
         return;
       }
+
+      // 当天可买票时间 必填
+      if($('#validTimeEnd').val() == '' || $('#validTimeStart').val() == '') {
+        alert('请输入当天可买票时间');
+        return;
+      }
+
       var c = $scope.root.config;
       var url = c.requestUrl + '/sale' + c.extension;
       self.sale.status = 'on';
       self.sale.saleDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
       self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
+      self.sale.validTimeEnd = $('#validTimeEnd').val();
+      self.sale.validTimeStart = $('#validTimeStart').val();
       self.sale.goodsId = self.myGoods.id;
       self.sale.partnerCode = self.myPartner.partnerCode;
 
