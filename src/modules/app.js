@@ -253,10 +253,10 @@
   });
 
   var config = {
-    requestUrl: '/xitang-ticket/src/api',
-    extension: '.json'
-    /*requestUrl: 'http://ota.cleartv.cn/ota_backend/v1/',
-    extension: ''*/
+    /*requestUrl: '/xitang-ticket/src/api',
+    extension: '.json'*/
+    requestUrl: 'http://ota.cleartv.cn/ota_backend/v1/',
+    extension: ''
   };
 
 })();
