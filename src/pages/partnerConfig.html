@@ -9,7 +9,6 @@
     </a>
     <hr>
    
-    <div ng-show="partnerConfig.loading">loading...</div>
     <table ng-table="partnerConfig.tableParams" ng-init="partnerConfig.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
             
@@ -31,7 +30,7 @@
             </td>
         </tr>
     </table>
-
-    
+    <div ng-show="partnerConfig.loading">loading...</div>
+    <div ng-show="partnerConfig.noData">无数据</div>
     
 </div>

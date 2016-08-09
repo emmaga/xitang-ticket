@@ -72,7 +72,6 @@
     <hr class="break-space-double">
     <hr class="break-space-double">
 
-    <div ng-show="checkStatement.loading">loading...</div>
     <table ng-table="checkStatement.tableParams" ng-init="checkStatement.search()" class="table table-hover table-striped">
         <colgroup>
           <col width="40%" />
@@ -127,4 +126,6 @@
           </tr>
         </tfoot>
     </table>
+    <div ng-show="checkStatement.loading">loading...</div>
+    <div ng-show="checkStatement.noData">无数据</div>
 </div>

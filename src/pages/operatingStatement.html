@@ -76,7 +76,6 @@
     <hr class="break-space-double">
     <hr class="break-space-double">
 
-    <div ng-show="operatingStatement.loading">loading...</div>
     <table ng-table="operatingStatement.tableParams" ng-init="operatingStatement.search()" class="table table-hover table-striped">
         <colgroup>
           <col width="30%" />
@@ -142,4 +141,7 @@
           </tr>
         </tfoot>
     </table>
+    <div ng-show="operatingStatement.loading">loading...</div>
+    <div ng-show="operatingStatement.noData">无数据</div>
+    
 </div>

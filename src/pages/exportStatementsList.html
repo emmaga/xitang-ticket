@@ -21,7 +21,6 @@
         </div>
     </div>
     <hr class="break-space">
-    <div ng-show="exportStatementsList.loading">loading...</div>
     <table ng-table="exportStatementsList.tableParams" ng-init="exportStatementsList.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
             <td width="30" style="text-align: center;" header="'ng-table/headers/checkbox.html'">
@@ -52,6 +51,8 @@
             </td>
         </tr>
     </table>
+    <div ng-show="exportStatementsList.loading">loading...</div>
+    <div ng-show="exportStatementsList.noData">无数据</div>
 
     <script type="text/ng-template" id="ng-table/headers/checkbox.html">
         <input type="checkbox" ng-model="exportStatementsList.checkboxes.checked" value="" />

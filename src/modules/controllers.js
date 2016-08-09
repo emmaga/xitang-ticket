@@ -244,12 +244,17 @@
               };
               data = JSON.stringify(data);
               self.loading = true;
-              
+              self.noData = false;
+
               return $http.post(url, data).then(function successCallback(response) {
+                  self.loading = false;
                   var data = response.data;
                   if(data.rescode === 200) {
                     self.checkboxes = { 'checked': false, items: {} };
-                    self.loading = false;
+                    //查无数据
+                    if(data.users.totalCount === 0) {
+                      self.noData = true;
+                    }
                     params.total(data.users.totalCount);
                     self.tableData = data.users.lists;
                     return data.users.lists;
@@ -259,6 +264,7 @@
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
+                  self.loading = false;
                   alert('加载失败，请重试');
                 });
             }
@@ -571,11 +577,16 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               };
               data = JSON.stringify(data);
               self.loading = true;
-              
+              self.noData = false;
+
               return $http.post(url, data).then(function successCallback(response) {
+                  self.loading = false;
                   var data = response.data;
                   if(data.rescode === 200) {
-                    self.loading = false;
+                    // 查无数据
+                    if(data.orders.totalCount === 0) {
+                      self.noData = true;
+                    }
                     params.total(data.orders.totalCount);
                     self.tableData = data.orders.lists;
                     return data.orders.lists;
@@ -585,6 +596,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
+                  self.loading = false;
                   alert('加载失败，请重试');
                 });
             }
@@ -849,11 +861,16 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
               data = JSON.stringify(data);
               self.loading = true;
+              self.noData = false;
               
               return $http.post(url, data).then(function successCallback(response) {
                   var data = response.data;
+                  self.loading = false;
                   if(data.rescode === 200) {
-                    self.loading = false;
+                    //查无数据
+                    if(data.lists.totalCount === 0) {
+                      self.noData = true;
+                    }
                     params.total(data.lists.totalCount);
                     self.tableData = data.lists.lists;
                     self.totalCheckedTickets = data.lists.totalCheckedTickets;
@@ -865,6 +882,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
+                  self.loading = false;
                   alert('加载失败，请重试');
                 });
             }
@@ -989,18 +1007,24 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               };
               data = JSON.stringify(data);
               self.loading = true;
+              self.noData = false;
               
               return $http.post(url, data).then(function successCallback(response) {
+                  self.loading = false;
                   var data = response.data;
                   if(data.rescode === 200) {
                     self.checkboxes = { 'checked': false, items: {} };
-                    self.loading = false;
+                    //查无数据
+                    if(data.statements.totalCount === 0) {
+                      self.noData = true;
+                    }
                     params.total(data.statements.totalCount);
                     self.tableData = data.statements.lists;
                     return data.statements.lists;
                   }else if(data.rescode === 401){
                     $location.path('/index');
                   }else {
+                    self.loading = false;
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
@@ -1197,11 +1221,16 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
               data = JSON.stringify(data);
               self.loading = true;
+              self.noData = false;
               
               return $http.post(url, data).then(function successCallback(response) {
+                  self.loading = false;
                   var data = response.data;
                   if(data.rescode === 200) {
-                    self.loading = false;
+                    //查无数据
+                    if(data.lists.totalCount === 0) {
+                      self.noData = true;
+                    }
                     params.total(data.lists.totalCount);
                     self.tableData = data.lists.lists;
                     self.totalTotalTickets = data.lists.totalTotalTickets;
@@ -1214,6 +1243,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
+                  self.loading = false;
                   alert('加载失败，请重试');
                 });
             }
@@ -1407,11 +1437,16 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
               data = JSON.stringify(data);
               self.loading = true;
+              self.noData = false;
               
               return $http.post(url, data).then(function successCallback(response) {
+                  self.loading = false;
                   var data = response.data;
                   if(data.rescode === 200) {
-                    self.loading = false;
+                    //查无数据
+                    if(data.lists.totalCount === 0) {
+                      self.noData = true;
+                    }
                     params.total(data.lists.totalCount);
                     self.tableData = data.lists.lists;
                     self.totalTotalTickets = data.lists.totalTotalTickets;
@@ -1426,6 +1461,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
+                  self.loading = false;
                   alert('加载失败，请重试');
                 });
             }
@@ -1656,11 +1692,16 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               };
               data = JSON.stringify(data);
               self.loading = true;
+              self.noData = false;
               
               return $http.post(url, data).then(function successCallback(response) {
+                  self.loading = false;
                   var data = response.data;
                   if(data.rescode === 200) {
-                    self.loading = false;
+                    // 查无数据
+                    if(data.orders.totalCount === 0) {
+                      self.noData = true;
+                    }
                     params.total(data.orders.totalCount);
                     self.tableData = data.orders.lists;
                     return data.orders.lists;
@@ -1670,6 +1711,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
+                  self.loading = false;
                   alert('加载失败，请重试');
                 });
             }
@@ -2186,12 +2228,19 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               };
               data = JSON.stringify(data);
               self.loading = true;
+              self.noData = false;
               
               return $http.post(url, data).then(function successCallback(response) {
                   var data = response.data;
+                  self.loading = false;
                   if(data.rescode === 200) {
                     self.checkboxes = { 'checked': false, items: {} };
-                    self.loading = false;
+                    
+                    //查无数据
+                    if(data.goods.totalCount === 0) {
+                      self.noData = true;
+                    }
+
                     params.total(data.goods.totalCount);
                     self.tableData = data.goods.lists;
                     return data.goods.lists;
@@ -2201,6 +2250,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
+                  self.loading = false;
                   alert('加载失败，请重试');
                 });
             }
@@ -2354,12 +2404,18 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               };
               data = JSON.stringify(data);
               self.loading = true;
+              self.noData = false;
               
               return $http.post(url, data).then(function successCallback(response) {
+                  self.loading = false;
                   var data = response.data;
                   if(data.rescode === 200) {
                     self.checkboxes = { 'checked': false, items: {} };
-                    self.loading = false;
+                    
+                    //查无数据
+                    if(data.sale.totalCount === 0) {
+                      self.noData = true;
+                    }
                     params.total(data.sale.totalCount);
                     self.tableData = data.sale.lists;
                     return data.sale.lists;
@@ -2369,6 +2425,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
+                  self.loading = false;
                   alert('加载失败，请重试');
                 });
             }
@@ -2455,11 +2512,16 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               };
               data = JSON.stringify(data);
               self.loading = true;
+              self.noData = false;
               
               return $http.post(url, data).then(function successCallback(response) {
+                  self.loading = false;
                   var data = response.data;
                   if(data.rescode === 200) {
-                    self.loading = false;
+                    //查无数据
+                    if(data.partners.totalCount === 0) {
+                      self.noData = true;
+                    }
                     params.total(data.partners.totalCount);
                     return data.partners.lists;
                   }else if(data.rescode === 401){
@@ -2468,6 +2530,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
+                  self.loading = false;
                   alert('加载失败，请重试');
                 });
             }
