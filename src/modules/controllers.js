@@ -706,7 +706,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         for (var i = 0; i < data.length; i++) {
           t += parseFloat(data[i][field]);
         }
-        return t;
+        return t.toFixed(2);
       };
 
       self.isLastPage = function() {
@@ -1060,7 +1060,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         for (var i = 0; i < data.length; i++) {
           t += parseFloat(data[i][field]);
         }
-        return t;
+        return t.toFixed(2);
       };
 
       self.isLastPage = function() {
@@ -1276,7 +1276,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         for (var i = 0; i < data.length; i++) {
           t += parseFloat(data[i][field]);
         }
-        return t;
+        return t.toFixed(2);
       };
 
       self.isLastPage = function() {
@@ -1992,7 +1992,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             var data = response.data;
             if(data.rescode === 200) {
               var d = data.goods;
-              d.cost = parseFloat(d.cost);
+              d.cost = parseFloat(d.cost).toFixed(2);
               self.goods = d;
 
               // 有效时间设置
@@ -2729,7 +2729,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           var data = response.data;
           if(data.rescode === 200) {
             var d = data.sale;
-            d.price = parseFloat(d.price);
+            d.price = parseFloat(d.price).toFixed(2);
             self.sale = d;
 
             // 有效时间设置
