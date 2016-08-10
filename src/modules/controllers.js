@@ -2590,7 +2590,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             alert(data.errInfo);
           }  
         }, function errorCallback(response) {
-          alert('读取分销商信息失败');
+          alert('读取分销商信息失败，请刷新页面重试');
         });
     };
     
@@ -2624,7 +2624,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             alert(data.errInfo);
           }  
         }, function errorCallback(response) {
-          alert('读取商品信息失败');
+          alert('读取商品信息失败，请刷新页面重试');
         });
     };
 
@@ -2793,7 +2793,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             alert(data.errInfo);
           }  
         }, function errorCallback(response) {
-          alert('读取分销商信息失败');
+          alert('读取分销商信息失败，请刷新页面重试');
         });
     };
     
@@ -2832,7 +2832,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             alert(data.errInfo);
           }  
         }, function errorCallback(response) {
-          alert('读取商品信息失败');
+          alert('读取商品信息失败，请刷新页面重试');
         });
     };
 
