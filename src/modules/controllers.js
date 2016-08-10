@@ -1992,7 +1992,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             var data = response.data;
             if(data.rescode === 200) {
               var d = data.goods;
-              d.cost = parseFloat(d.cost).toFixed(2);
+              d.cost = parseFloat(d.cost);
               self.goods = d;
 
               // 有效时间设置
@@ -2729,7 +2729,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           var data = response.data;
           if(data.rescode === 200) {
             var d = data.sale;
-            d.price = parseFloat(d.price).toFixed(2);
+            d.price = parseFloat(d.price);
             self.sale = d;
 
             // 有效时间设置
