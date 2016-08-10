@@ -166,6 +166,7 @@
             if(data.rescode === 200) {
               $window.location.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -194,6 +195,7 @@
               alert('启用／禁用 设置成功！');
               $window.location.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -259,6 +261,7 @@
                     self.tableData = data.users.lists;
                     return data.users.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     alert(data.errInfo);
@@ -302,6 +305,7 @@
             self.roles = data.roles.lists;
             // self.roles = self.roles[0];
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             alert(data.errInfo);
@@ -345,6 +349,7 @@
           if(data.rescode === 200) {
             $location.path('/userList');
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             self.setSubmit(false);
@@ -403,6 +408,7 @@
               alert('重置成功');
               $location.path('/userList');
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               self.setSubmit(false);
@@ -448,6 +454,7 @@
                 }
               }
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -480,6 +487,7 @@
               self.setRoleList();
 
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -521,6 +529,7 @@
             if(data.rescode === 200) {
               $location.path('/userList');
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               self.setSubmit(false);
@@ -591,6 +600,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.tableData = data.orders.lists;
                     return data.orders.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     alert(data.errInfo);
@@ -644,6 +654,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               self.close();
               $state.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -672,6 +683,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             if(data.rescode === 200) {
               self.orders = data.orders;
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -769,17 +781,18 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             "orderId": self.orderId ? self.orderId : "",
             "checkPerson": self.checkPerson ? self.checkPerson : "",
             "checkDateStart": self.checkDateStart ? self.checkDateStart : "", //检票日期开始
-            "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "" //检票日期结束
+            "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : "" //检票日期结束
           }
         };
 
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
-              if (confirm('导出中，是否到“报表中心－导出列表”中查看？')) {
+              if (confirm('导出中，导出成功后会在“报表中心－导出列表”中显示，是否前往查看？')) {
                 $location.path('/exportStatementsList');
               }
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -855,7 +868,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "orderId": self.orderId ? self.orderId : "",
                   "checkPerson": self.checkPerson ? self.checkPerson : "",
                   "checkDateStart": self.checkDateStart ? self.checkDateStart : "", //检票日期开始
-                  "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "" //检票日期结束
+                  "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : "" //检票日期结束
                 }
               };
 
@@ -877,6 +890,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.totalCheckedPrice = data.lists.totalCheckedPrice;
                     return data.lists.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     alert(data.errInfo);
@@ -962,6 +976,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             if(data.rescode === 200) {
               $window.location.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -1022,6 +1037,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.tableData = data.statements.lists;
                     return data.statements.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     self.loading = false;
@@ -1133,10 +1149,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
-              if (confirm('导出中，是否到“报表中心－导出列表”中查看？')) {
+              if (confirm('导出中，导出成功后会在“报表中心－导出列表”中显示，是否前往查看？')) {
                 $location.path('/exportStatementsList');
               }
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -1238,6 +1255,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.totalCheckedPrice = data.lists.totalCheckedPrice;
                     return data.lists.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     alert(data.errInfo);
@@ -1349,10 +1367,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
-              if (confirm('导出中，是否到“报表中心－导出列表”中查看？')) {
+              if (confirm('导出中，导出成功后会在“报表中心－导出列表”中显示，是否前往查看？')) {
                 $location.path('/exportStatementsList');
               }
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -1456,6 +1475,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.totalCheckedPrice = data.lists.totalCheckedPrice;
                     return data.lists.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     alert(data.errInfo);
@@ -1500,6 +1520,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           if(data.rescode === 200) {
             self.orders = data.orders;
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             alert(data.errInfo);
@@ -1599,10 +1620,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
-              if (confirm('导出中，是否到“报表中心－导出列表”中查看？')) {
+              if (confirm('导出中，导出成功后会在“报表中心－导出列表”中显示，是否前往查看？')) {
                 $location.path('/exportStatementsList');
               }
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -1706,6 +1728,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.tableData = data.orders.lists;
                     return data.orders.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     alert(data.errInfo);
@@ -1757,6 +1780,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               $scope.main.userName = data.user.userName;
               $cookies.put('userName', data.user.userName);
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -1796,6 +1820,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               alert('保存成功');
               $window.location.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               self.setSubmit(false);
@@ -1858,6 +1883,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               $cookies.put('token', '');              
               $location.path('/index');
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               self.setSubmit(false);
@@ -1944,6 +1970,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           if(data.rescode === 200) {
             $location.path('/goodsList');
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             self.setSubmit(false);
@@ -2008,6 +2035,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               $('#checkTimeStart').val(data.goods.checkTimeStart);
 
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -2071,6 +2099,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             if(data.rescode === 200) {
               $location.path('/goodsList');
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               self.setSubmit(false);
@@ -2148,6 +2177,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             if(data.rescode === 200) {
               $window.location.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -2176,6 +2206,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               alert('启用／禁用 设置成功！');
               $window.location.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -2245,6 +2276,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.tableData = data.goods.lists;
                     return data.goods.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     alert(data.errInfo);
@@ -2324,6 +2356,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             if(data.rescode === 200) {
               $window.location.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -2352,6 +2385,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               alert('启用／禁用 设置成功！');
               $window.location.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -2420,6 +2454,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.tableData = data.sale.lists;
                     return data.sale.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     alert(data.errInfo);
@@ -2473,6 +2508,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               alert('启用／禁用 设置成功！');
               $window.location.reload();
             }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
               $location.path('/index');
             }else {
               alert(data.errInfo);
@@ -2525,6 +2561,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     params.total(data.partners.totalCount);
                     return data.partners.lists;
                   }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
                     $location.path('/index');
                   }else {
                     alert(data.errInfo);
@@ -2585,6 +2622,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             self.partners = data.partners.lists;
             // self.myPartner = self.partners[0];
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             alert(data.errInfo);
@@ -2619,6 +2657,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             self.goods = data.goods.lists;
             // self.myGoods = self.goods[0];
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             alert(data.errInfo);
@@ -2680,6 +2719,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           if(data.rescode === 200) {
             $location.path('/saleList');
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             self.setSubmit(false);
@@ -2748,6 +2788,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             self.initpartnerConfig();
 
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             alert(data.errInfo);
@@ -2788,6 +2829,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               }
             }
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             alert(data.errInfo);
@@ -2827,6 +2869,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               }
             }
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             alert(data.errInfo);
@@ -2887,6 +2930,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           if(data.rescode === 200) {
             $location.path('/saleList');
           }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
             self.setSubmit(false);
