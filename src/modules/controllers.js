@@ -82,7 +82,11 @@
         case 'userAdd':
         case 'userEdit':
           $scope.$state = 'admin';
-          break;  
+          break;
+        case 'personalPasswordEdit':
+        case 'personalInfo':
+          $scope.$state = 'personal';
+          break;
       }
       if( !this.auth($scope.$state) ) {
         alert('抱歉，您无权限访问该页面');
@@ -1363,6 +1367,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             "visitDateEnd": self.visitDateEnd ? self.visitDateEnd : ""
           }
         };
+
+        data = JSON.stringify(data);
 
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;

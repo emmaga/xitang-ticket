@@ -13,7 +13,7 @@
       if(roleId == 1) {
         ret = true;
       }
-      else if( roleId == 2 && (authName =="orders"  || authName == "statement") ) {
+      else if( roleId == 2 && (authName =="orders"  || authName == "statement" || authName == "personal") ) {
         ret = true;
       }
 
