@@ -311,7 +311,7 @@
             alert(data.errInfo);
           }  
         }, function errorCallback(response) {
-          alert('读取角色信息失败');
+          alert('读取角色信息失败，请刷新页面重试');
         });
     };
 
@@ -333,7 +333,7 @@
       var url = c.requestUrl + '/users' + c.extension;
       this.user.status = 'on';
       self.user.roleId = self.myRole.id;
-
+      self.user.password = $filter('md5_32_lowerCase')(self.user.password);
       var data = {
         "action": "Add",
         "account": $cookies.get('account'),
@@ -460,7 +460,7 @@
               alert(data.errInfo);
             }  
           }, function errorCallback(response) {
-            alert('读取角色信息失败');
+            alert('读取角色信息失败，请刷新页面重试');
           });
       };
 
