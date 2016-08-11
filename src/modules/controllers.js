@@ -277,7 +277,7 @@
     }
   ]);
   
-  app.controller('userAddController', ['$scope', '$location', '$cookies', '$http', function($scope, $location, $cookies, $http) {
+  app.controller('userAddController', ['$scope', '$location', '$cookies', '$http', '$filter', function($scope, $location, $cookies, $http, $filter) {
     console.log('userAdd');
     var self = this;
 
