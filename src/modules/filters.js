@@ -3,6 +3,17 @@
 (function() {
   var app = angular.module('app.filters', [ ]);
 
+  /*
+  * 输入date
+  * 返回date：将秒数置为00 
+  */
+  app.filter('emptySec', function() {
+    return function(date) {
+      var newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), 0, 0);
+      return newDate;
+    }
+  });
+
   app.filter('isExpired', function() {
     return function(input) {
       var ret;

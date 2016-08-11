@@ -742,11 +742,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
           var sDate = new Date();
           sDate.setMonth(sDate.getMonth() - 1);
-          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm:ss');
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_qcaxwa').val(sDate);
           $('#check-date-start').val(sDate);
 
-          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss');
+          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_khaydt').val(eDate);
           $('#check-date-end').val(eDate);
 
@@ -755,7 +755,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         else if(!$('#rd_qcaxwa').val()) {
           var d = new Date($('#rd_khaydt').val());
           d.setMonth(d.getMonth() - 1);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_qcaxwa').val(d);
           $('#check-date-start').val(d);
         }
@@ -763,14 +763,14 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         else if(!$('#rd_khaydt').val()) {
           var d = new Date($('#rd_qcaxwa').val());
           d.setMonth(d.getMonth() + 1);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_khaydt').val(d);
           $('#check-date-end').val(d);
         }
 
         //读取成交日期
-        self.checkDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
-        self.checkDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+        self.checkDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
+        self.checkDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
       
         var data = {
           "action": "ExportcheckDetailStatement",
@@ -828,11 +828,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
                 var sDate = new Date();
                 sDate.setMonth(sDate.getMonth() - 1);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm:ss');
+                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_qcaxwa').val(sDate);
                 $('#check-date-start').val(sDate);
 
-                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss');
+                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_khaydt').val(eDate);
                 $('#check-date-end').val(eDate);
 
@@ -841,7 +841,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               else if(!$('#rd_qcaxwa').val()) {
                 var d = new Date($('#rd_khaydt').val());
                 d.setMonth(d.getMonth() - 1);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_qcaxwa').val(d);
                 $('#check-date-start').val(d);
               }
@@ -849,14 +849,14 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               else if(!$('#rd_khaydt').val()) {
                 var d = new Date($('#rd_qcaxwa').val());
                 d.setMonth(d.getMonth() + 1);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_khaydt').val(d);
                 $('#check-date-end').val(d);
               }
 
               //读取成交日期
-              self.checkDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
-              self.checkDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+              self.checkDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
+              self.checkDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
             
               var data = {
                 "action": "GetcheckDetailStatement",
@@ -1100,11 +1100,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
           var sDate = new Date();
           sDate.setMonth(sDate.getMonth() - 1);
-          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm:ss');
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_lptvht').val(sDate);
           $('#check-date-start').val(sDate);
 
-          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss');
+          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_idwdiz').val(eDate);
           $('#check-date-end').val(eDate);
 
@@ -1113,7 +1113,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         else if(!$('#rd_lptvht').val()) {
           var d = new Date($('#rd_idwdiz').val());
           d.setMonth(d.getMonth() - 1);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_lptvht').val(d);
           $('#check-date-start').val(d);
         }
@@ -1121,18 +1121,18 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         else if(!$('#rd_idwdiz').val()) {
           var d = new Date($('#rd_lptvht').val());
           d.setMonth(d.getMonth() + 1);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_idwdiz').val(d);
           $('#check-date-end').val(d);
         }
 
         //读取成交日期
-        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
-        self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
+        self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
         
         //读取检票日期
-        self.checkDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
-        self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+        self.checkDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val())).getTime() : '';
+        self.checkDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
 
         var data = {
           "action": "ExportCheckStatement",
@@ -1189,11 +1189,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
                 var sDate = new Date();
                 sDate.setMonth(sDate.getMonth() - 1);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm:ss');
+                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_lptvht').val(sDate);
                 $('#check-date-start').val(sDate);
 
-                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss');
+                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_idwdiz').val(eDate);
                 $('#check-date-end').val(eDate);
 
@@ -1202,7 +1202,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               else if(!$('#rd_lptvht').val()) {
                 var d = new Date($('#rd_idwdiz').val());
                 d.setMonth(d.getMonth() - 1);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_lptvht').val(d);
                 $('#check-date-start').val(d);
               }
@@ -1210,18 +1210,18 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               else if(!$('#rd_idwdiz').val()) {
                 var d = new Date($('#rd_lptvht').val());
                 d.setMonth(d.getMonth() + 1);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_idwdiz').val(d);
                 $('#check-date-end').val(d);
               }
 
               //读取成交日期
-              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
-              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
               
               //读取检票日期
-              self.checkDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
-              self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+              self.checkDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val())).getTime() : '';
+              self.checkDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
 
               var data = {
                 "action": "GetCheckStatement",
@@ -1318,11 +1318,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
           var sDate = new Date();
           sDate.setMonth(sDate.getMonth() - 1);
-          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm:ss');
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_qcaxwa').val(sDate);
           $('#order-create-date-start').val(sDate);
 
-          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss');
+          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_khaydt').val(eDate);
           $('#order-create-date-end').val(eDate);
 
@@ -1331,7 +1331,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         else if(!$('#rd_qcaxwa').val()) {
           var d = new Date($('#rd_khaydt').val());
           d.setMonth(d.getMonth() - 1);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_qcaxwa').val(d);
           $('#order-create-date-start').val(d);
         }
@@ -1339,18 +1339,18 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         else if(!$('#rd_khaydt').val()) {
           var d = new Date($('#rd_qcaxwa').val());
           d.setMonth(d.getMonth() + 1);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
           $('#rd_khaydt').val(d);
           $('#order-create-date-end').val(d);
         }
 
         //读取成交日期
-        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
-        self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
+        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
+        self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
         
         //读取游玩日期
-        self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
-        self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+        self.visitDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val())).getTime() : '';
+        self.visitDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
 
         var data = {
           "action": "ExportOperatingStatement",
@@ -1409,11 +1409,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
                 var sDate = new Date();
                 sDate.setMonth(sDate.getMonth() - 1);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm:ss');
+                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_qcaxwa').val(sDate);
                 $('#order-create-date-start').val(sDate);
 
-                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm:ss');
+                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_khaydt').val(eDate);
                 $('#order-create-date-end').val(eDate);
 
@@ -1422,7 +1422,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               else if(!$('#rd_qcaxwa').val()) {
                 var d = new Date($('#rd_khaydt').val());
                 d.setMonth(d.getMonth() - 1);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_qcaxwa').val(d);
                 $('#order-create-date-start').val(d);
               }
@@ -1430,18 +1430,18 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               else if(!$('#rd_khaydt').val()) {
                 var d = new Date($('#rd_qcaxwa').val());
                 d.setMonth(d.getMonth() + 1);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_khaydt').val(d);
                 $('#order-create-date-end').val(d);
               }
 
               //读取成交日期
-              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
-              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
-              
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+
               //读取游玩日期
-              self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
-              self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
+              self.visitDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val())).getTime() : '';
+              self.visitDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
 
               var data = {
                 "action": "GetOperatingStatement",
