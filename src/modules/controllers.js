@@ -333,6 +333,14 @@
 
     this.submit = function() {
 
+      // 账号由3-16位的数字或英文字母组成
+      var exp='^[0-9a-zA-Z]{3,16}$';
+      var reg= new RegExp(exp);
+      if(!reg.test(self.user.account)){
+        alert('账号格式不正确');
+        return;
+      }
+
       var c = $scope.root.config;
       var url = c.requestUrl + '/users' + c.extension;
       this.user.status = 'on';
@@ -514,6 +522,15 @@
       self.setSubmit(false);
 
       this.submit = function() {
+        
+        // 账号由3-16位的数字或英文字母组成
+        var exp='^[0-9a-zA-Z]{3,16}$';
+        var reg= new RegExp(exp);
+        if(!reg.test(self.user.account)){
+          alert('账号格式不正确');
+          return;
+        }
+
         var c = $scope.root.config;
         var url = c.requestUrl + '/users' + c.extension;
         self.user.roleId = self.myRole.id;
