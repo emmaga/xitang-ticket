@@ -9,7 +9,7 @@
     </a>
     <hr>
     <div class="row" ng-init="ordersList.checkStatus = 'all'; ordersList.isExpired = 'all'">
-        <div class="controls btn-group col-sm-2 col-condensed">
+        <div class="controls btn-group col-sm-6 col-condensed">
             <label>检票状态</label>
             <select ng-model="ordersList.checkStatus" class="form-control">
                 <option value="all" class="" selected="selected">全部</option>
@@ -19,7 +19,7 @@
                 <option label="已退票" value="refund">已退票</option>
             </select>
         </div>
-        <div class="controls btn-group col-sm-2 col-condensed">
+        <div class="controls btn-group col-sm-6 col-condensed">
             <label>是否过期</label>
             <select ng-model="ordersList.isExpired" class="form-control">
                 <option value="all" class="" selected="selected">全部</option>
@@ -27,6 +27,10 @@
                 <option label="已过期" value="yes">已过期</option>
             </select>
         </div>
+    </div>
+        <hr class="break-space">
+    <div class="row">
+
         <div class="col-sm-2 col-condensed">
             <label>成交时间开始</label>
             <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
@@ -67,7 +71,26 @@
                 
             </div>
         </div>
+        <div class="col-sm-2 col-condensed">
+            <label>检票时间开始</label>
+            <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_lptvht">
+                <!-- <span class="input-group-addon ">开始</span> -->
+                <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_lptvht" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div>
+        <div class="col-sm-2 col-condensed">
+            <label>检票时间结束</label>
+            <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_idwdiz">
+                <!-- <span class="input-group-addon ">结束</span> -->
+                <input id="check-date-end" class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_idwdiz" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div>
     </div>
+
 
 
 

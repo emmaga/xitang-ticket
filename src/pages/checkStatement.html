@@ -8,50 +8,43 @@
         </strong>
     </a>
     <hr>
-
     <div class="row">
-    <div class="col-sm-3 col-condensed">
-        <label>成交时间开始</label>
-        <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_qcaxwa">
-            <!-- <span class="input-group-addon ">开始</span> -->
-            <input class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
-            <input type="hidden" id="rd_qcaxwa" value="" />
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            
+        <div class="col-sm-3 col-condensed">
+            <label>成交时间开始</label>
+            <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_qcaxwa">
+                <!-- <span class="input-group-addon ">开始</span> -->
+                <input class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_qcaxwa" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-3 col-condensed">
-        <label>成交时间结束</label>
-        <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_khaydt">
-            <!-- <span class="input-group-addon ">结束</span> -->
-            <input class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
-            <input type="hidden" id="rd_khaydt" value="" />
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            
+        <div class="col-sm-3 col-condensed">
+            <label>成交时间结束</label>
+            <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_khaydt">
+                <!-- <span class="input-group-addon ">结束</span> -->
+                <input class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_khaydt" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-3 col-condensed">
-        <label>检票时间开始</label>
-        <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_lptvht">
-            <!-- <span class="input-group-addon ">开始</span> -->
-            <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
-            <input type="hidden" id="rd_lptvht" value="" />
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            
+        <div class="col-sm-3 col-condensed">
+            <label>检票时间开始</label>
+            <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_lptvht">
+                <!-- <span class="input-group-addon ">开始</span> -->
+                <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_lptvht" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-3 col-condensed">
-        <label>检票时间结束</label>
-        <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_idwdiz">
-            <!-- <span class="input-group-addon ">结束</span> -->
-            <input id="check-date-end" class="form-control " size="16" type="text" value="" readonly>
-            <input type="hidden" id="rd_idwdiz" value="" />
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            
+        <div class="col-sm-3 col-condensed">
+            <label>检票时间结束</label>
+            <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_idwdiz">
+                <!-- <span class="input-group-addon ">结束</span> -->
+                <input id="check-date-end" class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_idwdiz" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
         </div>
-
-
-    </div>
     </div>
     <hr class="break-space">
     <div class="input-group flex-box multi-input">
@@ -67,27 +60,25 @@
             <i class="glyphicon glyphicon-search"></i>搜索
         </button>
     </div>
-
     <hr class="break-space-double">
     <hr class="break-space-double">
     <hr class="break-space-double">
-
     <table ng-table="checkStatement.tableParams" ng-init="checkStatement.search()" class="table table-hover table-striped">
         <colgroup>
-          <col width="40%" />
-          <col width="15%" />
-          <col width="15%" />
-          <col width="15%" />
-          <col width="15%" />
-          <col width="15%" />
+            <col width="40%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
         </colgroup>
         <tr class="ng-table-group" ng-repeat-start="group in $groups">
-          <td colspan="6">
-            <a href="" ng-click="group.$hideRows = !group.$hideRows">
-              <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
-              <strong>{{ group.value }}</strong>
-            </a>
-          </td>
+            <td colspan="6">
+                <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                    <strong>{{ group.value }}</strong>
+                </a>
+            </td>
         </tr>
         <tr ng-hide="group.$hideRows" ng-repeat="row in group.data">
             <td data-title="'分销商'" groupable="'partnerCode'" ng-if="false">
@@ -117,13 +108,13 @@
             <td><em>{{checkStatement.sum(group.data, "checkedPrice")}}</em></td>
         </tr>
         <tfoot ng-if="checkStatement.isLastPage()">
-          <tr>
-            <td class="text-success text-left"><strong>总计：</strong></td>
-             <td></td>
-            <td><em>{{checkStatement.totalTotalTickets}}</em></td>
-            <td><em>{{checkStatement.totalCheckedTickets}}</em></td>
-            <td><em>{{checkStatement.totalCheckedPrice}}</em></td>
-          </tr>
+            <tr>
+                <td class="text-success text-left"><strong>总计：</strong></td>
+                <td></td>
+                <td><em>{{checkStatement.totalTotalTickets}}</em></td>
+                <td><em>{{checkStatement.totalCheckedTickets}}</em></td>
+                <td><em>{{checkStatement.totalCheckedPrice}}</em></td>
+            </tr>
         </tfoot>
     </table>
     <div ng-show="checkStatement.loading">loading...</div>
