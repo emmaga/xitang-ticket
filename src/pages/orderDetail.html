@@ -33,7 +33,13 @@
                     			</tr>
 								<tr>
                     				<td>游玩日期</td>
-                    				<td>{{orderDetail.orders.visitDateStart | date:'yyyy.MM.dd'}} ~ {{orderDetail.orders.visitDateEnd | date:'yyyy.MM.dd'}}</td>
+                    				<td>
+                                        {{orderDetail.orders.visitDateStart | date:'yyyy.MM.dd'}} ~ {{orderDetail.orders.visitDateEnd | date:'yyyy.MM.dd'}}
+                                        <a class="btn btn-xs btn-default pull-right">
+                                            <i class="glyphicon glyphicon-pencil"></i>
+                                            修改
+                                        </a>
+                                    </td>
                     			</tr>
                     			<tr>
                     				<td>成交时间</td>
