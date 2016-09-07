@@ -178,6 +178,28 @@
           }
         }
       })
+      .state('updateVisitStatement', {
+        url: '/updateVisitStatement',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@updateVisitStatement': {
+            templateUrl: 'pages/updateVisitStatement.html'
+          }
+        }
+      })
+      .state('exportBookerDetailStatement', {
+        url: '/exportBookerDetailStatement',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@exportBookerDetailStatement': {
+            templateUrl: 'pages/exportBookerDetailStatement.html'
+          }
+        }
+      })
       .state('exportStatementsList', {
         url: '/exportStatementsList',
         views: {
@@ -253,8 +275,9 @@
   });
 
   var config = {
-    /*requestUrl: '/xitang-ticket/src/api',
-    extension: '.json'*/
+    // requestUrl: '/xitang-ticket/src/api',
+    // extension: '.json'
+
     requestUrl: 'http://ota.cleartv.cn/ota_backend/v1/',
     extension: ''
   };

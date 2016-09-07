@@ -99,6 +99,16 @@
                                 检票员检票
                             </a>
                     </li>
+                    <li class="nav-header" ng-show="main.auth('admin')">
+                        <a ui-sref="updateVisitStatement">
+                                改签报表
+                            </a>
+                    </li>
+                    <li class="nav-header">
+                        <a ui-sref="exportBookerDetailStatement">
+                                游客信息
+                            </a>
+                    </li>
                     <li class="nav-header">
                         <a ui-sref="exportStatementsList">
                                 导出列表

@@ -1,0 +1,45 @@
+{
+  "rescode": 200, 
+  "errInfo": "",  
+  "orders": {
+    "totalCount": 200,
+    "lists": [
+      {
+        "goodsName": "西塘成人票",
+        "bookPerson": "Jack",
+        "bookMobile": "13812345678",
+        "orderId": "1",
+        "parterOrderId": "1",
+        "bookerIDType": "ID_CARD",  
+        "bookerID": "350987898765676565",  
+        "content":"游玩日期从2016.08.10改至2016.08.10",  
+        "updateVisitDateTime":"1288323623006",  
+        "updateVisitDateUser":"Root"  
+      },
+      {
+        "goodsName": "西塘成人票",
+        "bookPerson": "Jack",
+        "bookMobile": "13812345678",
+        "orderId": "1",
+        "parterOrderId": "1",
+        "bookerIDType": "ID_CARD",  
+        "bookerID": "350987898765676565", 
+        "content":"游玩日期从2016.08.10改至2016.08.10", 
+        "updateVisitDateTime":"1288323623006",  
+        "updateVisitDateUser":"Root"  
+      },
+       {
+        "goodsName": "西塘成人票",
+        "bookPerson": "Jack",
+        "bookMobile": "13812345678",
+        "orderId": "2",
+        "parterOrderId": "2",
+        "bookerIDType": "ID_CARD",  
+        "bookerID": "350987898765676565", 
+        "content":"游玩日期从2016.08.10改至2016.08.10", 
+        "updateVisitDateTime":"1288323623006",  
+        "updateVisitDateUser":"Root"  
+      }
+    ]
+  }
+}

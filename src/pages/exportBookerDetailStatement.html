@@ -1,0 +1,157 @@
+﻿<div ng-controller="exportBookerDetailStatementController as exportBookerDetailStatement" ng-init="exportBookerDetailStatement.init()">
+    <a>
+        <strong>
+            <i class="glyphicon glyphicon-list-alt"></i>
+            报表中心
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            游客信息
+        </strong>
+    </a>
+    <hr>
+    <div class="row">
+       <div class="col-sm-3 col-condensed">
+           <label>成交时间开始</label>
+           <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_qcaxwa">
+               <!-- <span class="input-group-addon ">开始</span> -->
+               <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
+               <input type="hidden" id="rd_qcaxwa" value="" />
+               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+               
+           </div>
+       </div>
+       <div class="col-sm-3 col-condensed">
+           <label>成交时间结束</label>
+           <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_khaydt">
+               <!-- <span class="input-group-addon ">结束</span> -->
+               <input id="check-date-end" class="form-control " size="16" type="text" value="" readonly>
+               <input type="hidden" id="rd_khaydt" value="" />
+               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+               
+           </div>
+       </div>
+       <div class="col-sm-3 col-condensed">
+           <label>游玩时间开始</label>
+           <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_lptvht">
+               <!-- <span class="input-group-addon ">开始</span> -->
+               <input class="form-control " size="16" type="text" value="" readonly>
+               <input type="hidden" id="rd_lptvht" value="" />
+               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+               
+           </div>
+       </div>
+       <div class="col-sm-3 col-condensed">
+           <label>游玩时间结束</label>
+           <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_idwdiz">
+               <!-- <span class="input-group-addon ">结束</span> -->
+               <input class="form-control " size="16" type="text" value="" readonly>
+               <input type="hidden" id="rd_idwdiz" value="" />
+               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+               
+           </div>
+       </div> 
+    </div>
+    
+
+    <hr class="break-space-lg">
+        <hr>
+        <div class=" col-sm-4 col-condensed">
+            <label>性别</label>
+            <select ng-model="exportBookerDetailStatement.sex" class="form-control">
+                <option value="" class="" selected="selected">全部</option>
+                <option label="男" value="male">男</option>
+                <option label="女" value="female">女</option>
+            </select>
+        </div>
+        <hr class="break-space-lg">
+        <div class="input-group flex-box multi-input">
+          <input ng-model="exportBookerDetailStatement.bookerLocation" type="text" class="flex-item form-control" placeholder="客源地">
+          <input ng-model="exportBookerDetailStatement.age" type="text" class="flex-item form-control" placeholder="年龄">
+        </div>
+    <hr class="break-space">
+    <div class="controls pull-right">
+        <button ng-click="exportBookerDetailStatement.export()" class="btn btn-default">
+            <i class="glyphicon glyphicon-export"></i> 导出
+        </button>
+        <button class="btn btn-primary" ng-click="exportBookerDetailStatement.search()" href>
+            <i class="glyphicon glyphicon-search"></i>搜索
+        </button>
+    </div>
+
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+
+    <table ng-table="exportBookerDetailStatement.tableParams" ng-init="exportBookerDetailStatement.search()" class="table table-hover table-striped">
+        <colgroup>
+          <col width="10%" />
+          <col width="10%" />
+          <col width="20%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="20%" />
+          <col width="20%" />
+        </colgroup>
+        <tr class="ng-table-group" ng-repeat-start="group in $groups">
+          <td colspan="10">
+            <a href="" ng-click="group.$hideRows = !group.$hideRows">
+              <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+              <strong>{{ group.value }}</strong>
+            </a>
+          </td>
+        </tr>
+        <tr ng-hide="group.$hideRows" ng-repeat="row in group.data">
+            <td data-title="'客源地'" groupable="'bookerLocation'" ng-if="false">
+                {{row.bookerLocation}}
+            </td>
+            <td data-title="'客源地'">
+                {{row.bookerLocation}}
+            </td>
+            <td data-title="'证件类型'">
+                {{row.bookerIDType | checkIdentity}}
+            </td>
+            <td data-title="'证件号'">
+                {{row.bookerID}}
+            </td>
+            <td data-title="'性别'">
+                {{row.sex | checkGender}}
+            </td>
+            <td data-title="'年龄'">
+                {{row.age}}
+            </td>
+            <td data-title="'联系人'">
+                {{row.bookPerson}}
+            </td>
+            <td data-title="'联系电话'">
+                {{row.bookMobile}}
+            </td>
+            <td data-title="'购票数'">
+                {{row.totalTickets  }}
+            </td>
+        </tr>
+        <tr ng-repeat-end>
+            <td class="text-success text-left"><strong>小计：</strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><em>{{exportBookerDetailStatement.sum(group.data, "totalTickets")  | removeZero}}</em></td>
+        </tr>
+        <tfoot ng-if="exportBookerDetailStatement.isLastPage()">
+          <tr>
+            <td class="text-success text-left"><strong>总计：</strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><em>{{exportBookerDetailStatement.totalTotalTickets  | removeZero}}</em></td>
+          </tr>
+        </tfoot>
+    </table>
+    <div ng-show="exportBookerDetailStatement.loading">loading...</div>
+    <div ng-show="exportBookerDetailStatement.noData">无数据</div>
+
+</div>

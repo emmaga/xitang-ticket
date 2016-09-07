@@ -51,9 +51,6 @@
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             
         </div>
-
-
-
     </div>
     
     </div>
@@ -123,11 +120,11 @@
         <tr ng-repeat-end>
             <td class="text-success text-left"><strong>小计：</strong></td>
             <td></td>
-            <td><em>{{operatingStatement.sum(group.data, "totalTickets")}}</em></td>
-            <td><em>{{operatingStatement.sum(group.data, "waitingTickets")}}</em></td>
-            <td><em>{{operatingStatement.sum(group.data, "returnedTickets")}}</em></td>
-            <td><em>{{operatingStatement.sum(group.data, "checkedTickets")}}</em></td>
-            <td><em>{{operatingStatement.sum(group.data, "checkedPrice")}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "totalTickets")  | removeZero}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "waitingTickets")  | removeZero}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "returnedTickets")  | removeZero}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "checkedTickets")  | removeZero}}</em></td>
+            <td><em>{{operatingStatement.sum(group.data, "checkedPrice")  | removeZero}}</em></td>
         </tr>
         <tfoot ng-if="operatingStatement.isLastPage()">
           <tr>

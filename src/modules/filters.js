@@ -224,5 +224,71 @@
       return calcMD5(input).toLowerCase();
     }
   });
-
+   // 性别
+  app.filter('checkGender', function() {
+    return function(input) {
+      var ret;
+      switch (input){
+        case 'male':
+          ret = '男';
+          break;
+        case 'female':
+          ret = '女';
+          break;
+      }
+      return ret;
+    }
+  });
+  // 身份证件类型
+  app.filter('checkIdentity', function() {
+    return function(input) {
+      var ret;
+      switch (input){
+        case 'ERTONG':
+          ret = '儿童无证件';
+          break;
+        case 'GANGAO':
+          ret = '港澳通行证';
+          break;
+        case 'HUIXIANG':
+          ret = '回乡证';
+          break;
+        case 'HUZHAO':
+          ret = '护照';
+          break;
+        case 'ID_CARD':
+          ret = '身份证';
+          break;
+        case 'SHIBING':
+          ret = '士兵证';
+          break;
+        case 'JUNGUAN':
+          ret = '军官证';
+          break;      
+        case 'HUKOUBO':
+          ret = '户口簿';
+          break;
+        case 'CHUSHENGZHENGMING':
+          ret = '出生证明';
+          break;
+        case 'TAIBAO':
+          ret = '台湾通行证';
+          break;
+        case 'TAIBAOZHENG':
+          ret = '台胞证';
+          break;
+        case 'OTHER':
+          ret = '其它';
+          break;
+      }
+      return ret;
+    }
+  });
+  // 去掉小数点后面的零
+  app.filter('removeZero', function() {
+    return function(input) {
+      return ret = parseFloat(input);
+    }
+  });
+  
 })();

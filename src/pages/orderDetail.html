@@ -1,4 +1,4 @@
-﻿<div ng-controller="orderDetailController as orderDetail">
+﻿<div ng-controller="orderDetailController as orderDetail" ng-init="orderDetail.init()">
     <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display:block">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -32,23 +32,48 @@
                                     <td>{{orderDetail.orders.bookMobile}}</td>
                                 </tr>
                                 <tr>
-                                    <td>身份证</td>
-                                    <td>{{orderDetail.orders.bookMobile}}</td>
+                                    <td>证件类型</td>
+                                    <td>{{orderDetail.orders.bookerIDType | checkIdentity}}</td>
+                                </tr>
+                                <tr>
+                                    <td>证件号</td>
+                                    <td>{{orderDetail.orders.bookerID}}</td>
                                 </tr>
 
-								<tr>
+								<tr >
                     				<td>游玩日期</td>
-                    				<td>
+                    				<td class="">
                                         {{orderDetail.orders.visitDateStart | date:'yyyy.MM.dd'}} ~ {{orderDetail.orders.visitDateEnd | date:'yyyy.MM.dd'}}
-                                        <a class="btn btn-xs btn-default pull-right">
-                                            <i class="glyphicon glyphicon-pencil"></i>
+                                        <!-- <div class="input-group date datetimepicker form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="updateDate" data-link-format="yyyy-mm-dd"> -->
+                                            <!-- <span class="input-group-addon ">开始</span> -->
+                                           <!--  <input class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                                            <input type="hidden" id="updateDate" value="" />
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        </div> -->
+                                        <div id="aaa" style=" position: absolute;margin-top: -31px; visibility: hidden; width: 50%;" class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="updateDate" data-link-format="yyyy-mm-dd">
+                                            <!-- <span class="input-group-addon ">结束</span> -->
+                                            <input class="form-control " size="16" type="text" value="" readonly>
+                                            <input type="hidden" id="updateDate" value="" />
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                            
+                                        </div>
+                                        <a ng-click="orderDetail.updateVisitDate()" class="btn btn-xs btn-default pull-right" ng-class="{disabled:orderDetail.submitting}" ng-show="orderDetail.auth('admin')">
+                                          <i class="glyphicon glyphicon-pencil"></i>
                                             修改
                                         </a>
+                                        
+                                        <a class="btn btn-xs btn-default pull-right" ng-show="orderDetail.showSave" ng-class="{disabled:orderDetail.submitting}" ng-click="orderDetail.updateDate()" style="margin-right: 7px;">    
+                                            <i class="glyphicon glyphicon-ok"></i> 
+                                            {{orderDetail.saveTxt}}
+                                        </a>
+                                        
+                                       
                                     </td>
                     			</tr>
                     			<tr>
                     				<td>成交时间</td>
                     				<td>{{orderDetail.orders.orderCreateTime | date:'yyyy.MM.dd HH:mm'}}</td>
+                                   
                     			</tr>
                     			<tr>
                     				<td>商品名称</td>
@@ -118,11 +143,6 @@
                     			</tr>
                     		</tbody>
                     	</table>
-
-
-
-
-                    
                     <!-- info end -->
                 </div>
                 <div class="modal-footer">

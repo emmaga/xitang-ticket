@@ -103,9 +103,9 @@
         <tr ng-repeat-end>
             <td class="text-success text-left"><strong>小计：</strong></td>
             <td></td>
-            <td><em>{{checkStatement.sum(group.data, "totalTickets")}}</em></td>
-            <td><em>{{checkStatement.sum(group.data, "checkedTickets")}}</em></td>
-            <td><em>{{checkStatement.sum(group.data, "checkedPrice")}}</em></td>
+            <td><em>{{checkStatement.sum(group.data, "totalTickets") | removeZero}}</em></td>
+            <td><em>{{checkStatement.sum(group.data, "checkedTickets")  | removeZero}}</em></td>
+            <td><em>{{checkStatement.sum(group.data, "checkedPrice")  | removeZero}}</em></td>
         </tr>
         <tfoot ng-if="checkStatement.isLastPage()">
             <tr>

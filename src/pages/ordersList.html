@@ -73,7 +73,7 @@
         </div>
         <div class="col-sm-2 col-condensed">
             <label>检票时间开始</label>
-            <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_zpqvrt">
+            <div class="input-group date form_datetime"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_zpqvrt">
                 <!-- <span class="input-group-addon ">开始</span> -->
                 <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
                 <input type="hidden" id="rd_zpqvrt" value="" />
@@ -82,7 +82,7 @@
         </div>
         <div class="col-sm-2 col-condensed">
             <label>检票时间结束</label>
-            <div class="input-group date form_datetime" data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_fiekwn">
+            <div class="input-group date form_datetime"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_fiekwn">
                 <!-- <span class="input-group-addon ">结束</span> -->
                 <input id="check-date-end" class="form-control " size="16" type="text" value="" readonly>
                 <input type="hidden" id="rd_fiekwn" value="" />
@@ -105,7 +105,7 @@
         <input ng-model="ordersList.parterOrderId" type="text" class="flex-item form-control" placeholder="分销商订单号">
         <input ng-model="ordersList.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
         <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
-        <input ng-model="ordersList.goodsName" type="text" class="flex-item form-control" placeholder="身份证">
+        <input ng-model="ordersList.bookerID" type="text" class="flex-item form-control" placeholder="证件号">
 
     </div>
     <hr class="break-space">
@@ -169,7 +169,11 @@
                 <a ng-click="ordersList.showDetail(row.orderId)" title="明细" class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-list"></i> 明细
                 </a>
+               <!--  <a ng-click="ordersList.showPersonDetail(row.orderId)" title="明细" class="btn btn-default btn-xs" style="margin-top:8px;"> 
+                    <i class="glyphicon glyphicon-user"></i> 游客
+                </a> -->
             </td>
+
         </tr>
     </table>
     <div ng-show="ordersList.loading">loading...</div>

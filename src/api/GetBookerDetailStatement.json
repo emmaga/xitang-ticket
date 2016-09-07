@@ -1,0 +1,50 @@
+{
+  "rescode": 200, 
+  "errInfo": "",  
+  "lists": {
+    "totalCount": 2,            
+    "totalTotalTickets": 19,    
+    "lists": [
+      {
+        "bookerLocation": "上海市",
+        "bookerIDType": "ID_CARD",  
+        "bookerID": "350987898765676565",  
+        "sex":"male",    
+        "age":"18",
+        "bookPerson": "Rose",
+        "bookMobile": "13812345672",
+        "totalTickets": 1    
+      },
+      {
+        "bookerLocation": "上海市",
+        "bookerIDType": "ID_CARD",  
+        "bookerID": "350987898765676565", 
+        "sex":"male",     
+        "age":"18",
+        "bookPerson": "Rose",
+        "bookMobile": "13812345672",
+        "totalTickets": 2       
+      },
+      {
+       "bookerLocation": "北京市",
+        "bookerIDType": "ID_CARD",  
+        "bookerID": "350987898765676565",  
+        "sex":"male",   
+        "age":"18",
+        "bookPerson": "Rose",
+        "bookMobile": "13812345672",
+        "totalTickets": 3       
+      },
+      {
+       "bookerLocation": "北京市",
+        "bookerIDType": "ID_CARD",  
+        "bookerID": "350987898765676565",  
+        "sex":"male",   
+        "age":"18",
+        "bookPerson": "Rose",
+        "bookMobile": "13812345672",
+        "totalTickets": 4       
+      }
+    ]
+  }
+}
