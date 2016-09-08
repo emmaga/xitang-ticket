@@ -1964,7 +1964,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
   ]);
   
   app.controller('orderDetailController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 'auth', 
-    function($scope, $state, $stateParams, $http, $cookies, $location, $filter, auth) {
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter, auth ) {
       console.log('orderDetail');
       var self = this;
       // 初始化 隐藏 保存 按钮
@@ -1975,14 +1975,15 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.close = function() {
         $scope.root.coverUrl = '';
         $scope.root.coverParamId = '';
-
+         
 
       };
       // 保存按钮，不可重复点击
       self.submitting = false;
       self.saveTxt = '保存';
       self.updateVisitDate=function(){ 
-        console.log('update');      
+        console.log('update');  
+
         $('#aaa').datetimepicker('show').on('changeDate', function(ev){
             $scope.$apply(function(){
               self.orders.visitDateStart = $('#updateDate').val();
@@ -2066,6 +2067,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             if(data.rescode === 200) {
               self.showSave = false;
               $state.reload();
+              // $state.go($state.current, {}, {reload: true});
               alert('改签成功');
               self.submitting = false;
               self.saveTxt = '保存';
@@ -2119,11 +2121,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       var url = c.requestUrl + '/orders' + c.extension;
 
       var data = {
-        "action": "GetDetail",
+        "action": "GetOrderUserList",
         "account": $cookies.get('account'),
         "token": $cookies.get('token'),
         "projectName": $cookies.get('projectName'),
-        "orderId": self.id
+        "orderId": self.id + "" 
       };
       data = JSON.stringify(data);
 
@@ -2131,7 +2133,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           var data = response.data;
           
           if(data.rescode === 200) {
-            self.orders = data.orders;
+            self.users = data.users;
              
           }else if(data.rescode === 401){
             alert('登录超时，请重新登录');
