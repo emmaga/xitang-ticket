@@ -2384,7 +2384,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
                 "sortBy": "OrderCreateTime",
-                "orderBy": "desc",
+                "orderBy": "asc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
                 "search": {
