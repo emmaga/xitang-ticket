@@ -1963,8 +1963,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
   
-  app.controller('orderDetailController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 'auth', 
-    function($scope, $state, $stateParams, $http, $cookies, $location, $filter, auth ) {
+  app.controller('orderDetailController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', '$window', 'auth', 
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter, $window, auth ) {
       console.log('orderDetail');
       var self = this;
       // 初始化 隐藏 保存 按钮
@@ -2066,8 +2066,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             var data = response.data;
             if(data.rescode === 200) {
               self.showSave = false;
-              $state.reload();
-              // $state.go($state.current, {}, {reload: true});
+              $window.location.reload();
+              // $state.reload();
+            
               alert('改签成功');
               self.submitting = false;
               self.saveTxt = '保存';
