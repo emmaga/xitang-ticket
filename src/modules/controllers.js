@@ -1993,7 +1993,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.updateVisitDate=function(){ 
         console.log('update');  
 
-        $('#aaa').datetimepicker('show').on('changeDate', function(ev){
+        $('#visitTimeHidden').datetimepicker('show').on('changeDate', function(ev){
             $scope.$apply(function(){
               self.orders.visitDateStart = $('#updateDate').val();
               self.orders.visitDateEnd = $('#updateDate').val();
@@ -2115,7 +2115,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.saveTxt = '保存';
       self.updateVisitDate=function(){ 
         console.log('update');      
-        $('#aaa').datetimepicker('show').on('changeDate', function(ev){
+        $('#visitTimeHidden').datetimepicker('show').on('changeDate', function(ev){
             $scope.$apply(function(){
               self.orders.visitDateStart = $('#updateDate').val();
               self.orders.visitDateEnd = $('#updateDate').val();
