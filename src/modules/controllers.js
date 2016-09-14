@@ -611,6 +611,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
                   "bookPerson": self.bookPerson ? self.bookPerson : "",
                   "bookMobile": self.bookMobile ? self.bookMobile : "",
+                  "orderTicketCode": self.orderTicketCode ? self.orderTicketCode : "",
                   "bookerIDType": self.bookerIDType ? self.bookerIDType : "",
                   "bookerID": self.bookerID ? self.bookerID : "",
                 }
@@ -2289,6 +2290,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
             "bookPerson": self.bookPerson ? self.bookPerson : "",
             "bookMobile": self.bookMobile ? self.bookMobile : "",
+            "orderTicketCode": self.orderTicketCode ? self.orderTicketCode : "",
             "bookerIDType": self.bookerIDType ? self.bookerIDType : "",      //  ID_CARD是身份证
             "bookerID": self.bookerID ? self.bookerID : "",  //身份证号
             "goodsName": self.goodsName ? self.goodsName : "",
@@ -2334,8 +2336,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var c = $scope.root.config;
               var url = c.requestUrl + '/orders' + c.extension;
 
-               // 去掉成交时间为空时，默认的时间段
-              //如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
+              // 去掉成交时间为空时，默认的时间段
+              // 如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
               // if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
 
               //   var sDate = new Date();
@@ -2392,6 +2394,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
                   "bookPerson": self.bookPerson ? self.bookPerson : "",
                   "bookMobile": self.bookMobile ? self.bookMobile : "",
+                  "orderTicketCode": self.orderTicketCode ? self.orderTicketCode : "",
                   "bookerIDType": self.bookerIDType ? self.bookerIDType : "",      //  ID_CARD是身份证
                   "bookerID": self.bookerID ? self.bookerID : "",  //身份证号
                   "goodsName": self.goodsName ? self.goodsName : "",
