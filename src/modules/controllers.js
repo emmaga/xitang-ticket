@@ -1988,9 +1988,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.close = function() {
         $scope.root.coverUrl = '';
         $scope.root.coverParamId = '';
-         
-
       };
+
+      self.formatOrderTicketCode = function(str) {
+        return str && str.split(',').join(', ');
+      }
+
       // 保存按钮，不可重复点击
       self.submitting = false;
       self.saveTxt = '保存';
