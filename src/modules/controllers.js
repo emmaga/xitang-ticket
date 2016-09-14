@@ -650,6 +650,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.checkDetail = function(orderId) {
         $scope.root.coverUrl = 'pages/check.html';
         $scope.root.coverParamId = orderId;
+        $scope.root.callback = function(){self.search();}
       }
     }
   ]);
@@ -659,10 +660,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       console.log('check');
       var self = this;
       self.id = $scope.root.coverParamId;
+      self.callback = $scope.root.callback;
 
       this.close = function() {
         $scope.root.coverUrl = '';
         $scope.root.coverParamId = '';
+        $scope.root.callback = '';
       };
 
       this.check = function() {
@@ -685,7 +688,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             if(data.rescode === 200) {
               alert('检票成功')
               self.close();
-              $state.reload();
+              // $state.reload();
+              self.callback();
             }else if(data.rescode === 401){
               alert('登录超时，请重新登录');
               $location.path('/index');
