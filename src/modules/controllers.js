@@ -746,12 +746,20 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         });
       }
 
-      self.sum = function(data, field){
+      self.sumFloat = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
           t += parseFloat(data[i][field]);
         }
         return t.toFixed(2);
+      };
+
+      self.sum = function(data, field){
+        var t = 0;
+        for (var i = 0; i < data.length; i++) {
+          t += Number(data[i][field]);
+        }
+        return t;
       };
 
       self.isLastPage = function() {
