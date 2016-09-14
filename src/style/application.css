@@ -309,3 +309,21 @@ font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSa
 .illution{
   pointer-events: none;
 }
+
+.table-action-btn {
+  margin-bottom: 8px;
+  float: left;
+  margin-right: 4px;
+}
+
+.table-action-btn:last-child {
+  margin-bottom: 0px;
+  float: left;
+  margin-right: 0px;
+}
+
+
+
+
+
+

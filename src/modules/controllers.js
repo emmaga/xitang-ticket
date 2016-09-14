@@ -611,6 +611,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
                   "bookPerson": self.bookPerson ? self.bookPerson : "",
                   "bookMobile": self.bookMobile ? self.bookMobile : "",
+                  "orderTicketCode": self.orderTicketCode ? self.orderTicketCode : "",
                   "bookerIDType": self.bookerIDType ? self.bookerIDType : "",
                   "bookerID": self.bookerID ? self.bookerID : "",
                 }
@@ -649,6 +650,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.checkDetail = function(orderId) {
         $scope.root.coverUrl = 'pages/check.html';
         $scope.root.coverParamId = orderId;
+        $scope.root.callback = function(){self.search();}
       }
     }
   ]);
@@ -658,10 +660,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       console.log('check');
       var self = this;
       self.id = $scope.root.coverParamId;
+      self.callback = $scope.root.callback;
 
       this.close = function() {
         $scope.root.coverUrl = '';
         $scope.root.coverParamId = '';
+        $scope.root.callback = '';
       };
 
       this.check = function() {
@@ -684,7 +688,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             if(data.rescode === 200) {
               alert('检票成功')
               self.close();
-              $state.reload();
+              // $state.reload();
+              self.callback();
             }else if(data.rescode === 401){
               alert('登录超时，请重新登录');
               $location.path('/index');
@@ -745,12 +750,20 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         });
       }
 
-      self.sum = function(data, field){
+      self.sumFloat = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
           t += parseFloat(data[i][field]);
         }
         return t.toFixed(2);
+      };
+
+      self.sum = function(data, field){
+        var t = 0;
+        for (var i = 0; i < data.length; i++) {
+          t += Number(data[i][field]);
+        }
+        return t;
       };
 
       self.isLastPage = function() {
@@ -1975,16 +1988,19 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.close = function() {
         $scope.root.coverUrl = '';
         $scope.root.coverParamId = '';
-         
-
       };
+
+      self.formatOrderTicketCode = function(str) {
+        return str && str.split(',').join(', ');
+      }
+
       // 保存按钮，不可重复点击
       self.submitting = false;
       self.saveTxt = '保存';
       self.updateVisitDate=function(){ 
         console.log('update');  
 
-        $('#aaa').datetimepicker('show').on('changeDate', function(ev){
+        $('#visitTimeHidden').datetimepicker('show').on('changeDate', function(ev){
             $scope.$apply(function(){
               self.orders.visitDateStart = $('#updateDate').val();
               self.orders.visitDateEnd = $('#updateDate').val();
@@ -2106,7 +2122,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.saveTxt = '保存';
       self.updateVisitDate=function(){ 
         console.log('update');      
-        $('#aaa').datetimepicker('show').on('changeDate', function(ev){
+        $('#visitTimeHidden').datetimepicker('show').on('changeDate', function(ev){
             $scope.$apply(function(){
               self.orders.visitDateStart = $('#updateDate').val();
               self.orders.visitDateEnd = $('#updateDate').val();
@@ -2289,6 +2305,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
             "bookPerson": self.bookPerson ? self.bookPerson : "",
             "bookMobile": self.bookMobile ? self.bookMobile : "",
+            "orderTicketCode": self.orderTicketCode ? self.orderTicketCode : "",
             "bookerIDType": self.bookerIDType ? self.bookerIDType : "",      //  ID_CARD是身份证
             "bookerID": self.bookerID ? self.bookerID : "",  //身份证号
             "goodsName": self.goodsName ? self.goodsName : "",
@@ -2334,8 +2351,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var c = $scope.root.config;
               var url = c.requestUrl + '/orders' + c.extension;
 
-               // 去掉成交时间为空时，默认的时间段
-              //如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
+              // 去掉成交时间为空时，默认的时间段
+              // 如果成交时间为空，默认设置为1个月查询，如果某个时间为空，补全整个时间段前移或后移1个月
               // if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
 
               //   var sDate = new Date();
@@ -2384,7 +2401,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 "token": $cookies.get('token'),
                 "projectName": $cookies.get('projectName'),
                 "sortBy": "OrderCreateTime",
-                "orderBy": "asc",
+                "orderBy": "desc",
                 "count": paramsUrl.count, //一页显示数量
                 "page": paramsUrl.page,   //当前页
                 "search": {
@@ -2392,6 +2409,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
                   "bookPerson": self.bookPerson ? self.bookPerson : "",
                   "bookMobile": self.bookMobile ? self.bookMobile : "",
+                  "orderTicketCode": self.orderTicketCode ? self.orderTicketCode : "",
                   "bookerIDType": self.bookerIDType ? self.bookerIDType : "",      //  ID_CARD是身份证
                   "bookerID": self.bookerID ? self.bookerID : "",  //身份证号
                   "goodsName": self.goodsName ? self.goodsName : "",

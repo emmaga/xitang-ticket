@@ -11,7 +11,7 @@
                     
                     	<table class="table table-condensed">
                     		<thead>
-                    			<th>订单信息</th>
+                    			<th style="min-width: 7em;">订单信息</th>
                     			<th></th>
                     		</thead>
                     		<tbody>
@@ -50,7 +50,7 @@
                                             <input type="hidden" id="updateDate" value="" />
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                                         </div> -->
-                                        <div id="aaa" style=" position: absolute;margin-top: -31px; visibility: hidden; width: 50%;" class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="updateDate" data-link-format="yyyy-mm-dd">
+                                        <div id="visitTimeHidden" style=" position: absolute;margin-top: -31px; visibility: hidden; width: 50%;" class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="updateDate" data-link-format="yyyy-mm-dd">
                                             <!-- <span class="input-group-addon ">结束</span> -->
                                             <input class="form-control " size="16" type="text" value="" readonly>
                                             <input type="hidden" id="updateDate" value="" />
@@ -141,6 +141,10 @@
                     				<td>是否过期</td>
                     				<td>{{orderDetail.orders.isExpired | isExpired}}</td>
                     			</tr>
+                                <tr>
+                                    <td>辅助码</td>
+                                    <td>{{orderDetail.formatOrderTicketCode(orderDetail.orders.orderTicketCode)}}</td>
+                                </tr>
                     		</tbody>
                     	</table>
                     <!-- info end -->
