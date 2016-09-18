@@ -661,7 +661,17 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       var self = this;
       self.id = $scope.root.coverParamId;
       self.callback = $scope.root.callback;
-
+      // 确认提交按钮 
+      self.showTxtFunc = function(boo){
+           if (boo) {
+            self.showTxt = "确认检票"
+            self.showTxtBool = false;
+           } else {
+            self.showTxt = "检票中..."
+            self.showTxtBool = true;
+           }
+      }
+      self.showTxtFunc(true);
       this.close = function() {
         $scope.root.coverUrl = '';
         $scope.root.coverParamId = '';
@@ -682,9 +692,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "userName": $cookies.get('userName')
         };
         data = JSON.stringify(data);
-
+        self.showTxtFunc(false);
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
+            self.showTxtFunc(true);
             if(data.rescode === 200) {
               alert('检票成功')
               self.close();
