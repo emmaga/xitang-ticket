@@ -16,7 +16,6 @@
             <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
             <input type="hidden" id="rd_qcaxwa" value="" />
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            
         </div>
     </div>
     <div class="col-sm-3 col-condensed">
@@ -117,8 +116,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><em>{{checkDetailStatement.sum(group.data, "checkedTickets")}}</em></td>
-            <td><em>{{checkDetailStatement.sumFloat(group.data, "checkedPrice")}}</em></td>
+            <td class="text-success text-left"><em>{{checkDetailStatement.sum(group.data, "checkedTickets")}}</em></td>
+            <td class="text-success text-left"><em>{{checkDetailStatement.sumFloat(group.data, "checkedPrice")}}</em></td>
             <td></td>
             <td></td>
         </tr>
