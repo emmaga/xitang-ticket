@@ -708,6 +708,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               alert(data.errInfo);
             }  
           }, function errorCallback(response) {
+            self.showTxtFunc(true);
             alert('检票可能失败，请返回“手动检票”列表复查。');
           });
       };
@@ -1517,7 +1518,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               else if(!$('#rd_khaydt').val()) {
                 var d = new Date($('#rd_qcaxwa').val());
                 d.setHours(23);
-                d.setMinutes();
+                d.setMinutes(59);
                 d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
                 $('#rd_khaydt').val(d);
                 $('#order-create-date-end').val(d);
