@@ -65,7 +65,7 @@
                     </div>
                     <div class="modal-footer">
                         <button ng-click="check.close()" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal">确认检票</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" ng-class="{disabled:check.showTxtBool}">{{check.showTxt}}</button>
                     </div>
                 </form>
             </div>
