@@ -67,7 +67,7 @@
         <colgroup>
             <col width="40%" />
             <col width="15%" />
-            <col width="15%" />
+            <!-- <col width="15%" /> -->
             <col width="15%" />
             <col width="15%" />
             <col width="15%" />
@@ -90,9 +90,9 @@
             <td data-title="'单价'">
                 {{row.price}}
             </td>
-            <td data-title="'门票总数'">
+            <!-- <td data-title="'门票总数'">
                 {{row.totalTickets}}
-            </td>
+            </td> -->
             <td data-title="'已检数量'">
                 {{row.checkedTickets}}
             </td>
@@ -103,7 +103,7 @@
         <tr ng-repeat-end>
             <td class="text-success text-left"><strong>小计：</strong></td>
             <td></td>
-            <td><em>{{checkStatement.sum(group.data, "totalTickets") | removeZero}}</em></td>
+            <!-- <td><em>{{checkStatement.sum(group.data, "totalTickets") | removeZero}}</em></td> -->
             <td><em>{{checkStatement.sum(group.data, "checkedTickets")  | removeZero}}</em></td>
             <td><em>{{checkStatement.sum(group.data, "checkedPrice")  | removeZero}}</em></td>
         </tr>
@@ -111,7 +111,7 @@
             <tr>
                 <td class="text-success text-left"><strong>总计：</strong></td>
                 <td></td>
-                <td><em>{{checkStatement.totalTotalTickets}}</em></td>
+                <!-- <td><em>{{checkStatement.totalTotalTickets}}</em></td> -->
                 <td><em>{{checkStatement.totalCheckedTickets}}</em></td>
                 <td><em>{{checkStatement.totalCheckedPrice}}</em></td>
             </tr>
