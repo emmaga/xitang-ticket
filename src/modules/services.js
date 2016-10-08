@@ -20,12 +20,5 @@
       return ret;
     };
   });
-  // 在不同view中共享数据
-  app.factory('shareData', function(){
-     return {
-      data : "data"
-     }
-
-  })
 
 })();
