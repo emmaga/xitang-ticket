@@ -799,7 +799,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         }
 
         for(var i = 0; i < tickets.length; i++) {
-          ret += tickets[i].name +'（'+ tickets[i].num + '） ' ;
+          ret += tickets[i].name +'：'+ tickets[i].num ;
+          if (i  < tickets.length -1) {
+            ret  += '，';
+          }
         }
         return ret;
 
