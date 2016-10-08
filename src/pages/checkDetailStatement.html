@@ -53,7 +53,7 @@
     <hr class="break-space-double">
     <hr class="break-space-double">
 
-    <table ng-table="checkDetailStatement.tableParams" ng-init="checkDetailStatement.search()" class="table table-hover table-striped">
+    <table ng-table="checkDetailStatement.tableParams" ng-init="checkDetailStatement.search()" class="table table-hover ">
         <colgroup>
           <col width="10%" />
           <col width="10%" />
@@ -111,15 +111,25 @@
         </tr>
         <tr ng-repeat-end>
             <td class="text-success text-left"><strong>小计：</strong></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="text-success text-left"><em>{{checkDetailStatement.sum(group.data, "checkedTickets")}}</em></td>
+            <td class="text-success text-left" colspan="6">
+               {{checkDetailStatement.ticket(group.data, "goodsName")}}
+               <!-- <span ng-repeat='data in checkDetailStatement.tickets'>{{data.name}}123</span> -->
+               <!--  
+               成人票：{{checkDetailStatement.sumTickets(group.data, "成人票")}}<br>
+                
+               家庭票：{{checkDetailStatement.sumTickets(group.data, "家庭票")}}<br>
+                
+               景+酒：{{checkDetailStatement.sumTickets(group.data, "景+酒")}}<br>
+                
+               学生票：{{checkDetailStatement.sumTickets(group.data, "学生票")}}<br>
+               老人票：{{checkDetailStatement.sumTickets(group.data, "老人票")}} -->
+            </td>
+            
             <td class="text-success text-left"><em>{{checkDetailStatement.sumFloat(group.data, "checkedPrice")}}</em></td>
             <td></td>
             <td></td>
+            
+            
         </tr>
         <tfoot ng-if="checkDetailStatement.isLastPage()">
           <tr>

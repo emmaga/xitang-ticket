@@ -761,7 +761,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     function($scope, $http, $cookies, $location, $window, $filter, NgTableParams) {
       console.log('checkDetailStatement');
       var self = this;
-
       self.init = function() {
         $('.form_datetime').datetimepicker({
           language:  'zh-CN',
@@ -790,6 +789,34 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         }
         return t;
       };
+   
+      self.ticket = function(data, field) {
+        var ret = "";
+        var tickets = [];
+
+        for (var i = 0; i < data.length; i++) {
+          checkTickets(data[i][field]);
+        }
+
+        for(var i = 0; i < tickets.length; i++) {
+          ret += tickets[i].name +'（'+ tickets[i].num + '） ' ;
+        }
+        return ret;
+
+        function checkTickets(name) {
+          var isIn = false;
+          for(var i = 0; i < tickets.length; i++) {
+            if(name == tickets[i].name) {
+              tickets[i].num ++;
+              isIn = true;
+              break;
+            }
+          }
+          if(!isIn) {
+            tickets.push({name: name, num: 1});
+          }
+        }
+      }
 
       self.isLastPage = function() {
         return self.tableParams.page() === totalPages();
