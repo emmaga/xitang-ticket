@@ -655,8 +655,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
 
-  app.controller('checkController', ['$scope', '$http', '$cookies', '$location', '$state', '$stateParams', 
-    function($scope, $http, $cookies, $location, $state, $stateParams) {
+  app.controller('checkController', ['$filter', '$scope', '$http', '$cookies', '$location', '$state', '$stateParams', 
+    function($filter, $scope, $http, $cookies, $location, $state, $stateParams) {
       console.log('check');
       var self = this;
       self.id = $scope.root.coverParamId;
@@ -681,7 +681,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       this.check = function() {
         var c = $scope.root.config;
         var url = c.requestUrl + '/orders' + c.extension;
-        
+        var serialNo = getSerialNo(new Date().getTime(), self.id, self.orders.checkNumber, $cookies.get('userId'));
+
         var data = {
           "action": "Check",
           "account": $cookies.get('account'),
@@ -689,7 +690,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "projectName": $cookies.get('projectName'),
           "orderId": self.id,
           "checkNumber": self.orders.checkNumber,  //检票数量
-          "userName": $cookies.get('userName')
+          "userName": $cookies.get('userName'),
+          "serialNo": serialNo
         };
         data = JSON.stringify(data);
         self.showTxtFunc(false);
@@ -712,6 +714,17 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             alert('检票可能失败，请返回“手动检票”列表复查。');
           });
       };
+
+      /* 生成序列号：按“timestamp(精确到毫秒)，订单号，检票数，检票员userid”顺序字符串相加
+       * @timestamp 时间戳（精确到毫秒）
+       * @orderNum 订单号
+       * @checkNum 检票数
+       * @checkPersonID 检票员userid
+       */
+      function getSerialNo(timestamp, orderNum, checkNum, checkPersonID) {
+        var str = timestamp + orderNum + checkNum + checkPersonID;
+        return str;
+      }
 
       this.init = function() {
         // get data
