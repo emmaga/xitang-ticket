@@ -53,7 +53,7 @@
                                 </tr>
                                 <tr  ng-if="check.orders.offlinePay == '1'">
                                     <td style="color:red">该票为到付票，请确认是否已支付</td>
-                                    <td><input type="checkbox" name="" ng-model="check.checkPay">请确认是否支付</td>
+                                    <td class="pay-confirm" ng-click="check.confirmPay()"><input type="checkbox" name="" ng-model="check.checkPay" style="position: relative; top: 2px; cursor: pointer"> 确认支付</td>
                                 </tr>
                             </tbody>
                         </table>

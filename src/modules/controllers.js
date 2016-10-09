@@ -663,8 +663,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.callback = $scope.root.callback;
       // 是否支付, 默认未支付,是否可以提交
       self.checkPay = false;
-      self.btnAblity = function(){
-        
+      self.confirmPay = function(){
+        self.checkPay = !self.checkPay;
       }
       // 确认提交按钮 
       self.showTxtFunc = function(boo){

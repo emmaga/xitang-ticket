@@ -322,6 +322,15 @@ font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSa
   margin-right: 0px;
 }
 
+.pay-confirm{
+  cursor: pointer;
+}
+
+.pay-confirm:hover{
+  background-color: #ddd
+}
+
+
 
 
 
