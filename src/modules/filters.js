@@ -284,6 +284,21 @@
       return ret;
     }
   });
+  // 是否支持到付
+  app.filter('checkOffLinePay', function() {
+    return function(input) {
+      var ret;
+      switch (input){
+        case 0:
+          ret = '不支持到付';
+          break;
+        case 1:
+          ret = '支持到付';
+          break;
+      }
+      return ret;
+    }
+  });
   // 去掉小数点后面的零
   app.filter('removeZero', function() {
     return function(input) {

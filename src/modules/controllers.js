@@ -661,6 +661,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       var self = this;
       self.id = $scope.root.coverParamId;
       self.callback = $scope.root.callback;
+      // 是否支付, 默认未支付,是否可以提交
+      self.checkPay = false;
+      self.btnAblity = function(){
+        
+      }
       // 确认提交按钮 
       self.showTxtFunc = function(boo){
            if (boo) {
@@ -744,6 +749,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             var data = response.data;
             if(data.rescode === 200) {
               self.orders = data.orders;
+              // 不是到付，则允许点击 检票按钮
+              if (self.orders.offlinePay == 0) {
+                self.checkPay = true;
+              }
             }else if(data.rescode === 401){
               alert('登录超时，请重新登录');
               $location.path('/index');
@@ -2805,7 +2814,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   }]);
 
-  app.controller('goodsEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter',
+  app.controller('goodsEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 
     function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
       console.log('goodsEdit');
 
