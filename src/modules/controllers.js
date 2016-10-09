@@ -722,7 +722,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
        * @checkPersonID 检票员userid
        */
       function getSerialNo(timestamp, orderNum, checkNum, checkPersonID) {
-        var str = timestamp + orderNum + checkNum + checkPersonID;
+        var str = '' + timestamp + orderNum + checkNum + checkPersonID;
         return str;
       }
 
