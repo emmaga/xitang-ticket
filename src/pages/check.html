@@ -51,7 +51,7 @@
                                     <td>可检票</td>
                                     <td>{{check.orders.waitingTickets}}</td>
                                 </tr>
-                                <tr  ng-if="check.orders.offlinePay == '1'">
+                                <tr ng-if="check.orders.offlinePay == '1'">
                                     <td style="color:red">该票为到付票，请确认是否已支付</td>
                                     <td class="pay-confirm" ng-click="check.confirmPay()"><input type="checkbox" name="" ng-model="check.checkPay" ng-click="check.confirmPay()" style="position: relative; top: 2px; cursor: pointer"> 确认支付</td>
                                 </tr>
@@ -59,11 +59,6 @@
                         </table>
                         <hr>
                         <label>检票数</label>
-                        <!-- <div class="input-group">
-                        	<a class="input-group-addon btn">-</a>
-                            <input type="number" class="form-control" value="3" placeholder="请输入检票数量" aria-describedby="basic-addon2">
-                            <a class="input-group-addon btn" disabled>+</a>
-                        </div> -->
                         <input ng-model="check.orders.checkNumber" min="1" max="{{check.orders.waitingTickets}}" type="number" class="form-control" value="" placeholder="请输入检票数量" aria-describedby="basic-addon2" required>
                         <!-- info end -->
                     </div>
