@@ -111,10 +111,10 @@
         </tr>
         <tr ng-repeat-end>
             <td class="text-success text-left"><strong>小计：</strong></td>
-            <td class="text-success text-left" colspan="6">
+            <td class="text-success text-left" colspan="5">
                {{checkDetailStatement.ticket(group.data, "goodsName")}}
             </td>
-            
+            <td class="text-success text-left"><em>{{checkDetailStatement.sum(group.data, "checkedTickets")}}</td>
             <td class="text-success text-left"><em>{{checkDetailStatement.sumFloat(group.data, "checkedPrice")}}</em></td>
             <td></td>
             <td></td>

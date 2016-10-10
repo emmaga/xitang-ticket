@@ -79,6 +79,10 @@
                     				<td>商品名称</td>
                     				<td>{{orderDetail.orders.goodsName}}</td>
                     			</tr>
+                                <tr>
+                                    <td>是否到付</td>
+                                    <td>{{orderDetail.orders.offlinePay | checkOffLinePay}}</td>
+                                </tr>
                     			<tr>
                     				<td>商品代码</td>
                     				<td>{{orderDetail.orders.goodsId}}</td>
