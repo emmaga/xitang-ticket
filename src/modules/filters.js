@@ -290,10 +290,10 @@
       var ret;
       switch (input){
         case 0:
-          ret = '不支持到付';
+          ret = '否';
           break;
         case 1:
-          ret = '支持到付';
+          ret = '是';
           break;
       }
       return ret;

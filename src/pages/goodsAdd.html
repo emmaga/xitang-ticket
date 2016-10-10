@@ -25,12 +25,13 @@
                             <input ng-model="goodsAdd.goods.goodsName" required type="text" class="form-control" placeholder="请输入商品名称">
                         </div>
                         <div class="form-group">
-                            <label class="required-info">是否支持到付</label>
+                            <label class="required-info">是否到付</label>
                             <select ng-model="goodsAdd.goods.offlinePay" class="form-control"> 
-                                <option  value="">选择是否支持到付</option>
-                                <option label="否" value="0" selected="selected">否</option>
+                                <option label="否" value="0">否</option>
                                 <option label="是" value="1">是</option>
+                                
                             </select> 
+                             <label class="label-explain">商品添加之后，该选项不可编辑</label>
                         </div>
                         
                         

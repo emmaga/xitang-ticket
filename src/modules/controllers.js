@@ -2743,8 +2743,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         minView: 2,
         forceParse: 0
       });
-    }
+      self.goods = {};
+      self.goods.offlinePay = '0';
 
+    }
+    
     self.setSubmit = function (status) {
       if(status) {
         self.addBtnText = "添加中...";
@@ -2754,7 +2757,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         self.submitting = false;
       }
     }
-
+    // self.sex = [
+    //  {"key":"是"},
+    //  {}
+    // ]
+    // 
     self.setSubmit(false);
 
     this.submit = function() {
@@ -2782,7 +2789,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       this.goods.validDateStart = '915120000000';
       this.goods.validDateEnd = '2082729600000';
-
+      this.goods.offlinePay = Number(this.goods.offlinePay);
       this.goods.checkTimeStart = $('#checkTimeStart').val() ? $('#checkTimeStart').val() : '00:00';
       this.goods.checkTimeEnd = $('#checkTimeEnd').val() ? $('#checkTimeEnd').val() : '23:59';
       
