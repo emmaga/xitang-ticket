@@ -804,7 +804,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var tickets = [];
 
         for (var i = 0; i < data.length; i++) {
-          checkTickets(data[i][field]);
+          checkTickets(data[i][field], data[i]['checkedTickets']);
         }
 
         for(var i = 0; i < tickets.length; i++) {
@@ -815,17 +815,18 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         }
         return ret;
 
-        function checkTickets(name) {
+        function checkTickets(name, ticketsCount) {
+          var tc = Number(ticketsCount);
           var isIn = false;
           for(var i = 0; i < tickets.length; i++) {
             if(name == tickets[i].name) {
-              tickets[i].num ++;
+              tickets[i].num += tc;
               isIn = true;
               break;
             }
           }
           if(!isIn) {
-            tickets.push({name: name, num: 1});
+            tickets.push({name: name, num: tc});
           }
         }
       }
