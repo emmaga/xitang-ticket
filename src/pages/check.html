@@ -51,7 +51,7 @@
                                     <td>可检票</td>
                                     <td>{{check.orders.waitingTickets}}</td>
                                 </tr>
-                                <tr ng-if="check.orders.offlinePay == '1'" ng-init="check.disableCheckBtn(check.orders.offlinePay);">
+                                <tr ng-if="check.orders.offlinePay == '1'">
                                     <td style="color:red">该票为到付票，请确认是否已支付</td>
                                     <td class="pay-confirm" ng-click="check.confirmPay()"><input type="checkbox" name="" ng-model="check.checkPay" ng-click="check.confirmPay()" style="position: relative; top: 2px; cursor: pointer"> 确认支付</td>
                                 </tr>
@@ -64,7 +64,7 @@
                     </div>
                     <div class="modal-footer">
                         <button ng-click="check.close()" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button id="btn-check" type="submit" class="btn btn-primary" data-dismiss="modal">{{check.showTxt}}</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" ng-class="{disabled:(check.showTxtBool || !check.checkPay)}">{{check.showTxt}}</button>
                     </div>
                 </form>
             </div>
