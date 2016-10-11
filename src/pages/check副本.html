@@ -1,4 +1,4 @@
-﻿<div ng-controller="checkController as check" ng-init="check.init()">
+﻿<div ng-controller="checkController as check" ng-init="check.init(checkForm)">
     <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display:block">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -6,7 +6,8 @@
                     <button ng-click="check.close()" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">检票</h4>
                 </div>
-                <form name="checkForm" class="form form-vertical" ng-submit="checkForm.$valid && check.check()">
+                <!-- <form name="checkForm" class="form form-vertical" ng-submit="checkForm.$valid && check.check()"> -->
+                <form name="checkForm" class="form form-vertical">
                     <div class="modal-body">
                         <!-- info -->
                         <table class="table table-condensed">
@@ -51,7 +52,7 @@
                                     <td>可检票</td>
                                     <td>{{check.orders.waitingTickets}}</td>
                                 </tr>
-                                <tr ng-if="check.orders.offlinePay == '1'" ng-init="check.disableCheckBtn(check.orders.offlinePay);">
+                                <tr ng-if="check.orders.offlinePay == '1'">
                                     <td style="color:red">该票为到付票，请确认是否已支付</td>
                                     <td class="pay-confirm" ng-click="check.confirmPay()"><input type="checkbox" name="" ng-model="check.checkPay" ng-click="check.confirmPay()" style="position: relative; top: 2px; cursor: pointer"> 确认支付</td>
                                 </tr>
@@ -64,7 +65,9 @@
                     </div>
                     <div class="modal-footer">
                         <button ng-click="check.close()" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button id="btn-check" type="submit" class="btn btn-primary" data-dismiss="modal">{{check.showTxt}}</button>
+                        
+                        <!-- <button id="check-btn" ng-click="check.submit(checkForm);" type="submit" class="btn btn-primary" data-dismiss="modal" ng-class="{disabled:(check.showTxtBool || !check.checkPay)}">{{check.showTxt}}</button> -->
+                        <button ng-init="check.initForm(checkForm)" id="check-btn" type="submit" class="btn btn-primary" data-dismiss="modal" ng-class="{disabled:(check.showTxtBool || !check.checkPay)}">{{check.showTxt}}</button>
                     </div>
                 </form>
             </div>

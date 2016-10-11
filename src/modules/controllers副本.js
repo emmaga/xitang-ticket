@@ -662,30 +662,20 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       
       self.confirmPay = function(){
         self.checkPay = !self.checkPay;
-        self.disableCheckBtn(!self.checkPay);
       }
-
-      self.disableCheckBtn = function(boo) {
-        if (boo) {
-          var btn = document.getElementById('btn-check');
-          btn.disabled=true;
-         } else {
-          var btn = document.getElementById('btn-check');
-          btn.disabled=false;
-         }
-      }
-
       // 确认提交按钮 
       self.showTxtFunc = function(boo){
            if (boo) {
-            self.showTxt = "确认检票"
-            self.disableCheckBtn(false);
+            self.showTxt = "确认检票";
+            self.showTxtBool = false;
            } else {
             self.showTxt = "检票中...";
-            self.disableCheckBtn(true);
+            var btn=document.getElementById("check-btn");
+            btn.disabled=true;
+            self.showTxtBool = true;
            }
       }
-      
+
       this.close = function() {
         $scope.root.coverUrl = '';
         $scope.root.coverParamId = '';
@@ -693,14 +683,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       };
 
       this.check = function() {
-        var btn = document.getElementById('btn-check');
-        
-        console.log('btn.disabled' + btn.disabled);
-
         self.showTxtFunc(false);
-        
-        console.log('btn.disabled' + btn.disabled);
-
         var c = $scope.root.config;
         var url = c.requestUrl + '/orders' + c.extension;
         var serialNo = getSerialNo(new Date().getTime(), self.id, self.orders.checkNumber, $cookies.get('userId'));
@@ -716,6 +699,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "serialNo": serialNo
         };
         data = JSON.stringify(data);
+        
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             self.showTxtFunc(true);
@@ -747,14 +731,22 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         return str;
       }
 
+      self.initForm = function(checkForm) {
+        console.log(checkForm);
+        self.checkForm = checkForm;
+      }
+
       this.init = function() {
+
+        $('#check-btn').bind('click', function () {
+            self.checkForm.$valid && self.check();
+            console.log("Anonymous function bind by jq is triggered!");
+        });
+
         self.id = $scope.root.coverParamId;
         self.callback = $scope.root.callback;
-        
         // 是否支付, 默认未支付,是否可以提交
         self.checkPay = false;
-
-        // 检票按钮初始化
         self.showTxtFunc(true);
 
         // get data
@@ -1860,7 +1852,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               return $http.post(url, data).then(function successCallback(response) {
                   self.loading = false;
                   var data = response.data;
-                  
+                  console.log(data.orders.totalCount);
                   if(data.rescode === 200) {
                     //查无数据
                     if(data.orders.totalCount === 0) {
@@ -2140,7 +2132,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       // 保存按钮，不可重复点击
       self.submitting = false;
       self.saveTxt = '保存';
-      self.updateVisitDate=function(){
+      self.updateVisitDate=function(){ 
+        console.log('update');  
 
         $('#visitTimeHidden').datetimepicker('show').on('changeDate', function(ev){
             $scope.$apply(function(){
@@ -2263,7 +2256,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.submitting = false;
       self.saveTxt = '保存';
       self.updateVisitDate=function(){ 
-            
+        console.log('update');      
         $('#visitTimeHidden').datetimepicker('show').on('changeDate', function(ev){
             $scope.$apply(function(){
               self.orders.visitDateStart = $('#updateDate').val();
@@ -3364,7 +3357,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           "state": status === 'on' ? 'off' : 'on'
         };
         data = JSON.stringify(data);
-        
+        console.log(data);
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
