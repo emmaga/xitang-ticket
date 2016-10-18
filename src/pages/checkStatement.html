@@ -50,73 +50,138 @@
     <div class="input-group flex-box multi-input">
         <input ng-model="checkStatement.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
         <input ng-model="checkStatement.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
+        <input ng-model="checkStatement.checkUserName" type="text" class="flex-item form-control" placeholder="检票员">
     </div>
     <hr class="break-space">
     <div class="controls pull-right">
         <button ng-click="checkStatement.export()" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
         </button>
-        <button class="btn btn-primary" ng-click="checkStatement.search()" href>
-            <i class="glyphicon glyphicon-search"></i>搜索
+        <button class="btn btn-default" ng-click="checkStatement.searchDetail()" href>
+            <i class="glyphicon glyphicon-list"></i> 明细
         </button>
+        <button class="btn btn-primary" ng-click="checkStatement.search()" href>
+            <i class="glyphicon glyphicon-search"></i> 报表
+        </button>
+        
     </div>
     <hr class="break-space-double">
     <hr class="break-space-double">
     <hr class="break-space-double">
-    <table ng-table="checkStatement.tableParams" ng-init="checkStatement.search()" class="table table-hover table-striped">
-        <colgroup>
-            <col width="40%" />
-            <col width="15%" />
-            <!-- <col width="15%" /> -->
-            <col width="15%" />
-            <col width="15%" />
-            <col width="15%" />
-        </colgroup>
-        <tr class="ng-table-group" ng-repeat-start="group in $groups">
-            <td colspan="6">
-                <a href="" ng-click="group.$hideRows = !group.$hideRows">
-                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
-                    <strong>{{ group.value }}</strong>
-                </a>
-            </td>
-        </tr>
-        <tr ng-hide="group.$hideRows" ng-repeat="row in group.data">
-            <td data-title="'分销商'" groupable="'partnerCode'" ng-if="false">
-                {{row.partnerCode}}
-            </td>
-            <td data-title="'商品名'">
-                {{row.goodsName}}
-            </td>
-            <td data-title="'单价'">
-                {{row.price}}
-            </td>
-            <!-- <td data-title="'门票总数'">
-                {{row.totalTickets}}
-            </td> -->
-            <td data-title="'已检数量'">
-                {{row.checkedTickets}}
-            </td>
-            <td data-title="'已检金额'">
-                {{row.checkedPrice}}
-            </td>
-        </tr>
-        <tr ng-repeat-end>
-            <td class="text-success text-left"><strong>小计：</strong></td>
-            <td></td>
-            <!-- <td><em>{{checkStatement.sum(group.data, "totalTickets") | removeZero}}</em></td> -->
-            <td><em>{{checkStatement.sum(group.data, "checkedTickets")  | removeZero}}</em></td>
-            <td><em>{{checkStatement.sum(group.data, "checkedPrice")  | removeZero}}</em></td>
-        </tr>
-        <tfoot ng-if="checkStatement.isLastPage()">
-            <tr>
-                <td class="text-success text-left"><strong>总计：</strong></td>
-                <td></td>
-                <!-- <td><em>{{checkStatement.totalTotalTickets}}</em></td> -->
-                <td><em>{{checkStatement.totalCheckedTickets}}</em></td>
-                <td><em>{{checkStatement.totalCheckedPrice}}</em></td>
+
+    
+    <div ng-show="checkStatement.loading ">loading...</div>
+    <div ng-show="checkStatement.showStatement">
+        <!-- <div ng-show="checkStatement.loading">loading...</div>
+        <div ng-show="checkStatement.noData">无数据</div> -->
+        <table ng-table="checkStatement.tableParams" ng-init="checkStatement.search()" class="table table-hover table-striped" >
+            <colgroup>
+                <col width="40%" />
+                <col width="15%" />
+                <!-- <col width="15%" /> -->
+                <col width="15%" />
+                <col width="15%" />
+                <col width="15%" />
+            </colgroup>
+            <tr class="ng-table-group" ng-repeat-start="group in $groups">
+                <td colspan="6">
+                    <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                        <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                        <strong>{{ group.value }}</strong>
+                    </a>
+                </td>
             </tr>
-        </tfoot>
-    </table>
-    <div ng-show="checkStatement.loading">loading...</div>
-    <div ng-show="checkStatement.noData">无数据</div>
+            <tr ng-hide="group.$hideRows" ng-repeat="row in group.data">
+                <td data-title="'分销商'" groupable="'partnerCode'" ng-if="false">
+                    {{row.partnerCode}}
+                </td>
+                <td data-title="'商品名'">
+                    {{row.goodsName}}
+                </td>
+                <td data-title="'单价'">
+                    {{row.price}}
+                </td>
+                <!-- <td data-title="'门票总数'">
+                    {{row.totalTickets}}
+                </td> -->
+                <td data-title="'已检数量'">
+                    {{row.checkedTickets}}
+                </td>
+                <td data-title="'已检金额'">
+                    {{row.checkedPrice}}
+                     <p ng-repeat="dataDetail in row.checkDetail">123</p>
+                </td>
+            </tr>
+            <tr ng-repeat-end>
+                <td class="text-success text-left"><strong>小计：</strong></td>
+                <td></td>
+                <!-- <td><em>{{checkStatement.sum(group.data, "totalTickets") | removeZero}}</em></td> -->
+                <td><em>{{checkStatement.sum(group.data, "checkedTickets")  | removeZero}}</em></td>
+                <td><em>{{checkStatement.sum(group.data, "checkedPrice")  | removeZero}}</em></td>
+            </tr>
+            <tfoot ng-if="checkStatement.isLastPage()">
+                <tr>
+                    <td class="text-success text-left"><strong>总计：</strong></td>
+                    <td></td>
+                    <!-- <td><em>{{checkStatement.totalTotalTickets}}</em></td> -->
+                    <td><em>{{checkStatement.totalCheckedTickets}}</em></td>
+                    <td><em>{{checkStatement.totalCheckedPrice}}</em></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    
+    <!-- 明细列表 -->
+    <div ng-show="!checkStatement.showStatement">    
+        <table ng-table="checkStatement.detailTaleParams" ng-init="checkStatement.search()" class="table table-hover table-striped" >
+            <tr  ng-repeat="row in $data" >
+                <td data-title="'分销商'" groupable="'partnerCode'" ng-if="false">
+                    {{row.partnerCode}}
+                </td>
+                <td data-title="'订单号'">
+                    {{row.orderID}}
+                </td>
+                <td data-title="'订票人'">
+                    {{row.bookerName}}
+                </td>
+                <td data-title="'客源地'">
+                    {{row.bookerLocation}}
+                </td>
+                <td data-title="'手机号'">
+                    {{row.bookerPhone}}
+                </td>
+                <td data-title="'证件类型'">
+                    {{row.bookerIDType | checkIdentity}}
+                </td>
+                <td data-title="'证件号'">
+                    {{row.bookerID}}
+                </td>
+                <td data-title="'票型'">
+                    {{row.goodsName}}
+                </td>
+                <td data-title="'分销商'">
+                    {{row.otaName}}
+                </td>
+                <td data-title="'购票'">
+                    {{row.totalCount}}
+                </td>
+                <td data-title="'已检'">
+                    {{row.orderCheckCount}}
+                </td>
+                <td data-title="'退票'">
+                    {{row.refundCount}}
+                </td>
+                <td data-title="'游玩时间'">
+                    {{row.orderAvailDate}}
+                </td>
+                <td data-title="'检票详情'">
+                    <span ng-repeat="dataDetail in row.checkDetail">{{dataDetail.checkTime}} {{dataDetail.checkUserName}} 检票{{dataDetail.checkCount}}张<br /></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-show="checkStatement.noData ">无数据</div>
+
+    
 </div>

@@ -1,0 +1,35 @@
+{
+  "rescode": 200, 
+  "errInfo": "",  
+  "lists": {
+    "totalCount": 200,  
+    "lists": [
+      {
+        "orderID": "1",
+        "bookerName": "康嘉",
+        "bookerLocation": "上海市市辖区",
+        "bookerPhone": "15122297967",
+        "bookerIDType": "ID_CARD",
+        "bookerID": "33038219910827001X",
+        "goodsName": "双人票",               
+        "otaName": "驴妈妈旅游网",                
+        "totalCount": "1",              
+        "orderCheckCount": "1",          
+        "refundCount": "0",             
+        "orderAvailDate": "2016-09-24 ~ 2016-09-24",          
+        "checkDetail": [
+              {
+              "checkUserName":"ddd",       
+              "checkTime":"2016-09-14 09:20:00",            
+              "checkCount":"1"            
+              },
+              {
+              "checkUserName":"eee",       
+              "checkTime":"2016-09-14 09:20:00",            
+              "checkCount":"1"            
+              }
+        ]
+      }
+    ]
+  }
+}

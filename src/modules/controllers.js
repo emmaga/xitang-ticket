@@ -1203,6 +1203,16 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     function($scope, $http, $cookies, $location, $window, $filter, NgTableParams) {
       console.log('checkStatement');
       var self = this;
+      // 显示报表列表 或 明细列表
+      // 默认显示 报表列表
+      self.showTable = function(bool){
+          if (bool) {
+             self.showStatement = true;
+          } else {
+              self.showStatement = false;
+          }
+      }
+      self.showTable(true);
 
       self.init = function() {
         $('.form_datetime').datetimepicker({
@@ -1294,14 +1304,15 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
             "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
             "checkDateStart": self.checkDateStart ? self.checkDateStart : "",
-            "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : ""
+            "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : "",
+            "checkUserName": self.checkUserName ? self.checkUserName : ""
           }
         };
-
+        alert('导出命令已发送，请稍后');
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
-              if (confirm('导出中，导出成功后会在“报表中心－导出列表”中显示，是否前往查看？')) {
+              if (confirm('导出已成功，是否前往查看？')) {
                 $location.path('/exportStatementsList');
               }
             }else if(data.rescode === 401){
@@ -1314,9 +1325,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             alert('导出失败，请重试');
           });
       };
+      
 
-      // ngtable
+      // ngtable 报表列表
       self.search = function() {
+        self.showTable(true);
         self.tableParams = new NgTableParams(
           {
             page: 1, 
@@ -1325,7 +1338,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             group: "partnerName"
           }, 
           {
-            counts: [15, 30],
+            // 不分页
+            // counts: [],
+            counts: [15,30],
             getData: function(params) {
               var paramsUrl = params.url();
 
@@ -1393,7 +1408,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
                   "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
                   "checkDateStart": self.checkDateStart ? self.checkDateStart : "",
-                  "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : ""
+                  "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : "",
+                  "checkUserName": self.checkUserName ? self.checkUserName : ""
                 }
               };
 
@@ -1414,6 +1430,123 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.totalTotalTickets = data.lists.totalTotalTickets;
                     self.totalCheckedTickets = data.lists.totalCheckedTickets;
                     self.totalCheckedPrice = data.lists.totalCheckedPrice;
+                    return data.lists.lists;
+                  }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
+                    $location.path('/index');
+                  }else {
+                    alert(data.errInfo);
+                  }  
+                }, function errorCallback(response) {
+                  self.loading = false;
+                  alert('加载失败，请重试');
+                });
+            }
+          }
+        );
+      };
+      // ngtable 明细列表
+      self.searchDetail = function() {
+        self.showTable(false);
+        self.detailTaleParams = new NgTableParams(
+          {
+            page: 1, 
+            count: 15,
+            url: '',
+          }, 
+          {
+            counts: [15, 30],
+            getData: function(params) {
+              var paramsUrl = params.url();
+
+              var c = $scope.root.config;
+              var url = c.requestUrl + '/statement' + c.extension;
+              // var url = '/xitang-ticket/src/api' + '/GetCheckStatementList.json'; 
+              //如果检票时间为空，默认设置为当天查询，如果某个时间为空，补全整个时间段前移或后移
+              if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
+
+                var sDate = new Date();
+                sDate.setHours(0);
+                sDate.setMinutes(0);
+                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd  HH:mm');
+                $('#rd_lptvht').val(sDate);
+                $('#check-date-start').val(sDate);
+                var eDate = new Date();
+                eDate.setHours(23);
+                eDate.setMinutes(59);
+                eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                $('#rd_idwdiz').val(eDate);
+                $('#check-date-end').val(eDate);
+
+              }
+              // 仅开始时间为空时
+              else if(!$('#rd_lptvht').val()) {
+                var d = new Date($('#rd_idwdiz').val());
+                d.setHours(0);
+                d.setMinutes(0);
+                
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                $('#rd_lptvht').val(d);
+                $('#check-date-start').val(d);
+              }
+              // 仅结束时间为空时
+              else if(!$('#rd_idwdiz').val()) {
+                var d = new Date($('#rd_lptvht').val());
+                 d.setHours(23);
+                 d.setMinutes(59);
+                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                $('#rd_idwdiz').val(d);
+                $('#check-date-end').val(d);
+              }
+      
+              //读取成交日期
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+              // //
+              // self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
+              // self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
+              
+              //读取检票日期
+              self.checkDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val()) ).getTime() : '';
+              self.checkDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
+
+              var data = {
+                "action": "GetCheckStatementList",
+                "account": $cookies.get('account'),
+                "token": $cookies.get('token'),
+                "projectName": $cookies.get('projectName'),
+                "sortBy": "OrderID", //成交时间
+                "orderBy": "desc", //asc 升序，desc 降序
+                "count": paramsUrl.count, //一页显示数量
+                "page": paramsUrl.page,   //当前页
+                "search": {
+                  "goodsName": self.goodsName ? self.goodsName : "",
+                  "partnerName": self.partnerName ? self.partnerName : "",
+                  "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
+                  "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
+                  "checkDateStart": self.checkDateStart ? self.checkDateStart : "",
+                  "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : "",
+                  "checkUserName": self.checkUserName ? self.checkUserName : ""
+                }
+              };
+
+              data = JSON.stringify(data);
+              self.loading = true;
+              self.noData = false;
+              
+              return $http.post(url, data).then(function successCallback(response) {
+                  self.loading = false;
+                  var data = response.data;
+                  if(data.rescode === 200) {
+                    //查无数据
+                    if(data.lists.totalCount === 0) {
+                      self.noData = true;
+                    }
+                    params.total(data.lists.totalCount);
+                    self.tableData = data.lists.lists;
+                    // self.totalTotalTickets = data.lists.totalTotalTickets;
+                    // self.totalCheckedTickets = data.lists.totalCheckedTickets;
+                    // self.totalCheckedPrice = data.lists.totalCheckedPrice;
                     return data.lists.lists;
                   }else if(data.rescode === 401){
                     alert('登录超时，请重新登录');
