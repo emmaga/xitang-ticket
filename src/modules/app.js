@@ -279,7 +279,8 @@
     // extension: '.json'
 
     // requestUrl: 'http://ota.cleartv.cn/ota_backend/v1/',
-    requestUrl: 'http://192.168.30.80/ota_backend/v1/',
+    // requestUrl: 'http://192.168.30.80/ota_backend/v1/',
+    requestUrl: 'http://otatest.cleartv.cn/ota_backend/v1/',
     extension: ''
   };
 
