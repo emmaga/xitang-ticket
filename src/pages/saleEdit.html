@@ -28,6 +28,8 @@
                                 </select>
                             </div>
                         </div>
+                        <!-- {{saleEdit.myGoods}}<br>
+                        {{saleEdit.goods}} -->
                         <div class="form-group">
                             <label class="required-info">分销商</label>
                             <div class="controls">
@@ -69,25 +71,26 @@
                         <div class="form-group">
                             <label class="required-info">二维码</label>
                             <div class="controls">
-                                <select required ng-model="saleEdit.sale.TwoDBarCodeOn" class="form-control"  ng-options="option.name for option in saleEdit.twoCodeOptions">
+                                <select required ng-model="saleEdit.sale.TwoDBarCodeOn" class="form-control"  ng-options="option.value for option in saleEdit.twoCodeOptions">
                                     <option value="">- 二维码是否开启 -</option>
-                                    <option value="1">On</option>
-                                    <option value="0">Off</option>
+                                    
                                 </select>
+                               <!--  {{saleEdit.sale.TwoDBarCodeOn}}<br>
+                                {{saleEdit.twoCodeOptions}} -->
 
 
                             </div>
                         </div>
                         <div >
                             <div class="form-group">
-                                <label class="required-info">对接YiGao的Id</label>
+                                <label class="required-info">易高产品的ID</label>
                                 <div class="controls">
                                     <input ng-required="saleEdit.sale.TwoDBarCodeOn.code == 1" ng-model="saleEdit.sale.GateGoodsID  " class="form-control"   type="text" ng-disabled="!(saleEdit.sale.TwoDBarCodeOn.code == 1)"/>
                                        
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="required-info">对接YiGao的数量</label>
+                                <label class="required-info">易高票的数量</label>
                                 <div class="controls">
                                      <input ng-required="saleEdit.sale.TwoDBarCodeOn.code == 1" ng-model="saleEdit.sale.GateGoodsCount" class="form-control"   type="number" ng-disabled="!(saleEdit.sale.TwoDBarCodeOn.code == 1)"/>
                                 </div>

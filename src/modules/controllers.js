@@ -3738,9 +3738,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     self.id = $stateParams.id;
     
     this.init = function() {
+      // 二维码 
       self.twoCodeOptions = [
-        {code:1,name:'On'},
-        {code:0,name:'Off'},
+        {code:1,value:"是"},
+        {code:0,value:"否"}
       ]
       $('.form_date').datetimepicker({
         language:  'zh-CN',
@@ -3774,6 +3775,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             var d = data.sale;
             d.price = parseFloat(d.price);
             self.sale = d;
+            // 返回的不是对象，在ng-options没法用
+            self.sale.TwoDBarCodeOn = (self.sale.TwoDBarCodeOn == 1) ? { code: 1, value: "是" } :{ code: 0, value: "否" };
 
             // 有效时间设置
             var sDate = $filter('date')(data.sale.saleDateStart, 'yyyy-MM-dd');

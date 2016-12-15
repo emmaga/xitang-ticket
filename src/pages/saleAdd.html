@@ -71,21 +71,21 @@
                             <div class="controls">
                                 <select required ng-model="saleAdd.TwoDBarCodeOn" class="form-control" id="twoCode">
                                     <option value="">- 二维码是否开启 -</option>
-                                    <option value="1">On</option>
-                                    <option value="0">Off</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
                                 </select>
                             </div>
                         </div>
                         <div >
                             <div class="form-group">
-                                <label class="required-info">对接YiGao的Id</label>
+                                <label class="required-info">易高产品的ID</label>
                                 <div class="controls">
                                     <input ng-required="saleAdd.TwoDBarCodeOn == 1" ng-model="saleAdd.GateGoodsID  " class="form-control"   type="text" ng-disabled="!(saleAdd.TwoDBarCodeOn == 1)"/>
                                        
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="required-info">对接YiGao的数量</label>
+                                <label class="required-info">易高票的数量</label>
                                 <div class="controls">
                                      <input ng-required="saleAdd.TwoDBarCodeOn == 1" ng-model="saleAdd.GateGoodsCount" class="form-control"   type="number" ng-disabled="!(saleAdd.TwoDBarCodeOn == 1)"/>
                                 </div>
