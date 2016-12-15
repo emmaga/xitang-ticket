@@ -3738,6 +3738,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     self.id = $stateParams.id;
     
     this.init = function() {
+      self.twoCodeOptions = [
+        {code:1,name:'On'},
+        {code:0,name:'Off'},
+      ]
       $('.form_date').datetimepicker({
         language:  'zh-CN',
         weekStart: 1,
@@ -3919,7 +3923,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.sale.validTimeStart = '00:00';
       self.sale.goodsId = self.myGoods.id;
       self.sale.partnerCode = self.myPartner.partnerCode;
-      self.sale.twoCode = self.twoCode;
+      
+
+      self.sale.TwoDBarCodeOn = self.sale.TwoDBarCodeOn.code || 0;
+      self.sale.GateGoodsID = self.sale.GateGoodsID || "0";
+      self.sale.GateGoodsCount = self.sale.GateGoodsCount || 0;
+
 
       var data = {
         "action": "Modify",
