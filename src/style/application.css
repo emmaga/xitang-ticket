@@ -188,12 +188,12 @@ tbody th{
 
 
 .col-left{
-  width: 240px !important;
+  width: 160px !important;
   float: left;
 }
 
 .col-right{
-  width: calc(100% - 240px) !important;
+  width: calc(100% - 160px) !important;
   float: right;
 }
 

@@ -34,6 +34,9 @@
             <td title="'分销商订单号'">
                 {{row.parterOrderId}}
             </td>
+            <td title="'辅助码'">
+                {{row.AssistCheckCode}}
+            </td>
             <td title="'商品名'">
                 {{row.goodsName}}
             </td>
@@ -66,8 +69,11 @@
                 <a ng-click="toBeChecked.showPersonDetail(row.orderId)" title="游客" class="btn btn-default btn-xs" style=""> 
                     <i class="glyphicon glyphicon-user"></i> 游客
                 </a>
-                <a ng-show="row.waitingTickets > 0" ng-click="toBeChecked.checkDetail(row.orderId)" title="检票" class="btn btn-primary btn-xs">
+                <a ng-show="(row.waitingTickets > 0) && (row.OrderTwoDBarCodeON == 0)" ng-click="toBeChecked.checkDetail(row.orderId)" title="检票" class="btn btn-primary btn-xs">
                     <i class="glyphicon glyphicon-check"></i> 检票
+                </a>
+                <a ng-show="(row.OrderTwoDBarCodeON == 1)"  title="二维码检票" class="btn btn-success btn-xs">
+                    二维码检票
                 </a>
             </td>
            
