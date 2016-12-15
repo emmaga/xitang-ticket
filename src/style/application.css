@@ -329,6 +329,10 @@ font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSa
 .pay-confirm:hover{
   background-color: #ddd
 }
+/**********禁用鼠标*/
+.pointerNotAllowed {
+  cursor:not-allowed;
+}
 
 
 

@@ -69,26 +69,25 @@
                         <div class="form-group">
                             <label class="required-info">二维码</label>
                             <div class="controls">
-                                <select required ng-model="saleAdd.twoCode" class="form-control" id="twoCode">
+                                <select required ng-model="saleAdd.TwoDBarCodeOn" class="form-control" id="twoCode">
                                     <option value="">- 二维码是否开启 -</option>
                                     <option value="1">On</option>
                                     <option value="0">Off</option>
                                 </select>
                             </div>
-                            {{saleAdd.twoCode}}
                         </div>
-                        <div ng-disabled="saleAdd.twoCode==0">
+                        <div >
                             <div class="form-group">
                                 <label class="required-info">对接YiGao的Id</label>
                                 <div class="controls">
-                                    <input required ng-model="saleAdd.GateGoodsID  " class="form-control"   type="text"/>
+                                    <input ng-required="saleAdd.TwoDBarCodeOn == 1" ng-model="saleAdd.GateGoodsID  " class="form-control"   type="text" ng-disabled="!(saleAdd.TwoDBarCodeOn == 1)"/>
                                        
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="required-info">对接YiGao的数量</label>
                                 <div class="controls">
-                                     <input required ng-model="saleAdd.GateGoodsCount" class="form-control"   type="text"/>
+                                     <input ng-required="saleAdd.TwoDBarCodeOn == 1" ng-model="saleAdd.GateGoodsCount" class="form-control"   type="number" ng-disabled="!(saleAdd.TwoDBarCodeOn == 1)"/>
                                 </div>
                             </div>
                         </div>

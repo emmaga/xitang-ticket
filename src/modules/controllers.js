@@ -3699,9 +3699,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       self.sale.goodsId = self.myGoods.id;
       self.sale.partnerCode = self.myPartner.partnerCode;
-      self.sale.twoCode = self.twoCode;
-      self.sale.GateGoodsID = self.GateGoodsID;
-      self.sale.GateGoodsCount = self.GateGoodsCount;
+      self.sale.TwoDBarCodeOn = (self.TwoDBarCodeOn - 0) || 0;
+      self.sale.GateGoodsID = self.GateGoodsID || "0";
+      self.sale.GateGoodsCount = self.GateGoodsCount || 0;
+
       var data = {
         "action": "Add",
         "account": $cookies.get('account'),
