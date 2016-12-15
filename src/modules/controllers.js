@@ -3780,6 +3780,12 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             $('#validTimeStart').val(data.sale.validTimeStart);
             $('#validTimeEnd').val(data.sale.validTimeEnd);
 
+            //二维码是否开启
+            // self.twoCode = data.sale.TwoDBarCodeOn;
+            $('#twoCode').val(data.sale.TwoDBarCodeOn)
+            $('#twoCode').removeClass('ng-invalid-required');
+
+
             self.initPartnersList();
             self.initpartnerConfig();
 
@@ -3910,6 +3916,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.sale.validTimeStart = '00:00';
       self.sale.goodsId = self.myGoods.id;
       self.sale.partnerCode = self.myPartner.partnerCode;
+      self.sale.twoCode = self.twoCode;
 
       var data = {
         "action": "Modify",
