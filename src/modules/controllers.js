@@ -3776,7 +3776,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             d.price = parseFloat(d.price);
             self.sale = d;
             // 返回的不是对象，在ng-options没法用
-            self.sale.TwoDBarCodeOn = (self.sale.TwoDBarCodeOn == 1) ? { code: 1, value: "是" } :{ code: 0, value: "否" };
+            self.sale.TwoDBarCodeOn = (self.sale.TwoDBarCodeOn == 1) ? self.twoCodeOptions[0] :self.twoCodeOptions[1];
 
             // 有效时间设置
             var sDate = $filter('date')(data.sale.saleDateStart, 'yyyy-MM-dd');
