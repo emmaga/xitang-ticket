@@ -67,6 +67,27 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="">可游玩时间</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="visitDateStart" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">开始</span>
+                                        <input id="visit-date-start" class="form-control cursor-pointer" size="16" type="text" value="" readonly>
+                                        <input type="hidden" id="visitDateStart" value="" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="visitDateEnd" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">结束</span>
+                                        <input id="visit-date-end" class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                                        <input type="hidden" id="visitDateEnd" value="" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="required-info">二维码</label>
                             <div class="controls">
                                 <select required ng-model="saleAdd.TwoDBarCodeOn" class="form-control" id="twoCode">

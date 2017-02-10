@@ -3737,6 +3737,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.sale.validTimeStart = '00:00';
       self.sale.validTimeEnd = $('#validTimeEnd').val();
 
+      // 可游玩时间
+      self.sale.visitDateStart = $('#visitDateStart').val() ? $('#visitDateStart').val() + ' 00:00:00' : '1970-01-01 00:00:00';
+      self.sale.visitDateEnd = $('#visitDateEnd').val() ? $('#visitDateEnd').val() + ' 23:59:59' : '2060-01-01 23:59:59';
+
+
       self.sale.goodsId = self.myGoods.id;
       self.sale.partnerCode = self.myPartner.partnerCode;
       self.sale.TwoDBarCodeOn = (self.TwoDBarCodeOn - 0) || 0;
@@ -3825,6 +3830,14 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             $('#sale-date-start').val(sDate);
             $('#rd_qcaxwa').val(eDate);
             $('#sale-date-end').val(eDate);
+
+            // visit date 可游玩时间设置
+            var vDateStart = $filter('date')(new Date(data.sale.visitDateStart), 'yyyy-MM-dd');
+            var vDateEnd = $filter('date')(new Date(data.sale.visitDateEnd), 'yyyy-MM-dd');
+            $('#visit-date-start').val(vDateStart);
+            $('#visitDateStart').val(vDateStart);
+            $('#visit-date-end').val(vDateEnd);
+            $('#visitDateEnd').val(vDateEnd);
 
             // 当天可买票时间设置
             $('#validTimeStart').val(data.sale.validTimeStart);
@@ -3951,8 +3964,14 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         return;
       }
 
+      // // 游玩时间 必填
+      // if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
+      //   alert('请输入有效时间');
+      //   return;
+      // }
+
       // 当天可买票时间 必填
-      if($('#validTimeEnd').val() == '' || $('#validTimeStart').val() == '') {
+      if($('#validTimeEnd').val() == '') {
         alert('请输入当天可买票时间');
         return;
       }
@@ -3962,6 +3981,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.sale.status = 'on';
       self.sale.saleDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
       self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
+      // 可游玩时间
+      self.sale.visitDateStart = $('#visitDateStart').val() ? $('#visitDateStart').val() + ' 00:00:00' : '1970-01-01 00:00:00';
+      self.sale.visitDateEnd = $('#visitDateEnd').val() ? $('#visitDateEnd').val() + ' 23:59:59' : '2060-01-01 23:59:59';
+
       self.sale.validTimeEnd = $('#validTimeEnd').val();
       self.sale.validTimeStart = '00:00';
       self.sale.goodsId = self.myGoods.id;
