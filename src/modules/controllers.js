@@ -806,6 +806,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           forceParse: 0,
           showMeridian: 1
         });
+        self.search(false);
       }
 
       self.sumFloat = function(data, field){
@@ -944,7 +945,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       };
 
       // ngtable
-      self.search = function() {
+      self.search = function(flag) {
         self.tableParams = new NgTableParams(
           {
             page: 1, 
@@ -959,42 +960,47 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
               var c = $scope.root.config;
               var url = c.requestUrl + '/statement' + c.extension;
-               //如果检票时间为空，默认设置为当天查询，如果某个时间为空
-              if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+              // 页面初始化时，添加默认时间段；页面点击时，不添加默认时间段
+              if (!flag) {
+                  //如果检票时间为空，默认设置为当天查询，如果某个时间为空
+                  if (!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
 
-                var sDate = new Date();
-                sDate.setHours(0);
-                sDate.setMinutes(0);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_qcaxwa').val(sDate);
-                $('#check-date-start').val(sDate);
+                      var sDate = new Date();
+                      sDate.setHours(0);
+                      sDate.setMinutes(0);
+                      sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+                      $('#rd_qcaxwa').val(sDate);
+                      $('#check-date-start').val(sDate);
 
-                var eDate = new Date();
-                eDate.setHours(23);
-                eDate.setMinutes(59);
-                eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_khaydt').val(eDate);
-                $('#check-date-end').val(eDate);
+                      var eDate = new Date();
+                      eDate.setHours(23);
+                      eDate.setMinutes(59);
+                      eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                      $('#rd_khaydt').val(eDate);
+                      $('#check-date-end').val(eDate);
 
+                  }
+                  // 仅开始时间为空时
+                  else if (!$('#rd_qcaxwa').val()) {
+                      var d = new Date($('#rd_khaydt').val());
+                      d.setHours(0);
+                      d.setMinutes(0);
+                      d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                      $('#rd_qcaxwa').val(d);
+                      $('#check-date-start').val(d);
+                  }
+                  // 仅结束时间为空时
+                  else if (!$('#rd_khaydt').val()) {
+                      var d = new Date($('#rd_qcaxwa').val());
+                      d.setHours(23);
+                      d.setMinutes(59);
+                      d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                      $('#rd_khaydt').val(d);
+                      $('#check-date-end').val(d);
+                  }
               }
-              // 仅开始时间为空时
-              else if(!$('#rd_qcaxwa').val()) {
-                var d = new Date($('#rd_khaydt').val());
-                d.setHours(0);
-                d.setMinutes(0);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_qcaxwa').val(d);
-                $('#check-date-start').val(d);
-              }
-              // 仅结束时间为空时
-              else if(!$('#rd_khaydt').val()) {
-                var d = new Date($('#rd_qcaxwa').val());
-                d.setHours(23);
-                d.setMinutes(59);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_khaydt').val(d);
-                $('#check-date-end').val(d);
-              }
+
+
 
               //读取成交日期
               self.checkDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
@@ -1225,6 +1231,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           forceParse: 0,
           showMeridian: 1
         });
+
       }
 
       self.sum = function(data, field){
@@ -1328,7 +1335,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       
 
       // ngtable 报表列表
-      self.search = function() {
+      self.search = function(flag) {
         self.showTable(true);
         self.tableParams = new NgTableParams(
           {
@@ -1346,43 +1353,47 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
               var c = $scope.root.config;
               var url = c.requestUrl + '/statement' + c.extension;
+              // 页面初始化时，添加默认时间段；页面点击时，不添加默认时间段
+              if (!flag) { 
+                //如果检票时间为空，默认设置为当天查询，如果某个时间为空，补全整个时间段前移或后移
+                if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
+
+                  var sDate = new Date();
+                  sDate.setHours(0);
+                  sDate.setMinutes(0);
+                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd  HH:mm');
+                  $('#rd_lptvht').val(sDate);
+                  $('#check-date-start').val(sDate);
+                  var eDate = new Date();
+                  eDate.setHours(23);
+                  eDate.setMinutes(59);
+                  eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_idwdiz').val(eDate);
+                  $('#check-date-end').val(eDate);
+
+                }
+                // 仅开始时间为空时
+                else if(!$('#rd_lptvht').val()) {
+                  var d = new Date($('#rd_idwdiz').val());
+                  d.setHours(0);
+                  d.setMinutes(0);
+                  
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_lptvht').val(d);
+                  $('#check-date-start').val(d);
+                }
+                // 仅结束时间为空时
+                else if(!$('#rd_idwdiz').val()) {
+                  var d = new Date($('#rd_lptvht').val());
+                   d.setHours(23);
+                   d.setMinutes(59);
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_idwdiz').val(d);
+                  $('#check-date-end').val(d);
+                }
+              }
                
-              //如果检票时间为空，默认设置为当天查询，如果某个时间为空，补全整个时间段前移或后移
-              if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
 
-                var sDate = new Date();
-                sDate.setHours(0);
-                sDate.setMinutes(0);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd  HH:mm');
-                $('#rd_lptvht').val(sDate);
-                $('#check-date-start').val(sDate);
-                var eDate = new Date();
-                eDate.setHours(23);
-                eDate.setMinutes(59);
-                eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_idwdiz').val(eDate);
-                $('#check-date-end').val(eDate);
-
-              }
-              // 仅开始时间为空时
-              else if(!$('#rd_lptvht').val()) {
-                var d = new Date($('#rd_idwdiz').val());
-                d.setHours(0);
-                d.setMinutes(0);
-                
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_lptvht').val(d);
-                $('#check-date-start').val(d);
-              }
-              // 仅结束时间为空时
-              else if(!$('#rd_idwdiz').val()) {
-                var d = new Date($('#rd_lptvht').val());
-                 d.setHours(23);
-                 d.setMinutes(59);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_idwdiz').val(d);
-                $('#check-date-end').val(d);
-              }
    
               //读取成交日期
               self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
@@ -1446,7 +1457,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         );
       };
       // ngtable 明细列表
-      self.searchDetail = function() {
+      self.searchDetail = function(flag) {
         self.showTable(false);
         self.detailTaleParams = new NgTableParams(
           {
@@ -1461,43 +1472,47 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
               var c = $scope.root.config;
               var url = c.requestUrl + '/statement' + c.extension;
-              // var url = '/xitang-ticket/src/api' + '/GetCheckStatementList.json'; 
-              //如果检票时间为空，默认设置为当天查询，如果某个时间为空，补全整个时间段前移或后移
-              if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
+              // var url = '/xitang-ticket/src/api' + '/GetCheckStatementList.json';
+              // 页面初始化时，添加默认时间段；页面点击时，不添加默认时间段
+              if (!flag) { 
+                //如果检票时间为空，默认设置为当天查询，如果某个时间为空，补全整个时间段前移或后移
+                if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
 
-                var sDate = new Date();
-                sDate.setHours(0);
-                sDate.setMinutes(0);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd  HH:mm');
-                $('#rd_lptvht').val(sDate);
-                $('#check-date-start').val(sDate);
-                var eDate = new Date();
-                eDate.setHours(23);
-                eDate.setMinutes(59);
-                eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_idwdiz').val(eDate);
-                $('#check-date-end').val(eDate);
+                  var sDate = new Date();
+                  sDate.setHours(0);
+                  sDate.setMinutes(0);
+                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd  HH:mm');
+                  $('#rd_lptvht').val(sDate);
+                  $('#check-date-start').val(sDate);
+                  var eDate = new Date();
+                  eDate.setHours(23);
+                  eDate.setMinutes(59);
+                  eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_idwdiz').val(eDate);
+                  $('#check-date-end').val(eDate);
 
-              }
-              // 仅开始时间为空时
-              else if(!$('#rd_lptvht').val()) {
-                var d = new Date($('#rd_idwdiz').val());
-                d.setHours(0);
-                d.setMinutes(0);
-                
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_lptvht').val(d);
-                $('#check-date-start').val(d);
-              }
-              // 仅结束时间为空时
-              else if(!$('#rd_idwdiz').val()) {
-                var d = new Date($('#rd_lptvht').val());
-                 d.setHours(23);
-                 d.setMinutes(59);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_idwdiz').val(d);
-                $('#check-date-end').val(d);
-              }
+                }
+                // 仅开始时间为空时
+                else if(!$('#rd_lptvht').val()) {
+                  var d = new Date($('#rd_idwdiz').val());
+                  d.setHours(0);
+                  d.setMinutes(0);
+                  
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_lptvht').val(d);
+                  $('#check-date-start').val(d);
+                }
+                // 仅结束时间为空时
+                else if(!$('#rd_idwdiz').val()) {
+                  var d = new Date($('#rd_lptvht').val());
+                   d.setHours(23);
+                   d.setMinutes(59);
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_idwdiz').val(d);
+                  $('#check-date-end').val(d);
+                }
+              } 
+
       
               //读取成交日期
               self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
@@ -1581,6 +1596,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           forceParse: 0,
           showMeridian: 1
         });
+        self.search(false);
       }
 
       self.sum = function(data, field){
@@ -1683,7 +1699,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       };
 
       // ngtable
-      self.search = function() {
+      self.search = function(flag) {
         self.tableParams = new NgTableParams(
           {
             page: 1, 
@@ -1698,42 +1714,47 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
               var c = $scope.root.config;
               var url = c.requestUrl + '/statement' + c.extension;
-              
-              //如果成交时间为空，默认设置为当天查询，如果某个时间为空，补全当天时间段
-              if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
-                
-                var sDate = new Date();
-                sDate.setHours(0);
-                sDate.setMinutes(0);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_qcaxwa').val(sDate);
-                $('#order-create-date-start').val(sDate);
-                var eDate = new Date();
-                eDate.setHours(23);
-                eDate.setMinutes(59);
-                var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_khaydt').val(eDate);
-                $('#order-create-date-end').val(eDate);
 
+              // 页面初始化时，添加默认时间段；页面点击时，不添加默认时间段
+              if (!flag) {
+                //如果成交时间为空，默认设置为当天查询，如果某个时间为空，补全当天时间段
+                if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+                  
+                  var sDate = new Date();
+                  sDate.setHours(0);
+                  sDate.setMinutes(0);
+                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_qcaxwa').val(sDate);
+                  $('#order-create-date-start').val(sDate);
+                  var eDate = new Date();
+                  eDate.setHours(23);
+                  eDate.setMinutes(59);
+                  var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_khaydt').val(eDate);
+                  $('#order-create-date-end').val(eDate);
+
+                }
+                // 仅开始时间为空时
+                else if(!$('#rd_qcaxwa').val()) {
+                  var d = new Date($('#rd_khaydt').val());
+                  d.setHours(0);
+                  d.setMinutes(0);
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_qcaxwa').val(d);
+                  $('#order-create-date-start').val(d);
+                }
+                // 仅结束时间为空时
+                else if(!$('#rd_khaydt').val()) {
+                  var d = new Date($('#rd_qcaxwa').val());
+                  d.setHours(23);
+                  d.setMinutes(59);
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_khaydt').val(d);
+                  $('#order-create-date-end').val(d);
+                }
               }
-              // 仅开始时间为空时
-              else if(!$('#rd_qcaxwa').val()) {
-                var d = new Date($('#rd_khaydt').val());
-                d.setHours(0);
-                d.setMinutes(0);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_qcaxwa').val(d);
-                $('#order-create-date-start').val(d);
-              }
-              // 仅结束时间为空时
-              else if(!$('#rd_khaydt').val()) {
-                var d = new Date($('#rd_qcaxwa').val());
-                d.setHours(23);
-                d.setMinutes(59);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_khaydt').val(d);
-                $('#order-create-date-end').val(d);
-              }
+              
+
               
               //读取成交日期
               self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
@@ -1794,6 +1815,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           }
         );
       };
+
+
     }
   ]);
   // 改签报表 
@@ -1812,6 +1835,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           forceParse: 0,
           showMeridian: 1
         });
+        self.search(false)
       }
 
       self.sum = function(data, field){
@@ -1909,7 +1933,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       };
 
       // ngtable
-      self.search = function() {
+      self.search = function(flag) {
         self.tableParams = new NgTableParams(
           {
             page: 1, 
@@ -1925,43 +1949,47 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var c = $scope.root.config;
               // var url = c.requestUrl + '/GetUpdateVisitDateStatus' + c.extension;
               var url = c.requestUrl + '/orders' + c.extension;
+              // 页面初始化时，添加默认时间段；页面点击时，不添加默认时间段
+              if (!flag) { 
+                //如果成交时间为空，默认设置为当天查询，如果某个时间为空，补全整个时间段前移或后移
+                if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
 
-              //如果成交时间为空，默认设置为当天查询，如果某个时间为空，补全整个时间段前移或后移
-              if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+                  var sDate = new Date();
+                  sDate.setHours(0);
+                  sDate.setMinutes(0);
+                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_qcaxwa').val(sDate);
+                  $('#order-create-date-start').val(sDate);
 
-                var sDate = new Date();
-                sDate.setHours(0);
-                sDate.setMinutes(0);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_qcaxwa').val(sDate);
-                $('#order-create-date-start').val(sDate);
+                  var eDate = new Date();
+                  eDate.setHours(23);
+                  eDate.setMinutes(59);
+                  var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_khaydt').val(eDate);
+                  $('#order-create-date-end').val(eDate);
 
-                var eDate = new Date();
-                eDate.setHours(23);
-                eDate.setMinutes(59);
-                var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_khaydt').val(eDate);
-                $('#order-create-date-end').val(eDate);
-
+                }
+                // 仅开始时间为空时
+                else if(!$('#rd_qcaxwa').val()) {
+                  var d = new Date($('#rd_khaydt').val());
+                  d.setHours(0);
+                  d.setMinutes(0);
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_qcaxwa').val(d);
+                  $('#order-create-date-start').val(d);
+                }
+                // 仅结束时间为空时
+                else if(!$('#rd_khaydt').val()) {
+                  var d = new Date($('#rd_qcaxwa').val());
+                  d.setHours(23);
+                  d.setMinutes(59);
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                  $('#rd_khaydt').val(d);
+                  $('#order-create-date-end').val(d);
+                }
               }
-              // 仅开始时间为空时
-              else if(!$('#rd_qcaxwa').val()) {
-                var d = new Date($('#rd_khaydt').val());
-                d.setHours(0);
-                d.setMinutes(0);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_qcaxwa').val(d);
-                $('#order-create-date-start').val(d);
-              }
-              // 仅结束时间为空时
-              else if(!$('#rd_khaydt').val()) {
-                var d = new Date($('#rd_qcaxwa').val());
-                d.setHours(23);
-                d.setMinutes(59);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_khaydt').val(d);
-                $('#order-create-date-end').val(d);
-              }
+
+
 
               //改签时间
               self.updateVisitDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
@@ -2041,6 +2069,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           forceParse: 0,
           showMeridian: 1
         });
+
+        self.search(false);
       }
 
       self.sum = function(data, field){
@@ -2143,7 +2173,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       // ngtable
       // 游客信息（身份证） 获取
-      self.search = function() {
+      self.search = function(flag) {
         self.tableParams = new NgTableParams(
           {
             page: 1, 
@@ -2160,40 +2190,45 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var url = c.requestUrl + '/statement' + c.extension;
               // var url = c.requestUrl + '/GetBookerDetailStatement' + c.extension;
 
-              // 如果成交时间为空，默认设置为当天查询，
-              if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
-                var sDate = new Date();
-                sDate.setHours(0);
-                sDate.setMinutes(0);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_qcaxwa').val(sDate);
-                $('#check-date-start').val(sDate);
-                var eDate = new Date();
-                eDate.setHours(23);
-                eDate.setMinutes(59);
-                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_khaydt').val(eDate);
-                $('#check-date-end').val(eDate);
+              // 页面初始化时，添加默认时间段；页面点击时，不添加默认时间段
+              if (!flag) {
+                  // 如果成交时间为空，默认设置为当天查询，
+                  if (!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+                      var sDate = new Date();
+                      sDate.setHours(0);
+                      sDate.setMinutes(0);
+                      sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+                      $('#rd_qcaxwa').val(sDate);
+                      $('#check-date-start').val(sDate);
+                      var eDate = new Date();
+                      eDate.setHours(23);
+                      eDate.setMinutes(59);
+                      var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
+                      $('#rd_khaydt').val(eDate);
+                      $('#check-date-end').val(eDate);
 
+                  }
+                  // 仅开始时间为空时
+                  else if (!$('#rd_qcaxwa').val()) {
+                      var d = new Date($('#rd_khaydt').val());
+                      d.setHours(0);
+                      d.setMinutes(0);
+                      d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                      $('#rd_qcaxwa').val(d);
+                      $('#check-date-start').val(d);
+                  }
+                  // 仅结束时间为空时
+                  else if (!$('#rd_khaydt').val()) {
+                      var d = new Date($('#rd_qcaxwa').val());
+                      d.setHours(23);
+                      d.setMinutes(59);
+                      d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                      $('#rd_khaydt').val(d);
+                      $('#check-date-end').val(d);
+                  }
               }
-              // 仅开始时间为空时
-              else if(!$('#rd_qcaxwa').val()) {
-                var d = new Date($('#rd_khaydt').val());
-                d.setHours(0);
-                d.setMinutes(0);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_qcaxwa').val(d);
-                $('#check-date-start').val(d);
-              }
-              // 仅结束时间为空时
-              else if(!$('#rd_khaydt').val()) {
-                var d = new Date($('#rd_qcaxwa').val());
-                d.setHours(23);
-                d.setMinutes(59);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                $('#rd_khaydt').val(d);
-                $('#check-date-end').val(d);
-              }
+
+
 
               //读取成交日期
               self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
@@ -2523,6 +2558,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           forceParse: 0,
           showMeridian: 1
         });
+        self.search(false);
       }
       self.export = function() {
         var c = $scope.root.config;
@@ -2610,7 +2646,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       }
 
       // ngtable
-      self.search = function() {
+      self.search = function(flag) {
         self.tableParams = new NgTableParams(
           {
             page: 1, 
@@ -2623,37 +2659,41 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               var paramsUrl = params.url();
               var c = $scope.root.config;
               var url = c.requestUrl + '/orders' + c.extension;
+              // 页面初始化时，添加默认时间段；页面点击时，不添加默认时间段
+              if (!flag) { 
+                // 如果成交时间为空，默认设置三天查询，如果某个时间为空，补全整个时间段前移或后移三天
+                if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+                  var sDate = new Date();
+                  sDate.setDate(sDate.getDate() - 3);
+                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
+                  $('#rd_qcaxwa').val(sDate);
+                  $('#order-create-date-start').val(sDate);
 
+                  var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
+                  $('#rd_khaydt').val(eDate);
+                  $('#order-create-date-end').val(eDate);
+
+                }
+                // 仅开始时间为空时
+                else if(!$('#rd_qcaxwa').val()) {
+                  var d = new Date($('#rd_khaydt').val());
+                  d.setDate(d.getDate() - 3);
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+                  $('#rd_qcaxwa').val(d);
+                  $('#order-create-date-start').val(d);
+                }
+                // 仅结束时间为空时
+                else if(!$('#rd_khaydt').val()){
+                  var d = new Date($('#rd_qcaxwa').val());
+                  d.setDate(d.getDate() + 3);
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+                  $('#rd_khaydt').val(d);
+                  $('#order-create-date-end').val(d);
+                }
+
+              }
               
-              // 如果成交时间为空，默认设置三天查询，如果某个时间为空，补全整个时间段前移或后移三天
-              if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
-                var sDate = new Date();
-                sDate.setDate(sDate.getDate() - 3);
-                sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
-                $('#rd_qcaxwa').val(sDate);
-                $('#order-create-date-start').val(sDate);
 
-                var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
-                $('#rd_khaydt').val(eDate);
-                $('#order-create-date-end').val(eDate);
-
-              }
-              // 仅开始时间为空时
-              else if(!$('#rd_qcaxwa').val()) {
-                var d = new Date($('#rd_khaydt').val());
-                d.setDate(d.getDate() - 3);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
-                $('#rd_qcaxwa').val(d);
-                $('#order-create-date-start').val(d);
-              }
-              // 仅结束时间为空时
-              else if(!$('#rd_khaydt').val()){
-                var d = new Date($('#rd_qcaxwa').val());
-                d.setDate(d.getDate() + 3);
-                d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
-                $('#rd_khaydt').val(d);
-                $('#order-create-date-end').val(d);
-              }
 
               //读取成交日期
               self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';

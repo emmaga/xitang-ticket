@@ -57,10 +57,10 @@
         <button ng-click="checkStatement.export()" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
         </button>
-        <button class="btn btn-default" ng-click="checkStatement.searchDetail()" href>
+        <button class="btn btn-default" ng-click="checkStatement.searchDetail(true)" href>
             <i class="glyphicon glyphicon-list"></i> 明细
         </button>
-        <button class="btn btn-primary" ng-click="checkStatement.search()" href>
+        <button class="btn btn-primary" ng-click="checkStatement.search(true)" href>
             <i class="glyphicon glyphicon-search"></i> 报表
         </button>
         
@@ -74,7 +74,7 @@
     <div ng-show="checkStatement.showStatement">
         <!-- <div ng-show="checkStatement.loading">loading...</div>
         <div ng-show="checkStatement.noData">无数据</div> -->
-        <table ng-table="checkStatement.tableParams" ng-init="checkStatement.search()" class="table table-hover table-striped" >
+        <table ng-table="checkStatement.tableParams" ng-init="checkStatement.search(false)" class="table table-hover table-striped" >
             <colgroup>
                 <col width="40%" />
                 <col width="15%" />
@@ -134,7 +134,7 @@
     
     <!-- 明细列表 -->
     <div ng-show="!checkStatement.showStatement">    
-        <table ng-table="checkStatement.detailTaleParams" ng-init="checkStatement.search()" class="table table-hover table-striped" >
+        <table ng-table="checkStatement.detailTaleParams" ng-init="checkStatement.search(false)" class="table table-hover table-striped" >
             <tr  ng-repeat="row in $data" >
                 <td data-title="'分销商'" groupable="'partnerCode'" ng-if="false">
                     {{row.partnerCode}}

@@ -72,7 +72,7 @@
         <button ng-click="exportBookerDetailStatement.export()" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
         </button>
-        <button class="btn btn-primary" ng-click="exportBookerDetailStatement.search()" href>
+        <button class="btn btn-primary" ng-click="exportBookerDetailStatement.search(true)" href>
             <i class="glyphicon glyphicon-search"></i>搜索
         </button>
     </div>
@@ -81,7 +81,7 @@
     <hr class="break-space-double">
     <hr class="break-space-double">
 
-    <table ng-table="exportBookerDetailStatement.tableParams" ng-init="exportBookerDetailStatement.search()" class="table table-hover table-striped">
+    <table ng-table="exportBookerDetailStatement.tableParams"  class="table table-hover table-striped">
         <colgroup>
           <col width="10%" />
           <col width="10%" />

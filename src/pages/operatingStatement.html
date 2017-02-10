@@ -64,7 +64,7 @@
         <button ng-click="operatingStatement.export()" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
         </button>
-        <button class="btn btn-primary" ng-click="operatingStatement.search()" href>
+        <button class="btn btn-primary" ng-click="operatingStatement.search(true)" href>
             <i class="glyphicon glyphicon-search"></i>搜索
         </button>
     </div>
@@ -73,7 +73,7 @@
     <hr class="break-space-double">
     <hr class="break-space-double">
 
-    <table ng-table="operatingStatement.tableParams" ng-init="operatingStatement.search()" class="table table-hover table-striped">
+    <table ng-table="operatingStatement.tableParams"  class="table table-hover table-striped">
         <colgroup>
           <col width="30%" />
           <col width="15%" />
