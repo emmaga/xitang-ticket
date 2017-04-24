@@ -6,7 +6,8 @@
     'app.controllers',
     'app.directive',
     'app.filters',
-    'app.services'
+    'app.services',
+    'ng-fusioncharts'
   ]);
 
   app.config(function($stateProvider, $urlRouterProvider) {
@@ -156,6 +157,17 @@
           }
         }
       })
+      .state('checkTourist', {
+          url: '/checkTourist',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@checkTourist': {
+                  templateUrl: 'pages/checkTourist.html'
+              }
+          }
+      })
       .state('operatingStatement', {
         url: '/operatingStatement',
         views: {
@@ -265,6 +277,50 @@
             templateUrl: 'pages/applyRoles.html'
           }
         }
+      })
+      .state('ordersCharts',{
+        url:'/ordersCharts',
+        views:{
+          '':{
+            templateUrl:'pages/main.html'
+          },
+          'mainFrame.body@ordersCharts':{
+            templateUrl:'pages/ordersCharts.html'
+          }
+        }
+      })
+      .state('monthlySales', {
+          url: '/monthlySales',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@monthlySales': {
+                  templateUrl: 'pages/monthlySales.html'
+              }
+          }
+      })
+      .state('goodsRate', {
+          url: '/goodsRate',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@goodsRate': {
+                  templateUrl: 'pages/goodsRate.html'
+              }
+          }
+      })
+      .state('yearlySales', {
+          url: '/yearlySales',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@yearlySales': {
+                  templateUrl: 'pages/yearlySales.html'
+              }
+          }
       })
   });
 

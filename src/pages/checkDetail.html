@@ -1,0 +1,43 @@
+<div ng-controller="checkDetailController as checkDetail" ng-init="checkDetail.init()">
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display:block">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button ng-click="checkDetail.close()" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">检票详情</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- info -->
+                    <table class="table table-condensed">
+                        <tr>
+                            <th>检票时间</th>
+                            <th>检票员账号</th>
+                            <th>检票员ID</th>
+                            <th>检票员</th>
+                        </tr>
+                        <tr  ng-repeat="row in checkDetail.users">
+                            <td title="'检票时间'">
+                                {{row.CheckTime}}
+                            </td>
+                            <td title="'检票员账号'">
+                                {{row.CheckCount}}
+                            </td>
+                            <td title="'检票员ID'">
+                                {{row.CheckUserID}}
+                            </td>
+                            <td title="'检票员'">
+                                {{row.CheckUserName}}
+                            </td>
+                        </tr>
+
+
+                    </table>
+                    <!-- info end -->
+                </div>
+                <div class="modal-footer">
+                    <button ng-click="checkDetail.close()" type="button" class="btn btn-default" data-dismiss="modal">完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,185 @@
+<div ng-controller="checkTouristController as checkTourist" ng-init="checkTourist.init()">
+    <a>
+        <strong>
+            <i class="glyphicon glyphicon-list-alt"></i>
+            报表中心
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            游客查询
+        </strong>
+    </a>
+    <hr>
+    <div class="row" ng-init="checkTourist.checkStatus = 'all'; checkTourist.isExpired = 'all'">
+        <div class="controls btn-group col-sm-6 col-condensed">
+            <label>检票状态</label>
+            <select ng-model="checkTourist.checkStatus" class="form-control">
+                <option value="all" class="" selected="selected">全部</option>
+                <option label="已检票" value="checked">已检票</option>
+                <option label="待检票" value="waiting">待检票</option>
+                <option label="部分检票中" value="checking">部分检票中</option>
+                <option label="已退票" value="refund">已退票</option>
+            </select>
+        </div>
+        <div class="controls btn-group col-sm-6 col-condensed">
+            <label>是否过期</label>
+            <select ng-model="checkTourist.isExpired" class="form-control">
+                <option value="all" class="" selected="selected">全部</option>
+                <option label="未过期" value="no">未过期</option>
+                <option label="已过期" value="yes">已过期</option>
+            </select>
+        </div>
+    </div>
+    <hr class="break-space">
+    <div class="row">
+
+        <div class="col-sm-2 col-condensed">
+            <label>成交时间开始</label>
+            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">开始</span> -->
+                <input id="order-create-date-start" class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_qcaxwa" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+
+            </div>
+        </div>
+        <div class="col-sm-2 col-condensed">
+            <label>成交时间结束</label>
+            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">结束</span> -->
+                <input id="order-create-date-end" class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_khaydt" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+
+            </div>
+        </div>
+        <div class="col-sm-2 col-condensed">
+            <label>游玩时间开始</label>
+            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">开始</span> -->
+                <input class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_lptvht" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+
+            </div>
+        </div>
+        <div class="col-sm-2 col-condensed">
+            <label>游玩时间结束</label>
+            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">结束</span> -->
+                <input class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_idwdiz" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+
+            </div>
+        </div>
+        <div class="col-sm-2 col-condensed">
+            <label>检票时间开始</label>
+            <div class="input-group date form_datetime"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_zpqvrt">
+                <!-- <span class="input-group-addon ">开始</span> -->
+                <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_zpqvrt" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div>
+        <div class="col-sm-2 col-condensed">
+            <label>检票时间结束</label>
+            <div class="input-group date form_datetime"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_fiekwn">
+                <!-- <span class="input-group-addon ">结束</span> -->
+                <input id="check-date-end" class="form-control " size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_fiekwn" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <hr class="break-space">
+
+    <div class="input-group flex-box multi-input">
+        <input ng-model="checkTouristr.bookPerson" type="text" class="flex-item form-control" placeholder="预订人">
+        <input ng-model="checkTourist.bookMobile" type="text" class="flex-item form-control" placeholder="手机">
+        <input ng-model="checkTourist.orderTicketCode" type="text" class="flex-item form-control" placeholder="辅助码">
+        <input ng-model="checkTourist.orderId" type="number" class="flex-item form-control" placeholder="订单号">
+        <input ng-model="checkTourist.parterOrderId" type="text" class="flex-item form-control" placeholder="分销商订单号">
+        <input ng-model="checkTourist.partnerName" type="text" class="flex-item form-control" placeholder="分销商">
+        <input ng-model="checkTourist.goodsName" type="text" class="flex-item form-control" placeholder="商品名">
+        <input ng-model="checkTourist.bookerID" type="text" class="flex-item form-control" placeholder="证件号">
+
+    </div>
+    <hr class="break-space">
+    <div class="controls pull-right">
+        <button ng-click="checkTourist.export()" class="btn btn-default">
+            <i class="glyphicon glyphicon-export"></i> 导出
+        </button>
+        <button class="btn btn-primary" ng-click="checkTourist.search()" href>
+            <i class="glyphicon glyphicon-search"></i>搜索
+        </button>
+    </div>
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+
+    <table ng-table="checkTourist.tableParams"  class="table table-hover table-striped">
+        <tr ng-repeat="row in $data">
+            <td title="'订单号'">
+                {{row.orderId}}
+            </td>
+            <td title="'分销商订单号'">
+                {{row.parterOrderId}}
+            </td>
+            <td title="'商品名'">
+                {{row.goodsName}}
+            </td>
+            <td title="'单价'">
+                ￥{{row.price}}
+            </td>
+            <td title="'预订人'">
+                {{row.bookPerson}}
+            </td>
+            <td title="'手机号'">
+                {{row.bookMobile}}
+            </td>
+            <td title="'分销商'">
+                {{row.partnerName}}
+            </td>
+            <td title="'成交时间'">
+                {{row.orderCreateTime | date:'yyyy.MM.dd HH:mm'}}
+            </td>
+            <td title="'游玩时间'">
+                {{row.visitDateStart | date:'yyyy.MM.dd'}} ~ {{row.visitDateEnd | date:'yyyy.MM.dd'}}
+            </td>
+            <td title="'数量'">
+                {{row.totalTickets}}
+            </td>
+            <td title="'已检'">
+                {{row.checkedTickets}}
+            </td>
+            <td title="'退票'">
+                {{row.returnedTickets}}
+            </td>
+            <td title="'状态'">
+                {{row.checkStatus | checkStatus}}
+            </td>
+            <td title="'过期'">
+                {{row.isExpired | isExpired}}
+            </td>
+            <td title="'操作'">
+                <a ng-click="checkTourist.showDetail(row.orderId)" title="明细" class="btn btn-default btn-xs table-action-btn">
+                    <i class="glyphicon glyphicon-list"></i> 明细
+                </a>
+                <a ng-click="checkTourist.showPersonDetail(row.orderId)" title="游客" class="btn btn-default btn-xs table-action-btn">
+                    <i class="glyphicon glyphicon-user"></i> 游客
+                </a>
+                <a ng-click="checkTourist.showCheckDetail(row.orderId)" title="游客" class="btn btn-default btn-xs table-action-btn">
+                    <i class="glyphicon glyphicon-user"></i> 检票详情
+                </a>
+            </td>
+
+        </tr>
+    </table>
+    <div ng-show="checkTourist.loading">loading...</div>
+    <div ng-show="checkTourist.noData">无数据</div>
+</div>

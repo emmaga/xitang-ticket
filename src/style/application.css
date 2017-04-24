@@ -334,9 +334,47 @@ font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSa
   cursor:not-allowed;
 }
 
-
-
-
-
-
+.inline-title{
+  text-align: right;
+  height: 34px;
+  line-height: 34px;
+  padding: 0 12px;
+}
+.good-name{
+  margin-left: 10px;
+}
+.distributor-name{
+  margin-left: -30px;
+}
+.orders-chart-search{
+  margin-right: 35px;
+}
+#orders-chart{
+  width: 600px;
+  height: 400px;
+}
+#orders-charts-content{
+  width: 400px;
+  height: 400px;
+  float:left;
+}
+#orders-charts-title{
+  float: right;
+  width: 240px;
+}
+.list-left{
+  width: 120px;
+  display: inline-block;
+}
+.orders-chart{
+  float: left;
+}
+#orders-charts-list{
+  margin-top: 135px;
+}
+#orders-charts-tab td{
+  border: 1px solid;
+  width: 78px;
+  text-align: center;
+}
 

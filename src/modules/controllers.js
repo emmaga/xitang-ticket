@@ -75,6 +75,7 @@
         case 'exportStatementsList':
         case 'checkDetailStatement':
         case 'operatingStatement':
+        case 'checkTourist':
         case 'checkStatement':
         case 'exportBookerDetailStatement':
         case 'updateVisitStatement':
@@ -90,6 +91,12 @@
         case 'personalInfo':
           $scope.$state = 'personal';
           break;
+        case 'ordersCharts':
+        case 'monthlySales':
+        case 'goodsRate':
+        case 'yearlySales':
+            $scope.$state = 'charts';
+            break;
       }
       if( !this.auth($scope.$state) ) {
         alert('抱歉，您无权限访问该页面');
@@ -2532,7 +2539,74 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     
   ]);
 
-  app.controller('ordersListController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
+  //检票信息
+  app.controller('checkDetailController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 'auth',
+        function($scope, $state, $stateParams, $http, $cookies, $location, $filter, auth) {
+            console.log('checkDetail');
+            var self = this;
+
+            self.id = $scope.root.coverParamId;
+
+            self.close = function() {
+                $scope.root.coverUrl = '';
+                $scope.root.coverParamId = '';
+
+
+            };
+            // 保存按钮，不可重复点击
+            self.submitting = false;
+            self.saveTxt = '保存';
+            self.updateVisitDate=function(){
+
+                $('#visitTimeHidden').datetimepicker('show').on('changeDate', function(ev){
+                    $scope.$apply(function(){
+                            self.orders.visitDateStart = $('#updateDate').val();
+                            self.orders.visitDateEnd = $('#updateDate').val();
+                            self.visitDate = $('#updateDate').val();
+                            self.showSave = true;
+                        }
+                    );
+                });
+            }
+            // get data
+            var c = $scope.root.config;
+            // var url = c.requestUrl + '/ordersDetail' + c.extension;
+            var url = c.requestUrl + '/orders' + c.extension;
+
+            var data = {
+                "action": "GetOrderCheckDetailInfo",
+                "token": $cookies.get('token'),
+                "projectName": $cookies.get('projectName'),
+                "orderId": self.id + ""
+            };
+            data = JSON.stringify(data);
+
+            $http.post(url, data).then(function successCallback(response) {
+                var data = response.data;
+
+                if(data.rescode === 200) {
+                    self.users = data.orderCheckInfo;
+
+                }else if(data.rescode === 401){
+                    alert('登录超时，请重新登录');
+                    $location.path('/index');
+                }else {
+                    alert(data.errInfo);
+                }
+            }, function errorCallback(response) {
+                alert('读取信息失败');
+            });
+            // 超级管理员 权限问题
+            self.auth = function(authName) { return auth($cookies.get('roleId'), authName) };
+            self.init = function() {
+                self.userName = $cookies.get('userName');
+                $scope.$state = 'admin';
+            };
+        }
+
+    ]);
+
+  app.controller('ordersListController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
     function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
       console.log('ordersList');
       var self = this;
@@ -4023,5 +4097,731 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         });
     }
   }]);
+  app.controller('checkTouristController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+        function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+            console.log('checkTourist');
+            var self = this;
+            self.init = function() {
+                $('.form_date').datetimepicker({
+                    language:  'zh-CN',
+                    weekStart: 1,
+                    todayBtn:  1,
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 2,
+                    minView: 2,
+                    forceParse: 0,
+                    showMeridian: 1
+                });
+                $('.form_datetime').datetimepicker({
+                    language:  'zh-CN',
+                    weekStart: 1,
+                    todayBtn:  1,
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 2,
+                    forceParse: 0,
+                    showMeridian: 1
+                });
+            }
+            self.export = function() {
+                var c = $scope.root.config;
+                var url = c.requestUrl + '/orders' + c.extension;
+
+                // 如果成交时间为空，默认设置三天查询，如果某个时间为空，补全整个时间段前移或后移三天
+                if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+                    var sDate = new Date();
+                    sDate.setDate(sDate.getDate() - 3);
+                    sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
+                    $('#rd_qcaxwa').val(sDate);
+                    $('#order-create-date-start').val(sDate);
+
+                    var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
+                    $('#rd_khaydt').val(eDate);
+                    $('#order-create-date-end').val(eDate);
+
+                }
+                // 仅开始时间为空时
+                else if(!$('#rd_qcaxwa').val()) {
+                    var d = new Date($('#rd_khaydt').val());
+                    d.setDate(d.getDate() - 3);
+                    d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+                    $('#rd_qcaxwa').val(d);
+                    $('#order-create-date-start').val(d);
+                }
+                // 仅结束时间为空时
+                else if(!$('#rd_khaydt').val()){
+                    var d = new Date($('#rd_qcaxwa').val());
+                    d.setDate(d.getDate() + 3);
+                    d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+                    $('#rd_khaydt').val(d);
+                    $('#order-create-date-end').val(d);
+                }
+
+                //读取成交日期
+                self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
+                self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
+
+                //读取游玩日期
+                self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' 00:00:00').getTime() : '';
+                self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' 23:59:59').getTime() : '';
+
+                var data = {
+                    "action": "Export",
+                    "account": $cookies.get('account'),
+                    "token": $cookies.get('token'),
+                    "projectName": $cookies.get('projectName'),
+                    "sortBy": "OrderCreateTime",
+                    "orderBy": "desc",
+                    "search": {
+                        "orderId": self.orderId ? self.orderId : "",
+                        "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
+                        "bookPerson": self.bookPerson ? self.bookPerson : "",
+                        "bookMobile": self.bookMobile ? self.bookMobile : "",
+                        "orderTicketCode": self.orderTicketCode ? self.orderTicketCode : "",
+                        "bookerIDType": self.bookerIDType ? self.bookerIDType : "",      //  ID_CARD是身份证
+                        "bookerID": self.bookerID ? self.bookerID : "",  //身份证号
+                        "goodsName": self.goodsName ? self.goodsName : "",
+                        "checkStatus": self.checkStatus ? self.checkStatus : "all", //checked：已检票，checking：检票中，waiting：待检票
+                        "partnerName": self.partnerName ? self.partnerName : "",
+                        "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart : "", //成交日期开始
+                        "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd : "", //成交日期结束
+                        "visitDateStart": self.visitDateStart ? self.visitDateStart : "",
+                        "visitDateEnd": self.visitDateEnd ? self.visitDateEnd : "",
+                        "isExpired": self.isExpired ? self.isExpired : "all"
+                    }
+                };
+
+                $http.post(url, data).then(function successCallback(response) {
+                    var data = response.data;
+                    if(data.rescode === 200) {
+                        if (confirm('导出中，导出成功后会在“报表中心－导出列表”中显示，是否前往查看？')) {
+                            $location.path('/exportStatementsList');
+                        }
+                    }else if(data.rescode === 401){
+                        alert('登录超时，请重新登录');
+                        $location.path('/index');
+                    }else {
+                        alert(data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('导出失败，请重试');
+                });
+            }
+
+            // ngtable
+            self.search = function() {
+                self.tableParams = new NgTableParams(
+                    {
+                        page: 1,
+                        count: 15,
+                        url: ''
+                    },
+                    {
+                        counts: [15, 30],
+                        getData: function(params) {
+                            var paramsUrl = params.url();
+                            var c = $scope.root.config;
+                            var url = c.requestUrl + '/orders' + c.extension;
+                            // 页面初始化时，添加默认时间段；页面点击时，不添加默认时间段
+                                // 如果成交时间为空，默认设置三天查询，如果某个时间为空，补全整个时间段前移或后移三天
+                                if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
+                                    var sDate = new Date();
+                                    sDate.setDate(sDate.getDate() - 3);
+                                    sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
+                                    $('#rd_qcaxwa').val(sDate);
+                                    $('#order-create-date-start').val(sDate);
+
+                                    var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
+                                    $('#rd_khaydt').val(eDate);
+                                    $('#order-create-date-end').val(eDate);
+
+                                }
+                                // 仅开始时间为空时
+                                else if(!$('#rd_qcaxwa').val()) {
+                                    var d = new Date($('#rd_khaydt').val());
+                                    d.setDate(d.getDate() - 3);
+                                    d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+                                    $('#rd_qcaxwa').val(d);
+                                    $('#order-create-date-start').val(d);
+                                }
+                                // 仅结束时间为空时
+                                else if(!$('#rd_khaydt').val()){
+                                    var d = new Date($('#rd_qcaxwa').val());
+                                    d.setDate(d.getDate() + 3);
+                                    d = $filter('date')(d.getTime(), 'yyyy-MM-dd');
+                                    $('#rd_khaydt').val(d);
+                                    $('#order-create-date-end').val(d);
+                                }
+
+
+
+                            //读取成交日期
+                            self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
+                            self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
+
+                            //读取游玩日期
+                            self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' 00:00:00').getTime() : '';
+                            self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' 23:59:59').getTime() : '';
+
+                            // 检票时间
+                            self.checkDateStart = $('#rd_zpqvrt').val() ? $filter('emptySec')(new Date($('#rd_zpqvrt').val())).getTime() : '';
+                            self.checkDateEnd = $('#rd_fiekwn').val() ? $filter('emptySec')(new Date($('#rd_fiekwn').val())).getTime() : '';
+
+                            var data = {
+                                "action": "GetOrderCheckList",
+                                "account": $cookies.get('account'),
+                                "token": $cookies.get('token'),
+                                "projectName": $cookies.get('projectName'),
+                                "sortBy": "OrderCreateTime",
+                                "orderBy": "desc",
+                                "count": paramsUrl.count, //一页显示数量
+                                "page": paramsUrl.page,   //当前页
+                                "search": {
+                                    "orderId": self.orderId ? self.orderId : "",
+                                    "parterOrderId": self.parterOrderId ? self.parterOrderId : "",
+                                    "bookPerson": self.bookPerson ? self.bookPerson : "",
+                                    "bookMobile": self.bookMobile ? self.bookMobile : "",
+                                    "orderTicketCode": self.orderTicketCode ? self.orderTicketCode : "",
+                                    "bookerIDType": self.bookerIDType ? self.bookerIDType : "",      //  ID_CARD是身份证
+                                    "bookerID": self.bookerID ? self.bookerID : "",  //身份证号
+                                    "goodsName": self.goodsName ? self.goodsName : "",
+                                    "checkStatus": self.checkStatus ? self.checkStatus : "all", //checked：已检票，checking：检票中，waiting：待检票
+                                    "partnerName": self.partnerName ? self.partnerName : "",
+                                    "orderCreateDateStart": self.orderCreateDateStart ? self.orderCreateDateStart+"" : "", //成交日期开始
+                                    "orderCreateDateEnd": self.orderCreateDateEnd ? self.orderCreateDateEnd+"" : "", //成交日期结束
+                                    "visitDateStart": self.visitDateStart ? self.visitDateStart : "",
+                                    "visitDateEnd": self.visitDateEnd ? self.visitDateEnd : "",
+                                    "checkDateStart": self.checkDateStart ? self.checkDateStart : "", //检票时间开始   年月日，时分
+                                    "checkDateEnd": self.checkDateEnd ? self.checkDateEnd : "",    //检票时间开始   年月日，时分
+                                    "isExpired": self.isExpired ? self.isExpired : "all"
+                                }
+                            };
+                            data = JSON.stringify(data);
+                            self.loading = true;
+                            self.noData = false;
+
+                            return $http.post(url, data).then(function successCallback(response) {
+                                self.loading = false;
+                                var data = response.data;
+                                if(data.rescode === 200) {
+                                    // 查无数据
+                                    if(data.orders.totalCount === 0) {
+                                        self.noData = true;
+                                    }
+                                    params.total(data.orders.totalCount);
+                                    self.tableData = data.orders.lists;
+                                    console.log(data.orders.lists);
+                                    return data.orders.lists;
+                                }else if(data.rescode === 401){
+                                    alert('登录超时，请重新登录');
+                                    $location.path('/index');
+                                }else {
+                                    alert(data.errInfo);
+                                }
+                            }, function errorCallback(response) {
+                                self.loading = false;
+                                alert('加载失败，请重试');
+                            });
+                        }
+                    }
+                );
+            }
+
+            self.showDetail = function(orderId) {
+                $scope.root.coverUrl = 'pages/orderDetail.html';
+                $scope.root.coverParamId = orderId;
+            }
+            // 游客信息
+            self.showPersonDetail = function(orderId) {
+                $scope.root.coverUrl = 'pages/personDetail.html';
+                $scope.root.coverParamId = orderId;
+            }
+            //检票详情
+            self.showCheckDetail = function (orderId) {
+                $scope.root.coverUrl = 'pages/checkDetail.html';
+                $scope.root.coverParamId = orderId;
+            }
+        }
+  ]);
+  app.controller('ordersChartsController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+        function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+            console.log('ordersCharts');
+            var self = this;
+            self.init = function () {
+                $('.form_date').datetimepicker({
+                    language: 'zh-CN',
+                    weekStart: 1,
+                    todayBtn: 1,
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 2,
+                    minView: 2,
+                    forceParse: 0,
+                    showMeridian: 1
+                });
+                $('.form_datetime').datetimepicker({
+                    language: 'zh-CN',
+                    weekStart: 1,
+                    todayBtn: 1,
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 2,
+                    forceParse: 0,
+                    showMeridian: 1
+                });
+                $scope.days = [];
+                $scope.showList = false;
+                self.search(false);
+                $scope.ordersChartsData = {
+                    chart: {
+                        caption: "订单统计",
+                        startingangle: "120",
+                        showlabels: "0",
+                        showlegend: "1",
+                        enablemultislicing: "0",
+                        slicingdistance: "35",
+                        showpercentvalues: "1",
+                        showpercentintooltip: "0",
+                        plottooltext: "$label : $datavalue",
+                        theme: "fint"
+                    },
+                    data: []
+                };
+            }
+
+
+            // chartsData
+            self.search = function (flag) {
+                var c = $scope.root.config;
+                var url = c.requestUrl + '/statistics' + c.extension;
+
+                if(flag) {
+                    //读取下单日期
+                    self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
+                    self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
+
+                    //读取商品名称和分销商名称
+                    self.goodsName = $('#good-name').val()?$('#good-name').val():"";
+                    self.OTAName = $('#distributor-name').val()?$('#distributor-name').val():"";
+                }else {
+                    self.orderCreateDateStart = "";
+                    self.orderCreateDateEnd = "";
+                    self.goodsName = "";
+                    self.OTAName = "";
+                }
+                var data = {
+                    "action": "OrderStatistics",
+                    "token": $cookies.get('token'),
+                    "projectName": $cookies.get('projectName'),
+                    "search": {
+                        "OrderStartTime": self.orderCreateDateStart ? self.orderCreateDateStart + "" : "", //下单日期开始
+                        "OrderEndTime": self.orderCreateDateEnd ? self.orderCreateDateEnd + "" : "", //下单日期结束
+                        "GoodsName": self.goodsName,
+                        "OTAName": self.OTAName
+                    }
+                };
+                data = JSON.stringify(data);
+                self.loading = true;
+                self.noData = false;
+
+                $http.post(url, data).then(function successCallback(response) {
+                    self.loading = false;
+                    var data = response.data;
+                    if (data.rescode == 200) {
+                        // 查无数据
+                        if(data.OrderStatus.CheckedCount+data.OrderStatus.UncheckedCount+data.OrderStatus.RefundedCount == 0){
+                            $scope.ordersChartsData.data = [];
+                        }else {
+                            $scope.ordersChartsData.data = [
+                                {
+                                    label: "已检人数",
+                                    value: data.OrderStatus.CheckedCount
+                                },
+                                {
+                                    label: "未检人数",
+                                    value: data.OrderStatus.UncheckedCount
+                                },
+                                {
+                                    label: "退票人数",
+                                    value: data.OrderStatus.RefundedCount
+                                }
+                            ];
+                        }
+                        $scope.totalMoney = data.OrderStatus.TotalMoney;
+                        $scope.checked = data.OrderStatus.CheckedCount;
+                        $scope.unchecked = data.OrderStatus.UncheckedCount;
+                        $scope.refunded = data.OrderStatus.RefundedCount;
+                        $scope.totalPerson = $scope.checked + $scope.unchecked + $scope.refunded;
+                        $scope.showList = true;
+
+                    } else if (data.rescode == 401) {
+                        alert('登录超时，请重新登录');
+                        $location.path('/index');
+                    } else {
+                        alert(data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    self.loading = false;
+                    alert('加载失败，请重试');
+                });
+            }
+        }
+
+  ]);
+  app.controller('monthlyChartsController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+        function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+            console.log('monthlyCharts');
+            var self = this;
+            self.init = function () {
+                $scope.year = new Date().getFullYear();
+                $scope.month = new Date().getMonth()+1;
+                $scope.searchType = "0";
+                $scope.monthlyChartsData = {
+                    chart: {
+                        caption: "月度销售统计",
+                        paletteColors: "#0075c2,#1aaf5d,#c60000",
+                        bgcolor: "#ffffff",
+                        labelStep:"3",
+                        showBorder: "0",
+                        showShadow: "1",
+                        showCanvasBorder: "1",
+                        usePlotGradientColor: "1",
+                        legendBorderAlpha: "0",
+                        legendShadow: "0",
+                        showAxisLines: "0",
+                        showAlternateHGridColor: "1",
+                        divlineThickness: "1",
+                        divLineIsDashed: "1",
+                        divLineDashLen: "1",
+                        divLineGapLen: "1",
+                        showValues: "0",
+                        labelDisplay:"rotate",
+                        slantLabels:"90",
+                        theme: "fint"
+                    },
+                    categories:[],
+                    dataset:[]
+                };
+                self.search();
+            };
+
+            //横坐标月份
+            self.monthDate = function (year,month) {
+                var  day = new Date(year,month,0);
+                var dayCount = day.getDate();
+                $scope.monthlyChartsData.categories =[
+                    {
+                        "category": [
+                            {
+                                "label": year+'-'+month+'-'+"1"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"2"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"3"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"4"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"5"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"6"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"7"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"8"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"9"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"10"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"11"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"12"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"13"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"14"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"15"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"16"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"17"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"18"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"19"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"20"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"21"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"22"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"23"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"24"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"25"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"26"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"27"
+                            },
+                            {
+                                "label": year+'-'+month+'-'+"28"
+                            }
+                        ]
+                    }
+                ]
+                if(dayCount === 29){
+                    $scope.monthlyChartsData.categories[0].category.push({
+                        "label": year+'-'+month+'-'+"29"
+                    })
+                }else if(dayCount === 30){
+                    $scope.monthlyChartsData.categories[0].category.push({
+                        "label": year+'-'+month+'-'+"29"
+                    },{
+                        "label": year+'-'+month+'-'+"30"
+                    })
+                }else if(dayCount === 31){
+                    $scope.monthlyChartsData.categories[0].category.push({
+                        "label": year+'-'+month+'-'+"29"
+                    },{
+                        "label": year+'-'+month+'-'+"30"
+                    },{
+                        "label": year+'-'+month+'-'+"31"
+                    })
+                }
+                console.log($scope.monthlyChartsData.categories)
+            };
+
+            // chartsData
+            self.search = function () {
+                var c = $scope.root.config;
+                var url = c.requestUrl + '/statistics' + c.extension;
+                self.monthDate($scope.year,$scope.month);
+                var data = {
+                    "action": "MonthlyOrderStatistics",
+                    "token": $cookies.get('token'),
+                    "projectName": $cookies.get('projectName'),
+                    "search": {
+                        "OrderYear": $scope.year ? $scope.year + "" : "",
+                        "OrderMonth": $scope.month ? $scope.month + "" : "",
+                        "SearchType": $scope.searchType + ""
+                    }
+                };
+                data = JSON.stringify(data);
+                self.loading = true;
+                self.noData = false;
+
+                $http.post(url, data).then(function successCallback(response) {
+                    self.loading = false;
+                    var data = response.data;
+                    if (data.rescode == 200) {
+                        // 查无数据
+                        if(data.OrderMonthlyStatus.length == 0){
+                            $scope.monthlyChartsData.dataset = [];
+                        }else {
+                            $scope.monthlyChartsData.dataset = [
+                                {
+                                    "seriesname": "订单数",
+                                    "data": []
+                                },
+                                {
+                                    "seriesname": "检票数",
+                                    "data": []
+                                },
+                                {
+                                    "seriesname": "退票数",
+                                    "data": []
+                                }
+                            ]
+                          for(var day in data.OrderMonthlyStatus){
+                            var dayIndex = parseInt(day.split('-')[2])-1;
+                            $scope.monthlyChartsData.dataset[0].data[dayIndex] = {"value":data.OrderMonthlyStatus[day].OrderCount}
+                            $scope.monthlyChartsData.dataset[1].data[dayIndex] = {"value":data.OrderMonthlyStatus[day].CheckCount}
+                            $scope.monthlyChartsData.dataset[2].data[dayIndex] = {"value":data.OrderMonthlyStatus[day].RefundCount}
+                          }
+                        }
+
+                    } else if (data.rescode == 401) {
+                        alert('登录超时，请重新登录');
+                        $location.path('/index');
+                    } else {
+                        alert(data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    self.loading = false;
+                    alert('加载失败，请重试');
+                });
+            }
+        }
+
+  ]);
+  app.controller('yearlyChartsController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+        function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+            console.log('yearlyCharts');
+            var self = this;
+            self.init = function () {
+                $scope.year = new Date().getFullYear();
+                $scope.searchType = "0";
+                $scope.yearlyChartsData = {
+                    chart: {
+                        caption: "年度销售统计",
+                        paletteColors: "#0075c2,#1aaf5d,#c60000",
+                        bgcolor: "#ffffff",
+                        showBorder: "0",
+                        showShadow: "1",
+                        showCanvasBorder: "1",
+                        usePlotGradientColor: "1",
+                        legendBorderAlpha: "0",
+                        legendShadow: "0",
+                        showAxisLines: "0",
+                        showAlternateHGridColor: "1",
+                        divlineThickness: "1",
+                        divLineIsDashed: "1",
+                        divLineDashLen: "1",
+                        divLineGapLen: "1",
+                        showValues: "0",
+                        labelDisplay:"rotate",
+                        slantLabels:"90",
+                        theme: "fint"
+                    },
+                    categories:[
+                        {
+                            "category": [
+                                {
+                                    "label": "1月"
+                                },
+                                {
+                                    "label": "2月"
+                                },
+                                {
+                                    "label": "3月"
+                                },
+                                {
+                                    "label": "4月"
+                                },
+                                {
+                                    "label": "5月"
+                                },
+                                {
+                                    "label": "6月"
+                                },
+                                {
+                                    "label": "7月"
+                                },
+                                {
+                                    "label": "8月"
+                                },
+                                {
+                                    "label": "9月"
+                                },
+                                {
+                                    "label": "10月"
+                                },
+                                {
+                                    "label": "11月"
+                                },
+                                {
+                                    "label": "12月"
+                                }
+                            ]
+                        }
+                    ],
+                    dataset:[]
+                };
+                self.search();
+            };
+
+
+            // chartsData
+            self.search = function () {
+                var c = $scope.root.config;
+                var url = c.requestUrl + '/statistics' + c.extension;
+                var data = {
+                    "action": "OrderYearStatistics",
+                    "token": $cookies.get('token'),
+                    "projectName": $cookies.get('projectName'),
+                    "search": {
+                        "OrderYear": $scope.year ? $scope.year + "" : "",
+                        "SearchType": $scope.searchType + ""
+                    }
+                };
+                data = JSON.stringify(data);
+                self.loading = true;
+                self.noData = false;
+
+                $http.post(url, data).then(function successCallback(response) {
+                    self.loading = false;
+                    var data = response.data;
+                    if (data.rescode == 200) {
+                        // 查无数据
+                        if(data.OrderSalesStatus.length == 0){
+                            $scope.yearlyChartsData.dataset = [];
+                        }else {
+                            $scope.yearlyChartsData.dataset = [
+                                {
+                                    "seriesname": "订单数",
+                                    "data": []
+                                },
+                                {
+                                    "seriesname": "检票数",
+                                    "data": []
+                                },
+                                {
+                                    "seriesname": "退票数",
+                                    "data": []
+                                }
+                            ]
+                            for(var month in data.OrderSalesStatus){
+                                var monthIndex = parseInt(month)-1;
+                                $scope.yearlyChartsData.dataset[0].data[monthIndex] = {"value":data.OrderSalesStatus[month].OrderCount}
+                                $scope.yearlyChartsData.dataset[1].data[monthIndex] = {"value":data.OrderSalesStatus[month].CheckCount}
+                                $scope.yearlyChartsData.dataset[2].data[monthIndex] = {"value":data.OrderSalesStatus[month].RefundCount}
+                            }
+                        }
+
+                    } else if (data.rescode == 401) {
+                        alert('登录超时，请重新登录');
+                        $location.path('/index');
+                    } else {
+                        alert(data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    self.loading = false;
+                    alert('加载失败，请重试');
+                });
+            }
+        }
+
+  ]);
 
 })();
