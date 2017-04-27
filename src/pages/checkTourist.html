@@ -99,7 +99,7 @@
     <hr class="break-space">
 
     <div class="input-group flex-box multi-input">
-        <input ng-model="checkTouristr.bookPerson" type="text" class="flex-item form-control" placeholder="预订人">
+        <input ng-model="checkTourist.bookPerson" type="text" class="flex-item form-control" placeholder="预订人">
         <input ng-model="checkTourist.bookMobile" type="text" class="flex-item form-control" placeholder="手机">
         <input ng-model="checkTourist.orderTicketCode" type="text" class="flex-item form-control" placeholder="辅助码">
         <input ng-model="checkTourist.orderId" type="number" class="flex-item form-control" placeholder="订单号">
@@ -173,7 +173,7 @@
                 <a ng-click="checkTourist.showPersonDetail(row.orderId)" title="游客" class="btn btn-default btn-xs table-action-btn">
                     <i class="glyphicon glyphicon-user"></i> 游客
                 </a>
-                <a ng-click="checkTourist.showCheckDetail(row.orderId)" title="游客" class="btn btn-default btn-xs table-action-btn">
+                <a ng-if="row.checkStatus=='checked'" ng-click="checkTourist.showCheckDetail(row.orderId)" title="游客" class="btn btn-default btn-xs table-action-btn">
                     <i class="glyphicon glyphicon-user"></i> 检票详情
                 </a>
             </td>

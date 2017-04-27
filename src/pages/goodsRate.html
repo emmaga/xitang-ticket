@@ -1,0 +1,56 @@
+<div ng-controller="goodsRateController as rateCharts" ng-init="rateCharts.init()">
+    <a>
+        <strong>
+            <i class="glyphicon glyphicon-equalizer"></i>
+            图表统计
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            月度销售统计
+        </strong>
+    </a>
+    <hr>
+    <div class="row">
+        <label class="col-sm-1 inline-title">年份</label>
+        <div class="col-sm-2 col-condensed">
+            <input id="rate-year" class="form-control overflow-ellipsis" size="16" type="number" ng-model="year">
+        </div>
+        <label class="col-sm-1 inline-title">月份</label>
+        <div class="col-sm-2 col-condensed">
+            <select class="col-sm-2 form-control overflow-ellipsis" ng-model="month" ng-init="month='0'">
+                <option selected="selected" value="0">全年</option>
+                <option value="1">1月</option>
+                <option value="2">2月</option>
+                <option value="3">3月</option>
+                <option value="4">4月</option>
+                <option value="5">5月</option>
+                <option value="6">6月</option>
+                <option value="7">7月</option>
+                <option value="8">8月</option>
+                <option value="9">9月</option>
+                <option value="10">10月</option>
+                <option value="11">11月</option>
+                <option value="12">12月</option>
+            </select>
+        </div>
+        <div class="controls pull-right orders-chart-search">
+            <button class="btn btn-primary" ng-click="rateCharts.search()" href>
+                <i class="glyphicon glyphicon-search"></i>搜索
+            </button>
+        </div>
+    </div>
+    <div fusioncharts
+         class="orders-chart"
+         width="700"
+         height="400"
+         type="pie2d"
+         dataSource="{{rateChartsData}}" >
+    </div>
+    <div fusioncharts
+         class="orders-chart"
+         width="450"
+         height="400"
+         type="mscolumn2d"
+         dataSource="{{OTAChartsData}}" >
+    </div>
+    <div ng-show="rateCharts.loading">loading...</div>
+    <div ng-show="rateCharts.noData">无数据</div>
+</div>
