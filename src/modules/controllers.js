@@ -4123,6 +4123,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     forceParse: 0,
                     showMeridian: 1
                 });
+                self.bookPerson = '';
             }
             self.export = function() {
                 var c = $scope.root.config;
@@ -4358,6 +4359,33 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 };
             }
 
+            //time to date
+            self.timeToDate = function(time,format){
+                var t = new Date(time);
+                var tf = function(i){return (i < 10 ? '0' : '') + i};
+                return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a){
+                    switch(a){
+                        case 'yyyy':
+                            return tf(t.getFullYear());
+                            break;
+                        case 'MM':
+                            return tf(t.getMonth() + 1);
+                            break;
+                        case 'mm':
+                            return tf(t.getMinutes());
+                            break;
+                        case 'dd':
+                            return tf(t.getDate());
+                            break;
+                        case 'HH':
+                            return tf(t.getHours());
+                            break;
+                        case 'ss':
+                            return tf(t.getSeconds());
+                            break;
+                    }
+                })
+            };
 
             // chartsData
             self.search = function (flag) {
@@ -4366,8 +4394,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
                 if(flag) {
                     //读取下单日期
-                    self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
-                    self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
+                    self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
+                    self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
 
                     //读取商品名称和分销商名称
                     self.goodsName = $('#good-name').val()?$('#good-name').val():"";
@@ -4591,7 +4619,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             };
 
             // chartsData
-            self.search = function () {
+            self.search = function (type) {
+                if(type != undefined){
+                    $scope.searchType = type;
+                }
                 var c = $scope.root.config;
                 var url = c.requestUrl + '/statistics' + c.extension;
                 self.monthDate($scope.year,$scope.month);
@@ -4728,10 +4759,11 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 };
                 self.search();
             };
-
-
             // chartsData
-            self.search = function () {
+            self.search = function (type) {
+                if(type != undefined){
+                      $scope.searchType = type;
+                  }
                 var c = $scope.root.config;
                 var url = c.requestUrl + '/statistics' + c.extension;
                 var data = {
@@ -4791,5 +4823,140 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         }
 
   ]);
+  app.controller('goodsRateController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+        function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+            console.log('goodsRate');
+            var self = this;
+            self.init = function () {
+                $scope.year = new Date().getFullYear();
+                $scope.month = 0;
+                $scope.rateChartsData = {
+                    chart: {
+                        caption: "商品销售统计",
+                        subCaption:"仅显示销量前10位",
+                        paletteColors:'#BFF700,#40F200,#04CD65,#9FD7FB,#006AE0,#4D25FF,#BE0DBF,#FF330E,#FFB200,#F10D58',
+                        pieRadius:"150",
+                        showPercentInTooltip:"1",
+                        showShadow: "1",
+                        showLegend:"1",
+                        legendPosition:"right",
+                        legendIconScale:"1.7",
+                        theme: "fint"
+                    },
+                    data:[]
+                };
+                $scope.OTAChartsData = {
+                    chart: {
+                        caption: "分销商销售统计",
+                        subCaption: "仅显示销量前10位",
+                        paletteColors: "#87CEFA,#FF330E",
+                        showBorder: "1",
+                        showShadow: "0",
+                        canvasBorderAlpha: "1",
+                        divlineAlpha: "100",
+                        divlineColor: "#999999",
+                        divlineThickness: "1",
+                        divLineIsDashed: "1",
+                        divLineDashLen: "1",
+                        divLineGapLen: "1",
+                        usePlotGradientColor: "0",
+                        showplotborder: "0",
+                        showHoverEffect: "1",
+                        showXAxisLine: "1",
+                        xAxisLineThickness: "1",
+                        xAxisLineColor: "#999999",
+                        showAlternateHGridColor: "0",
+                        legendBgAlpha: "0",
+                        legendBorderAlpha: "0",
+                        legendShadow: "0"
+                    },
+                    categories: [],
+                    dataset: [],
+                }
+                self.search();
+            };
+
+
+            // chartsData
+            self.search = function () {
+                var c = $scope.root.config;
+                var url = c.requestUrl + '/statistics' + c.extension;
+                var data = {
+                    "action": "OrderSalesStatistics",
+                    "token": $cookies.get('token'),
+                    "projectName": $cookies.get('projectName'),
+                    "search": {
+                        "OrderYear": $scope.year ? $scope.year + "" : "",
+                        "OrderMonth": $scope.month ? $scope.month + "" : "0"
+                    }
+                };
+                data = JSON.stringify(data);
+                self.loading = true;
+                self.noData = false;
+
+                $http.post(url, data).then(function successCallback(response) {
+                    self.loading = false;
+                    var data = response.data;
+                    if (data.rescode == 200) {
+                        // 查无数据
+                        if(data.OrderSalesStatus.length == 0){
+                            $scope.rateChartsData.data = [];
+                        }else {
+                            $scope.rateChartsData.data = [];
+                            data.OrderSalesStatus.forEach(function (val,idx,arr) {
+                                $scope.rateChartsData.data.push({
+                                    "label":val.GoodsName,
+                                    "value":val.SaleCount
+                                })
+                            })
+                        }
+                        if(data.OTASalesStatus.length == 0){
+                            $scope.OTAChartsData.categories = [];
+                            $scope.OTAChartsData.dataset = [];
+                        }else {
+                            $scope.OTAChartsData.categories = [
+                                {
+                                    "category": []
+                                }
+                            ];
+                            $scope.OTAChartsData.dataset = [
+                                {
+                                    "seriesname": "销售金额",
+                                    "data": []
+                                },
+                                {
+                                    "seriesname": "销售数量",
+                                    "data": []
+                                }
+                            ];
+                            data.OTASalesStatus.forEach(function (val,idx,arr) {
+                                $scope.OTAChartsData.categories[0].category.push({
+                                    "label":val.OTAName
+                                });
+
+                                $scope.OTAChartsData.dataset[0].data.push({
+                                    "value":val.SaleMoney
+                                });
+                                $scope.OTAChartsData.dataset[1].data.push({
+                                    "value":val.SaleCount
+                                });
+
+                            })
+                        }
+
+                    } else if (data.rescode == 401) {
+                        alert('登录超时，请重新登录');
+                        $location.path('/index');
+                    } else {
+                        alert(data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    self.loading = false;
+                    alert('加载失败，请重试');
+                });
+            }
+        }
+
+    ]);
 
 })();
