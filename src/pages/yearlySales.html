@@ -13,17 +13,19 @@
         <div class="col-sm-2 col-condensed">
             <input id="monthly-year" class="form-control overflow-ellipsis" size="16" type="number" ng-model="year">
         </div>
+
         <label class="col-sm-1 inline-title good-name">查询结果</label>
-        <div class="col-sm-2 col-condensed">
-            <div class="input-group">
+        <form class="form-inline">
+            <div class="form-group">
                 <label>
-                    <input class="form-control" size="16" type="radio" value="0" ng-model="searchType" name="search-type" checked>金额
+                    <input ng-click="yearlyCharts.search(1)" class="form-control" size="16" type="radio" value="1" ng-model="searchType" name="search-type" checked>金额
                 </label>
+
                 <label>
-                    <input class="form-control" size="16" type="radio" value="1" ng-model="searchType" name="search-type">数量
+                    <input ng-click="yearlyCharts.search(0)" class="form-control" size="16" type="radio" value="0" ng-model="searchType" name="search-type">数量
                 </label>
             </div>
-        </div>
+        </form>
         <div class="controls pull-right orders-chart-search">
             <button class="btn btn-primary" ng-click="yearlyCharts.search()" href>
                 <i class="glyphicon glyphicon-search"></i>搜索
