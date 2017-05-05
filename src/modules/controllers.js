@@ -4444,6 +4444,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                                 }
                             ];
                         }
+                        $scope.days = data.Futrue7Days;
                         $scope.totalMoney = data.OrderStatus.TotalMoney;
                         $scope.checked = data.OrderStatus.CheckedCount;
                         $scope.unchecked = data.OrderStatus.UncheckedCount;
