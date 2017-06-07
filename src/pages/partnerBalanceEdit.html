@@ -6,7 +6,7 @@
             <i class="glyphicon glyphicon-chevron-right"></i>
             分销商设置
             <i class="glyphicon glyphicon-chevron-right"></i>
-            充值            
+            账户余额设置           
         </strong>
     </a>
     <hr>
@@ -27,7 +27,13 @@
                                    [name="addOrMinus"]
                                    >
                             <label>增加余额</label>
-                            <input ng-disabled="partnerBalanceEdit.addOrMinus == 'minus'" step="0.01" ng-model="partnerBalanceEdit.addAmount" type="number" class="form-control" placeholder="请输入增加的余额">
+                            <input ng-disabled="partnerBalanceEdit.addOrMinus == 'minus'" 
+                                    step="0.01" 
+                                    ng-required="partnerBalanceEdit.addOrMinus == 'add'" 
+                                    ng-model="partnerBalanceEdit.addAmount" 
+                                    type="number" 
+                                    class="form-control" 
+                                    placeholder="请输入增加的余额">
                         </div>
                         <div class="form-group">
                             <input type="radio"
@@ -36,7 +42,13 @@
                                    [name="addOrMinus"]
                                    >
                             <label>减少余额</label>
-                            <input ng-disabled="partnerBalanceEdit.addOrMinus == 'add'" step="0.01" ng-model="partnerBalanceEdit.minusAmount" type="number" class="form-control" placeholder="请输入减少的余额">
+                            <input ng-disabled="partnerBalanceEdit.addOrMinus == 'add'" 
+                                    ng-required="partnerBalanceEdit.addOrMinus == 'minus'" 
+                                    step="0.01" 
+                                    ng-model="partnerBalanceEdit.minusAmount" 
+                                    type="number" 
+                                    class="form-control" 
+                                    placeholder="请输入减少的余额">
                         </div>
                         <!--按钮-->
                         <div class="form-group pull-right">

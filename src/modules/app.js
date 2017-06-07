@@ -157,6 +157,17 @@
           }
         }
       })
+      .state('partnerEdit', {
+        url: '/partnerEdit/{id}',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@partnerEdit': {
+            templateUrl: 'pages/partnerEdit.html'
+          }
+        }
+      })
       .state('partnerBalanceEdit', {
         url: '/partnerBalanceEdit/{id}',
         views: {

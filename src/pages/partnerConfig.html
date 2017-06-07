@@ -46,6 +46,11 @@
                         <i ng-class="{ 'glyphicon-ok': partnerConfig.isOn(row.status), 'glyphicon-lock': !partnerConfig.isOn(row.status) }" class="glyphicon"></i>
                         {{partnerConfig.getStatus(row.status)}}
                     </a>
+                    
+                    <a ui-sref="partnerEdit({id:row.partnerCode})" title="编辑" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon glyphicon-pencil"></i>
+                        编辑
+                    </a>
 
                     <a ng-show="row.OrderType == 2" ng-click="partnerConfig.resetPW(row.partnerCode)" title="重置密码" class="btn btn-default btn-xs">
                         <i class="glyphicon glyphicon glyphicon-user"></i>

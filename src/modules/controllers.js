@@ -3883,6 +3883,90 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             }  
           }, function errorCallback(response) {
             self.setSubmit(false);
+            alert('修改失败，请重试');
+          });
+      }
+    }
+  ]);
+
+  app.controller('partnerEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
+      console.log('partnerEdit');
+
+      var self = this;
+      self.id = $stateParams.id;
+      self.info = {}
+
+      // get data
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/partners' + c.extension;
+
+      var data = {
+        "action": "GetOTADetail",
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "data": {
+          "OTACode": self.id
+        } 
+      };
+      data = JSON.stringify(data);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.info = data.data;
+          }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          }else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取信息失败');
+        });
+
+      self.setSubmit = function (status) {
+        if(status) {
+          this.btnText = "保存中...";
+          this.submitting = true;
+        }else {
+          self.btnText = "保存";
+          self.submitting = false;
+        }
+      }
+
+      self.setSubmit(false);
+
+      this.submit = function() {
+
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        self.info.OTACode = self.id
+        
+        var data = {
+          "action": "UpdateOTA",
+          "OTACode": self.id,
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "data": self.info
+        };
+        data = JSON.stringify(data);
+        self.setSubmit(true);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              alert('保存成功')
+              $location.path('/partnerConfig');
+            }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+            }else {
+              self.setSubmit(false);
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            self.setSubmit(false);
             alert('保存失败，请重试');
           });
       }
