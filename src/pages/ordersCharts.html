@@ -1,0 +1,79 @@
+<div ng-controller="ordersChartsController as ordersCharts" ng-init="ordersCharts.init()">
+    <a>
+        <strong>
+            <i class="glyphicon glyphicon-equalizer"></i>
+            图表统计
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            订单统计图表
+        </strong>
+    </a>
+    <hr>
+    <div class="row">
+        <label class="col-sm-1 inline-title">下单时间</label>
+        <div class="col-sm-2 col-condensed">
+            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">开始</span> -->
+                <input id="order-create-date-start" class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_qcaxwa" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+
+            </div>
+        </div>
+        <div class="col-sm-2 col-condensed">
+            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
+                <!-- <span class="input-group-addon ">结束</span> -->
+                <input id="order-create-date-end" class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_khaydt" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+
+            </div>
+        </div>
+        <label class="col-sm-1 inline-title good-name">商品名称</label>
+        <div class="col-sm-2 col-condensed">
+            <div class="input-group">
+                <input id="good-name" class="form-control overflow-ellipsis" size="16" type="text" value="">
+            </div>
+        </div>
+        <label class="col-sm-1 inline-title distributor-name">分销商名称</label>
+        <div class="col-sm-2 col-condensed">
+            <div class="input-group">
+                <input id="distributor-name" class="form-control overflow-ellipsis" size="16" type="text" value="">
+            </div>
+        </div>
+        <div class="controls pull-right orders-chart-search">
+            <button class="btn btn-primary" ng-click="ordersCharts.search(true)" href>
+                <i class="glyphicon glyphicon-search"></i>搜索
+            </button>
+        </div>
+    </div>
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <div fusioncharts
+         class="orders-chart"
+         width="600"
+         height="400"
+         type="pie3d"
+         dataSource="{{ordersChartsData}}" >
+    </div>
+    <div id="orders-charts-content" ng-show="showList">
+        <div id="orders-charts-title">
+            <h4>未来7天预计</h4>
+            <table id="orders-charts-tab">
+                <tr><td>游玩时间</td><td>总人数</td><td>总金额</td></tr>
+                <tr ng-repeat="day in days">
+                    <td>{{day.VisitDate}}</td><td>{{day.TotalPeople}}</td><td>{{day.TotalCount}}</td>
+                </tr>
+            </table>
+        </div>
+        <div id="orders-charts-list">
+            <h6><span class="list-left">订单总数 {{totalPerson}}</span>人</h6>
+            <h6><span class="list-left">订单金额 {{totalMoney}}</span>元</h6>
+            <h6><span class="list-left">已检人数 {{checked}}</span>人</h6>
+            <h6><span class="list-left">未检人数 {{unchecked}}</span>人</h6>
+            <h6><span class="list-left">已退人数 {{refunded}}</span>人</h6>
+        </div>
+    </div>
+    <div ng-show="ordersCharts.loading">loading...</div>
+    <div ng-show="ordersCharts.noData">无数据</div>
+</div>

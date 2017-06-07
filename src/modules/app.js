@@ -6,7 +6,8 @@
     'app.controllers',
     'app.directive',
     'app.filters',
-    'app.services'
+    'app.services',
+    'ng-fusioncharts'
   ]);
 
   app.config(function($stateProvider, $urlRouterProvider) {
@@ -145,6 +146,28 @@
           }
         }
       })
+      .state('partnerAdd', {
+        url: '/partnerAdd',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@partnerAdd': {
+            templateUrl: 'pages/partnerAdd.html'
+          }
+        }
+      })
+      .state('partnerBalanceEdit', {
+        url: '/partnerBalanceEdit/{id}',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@partnerBalanceEdit': {
+            templateUrl: 'pages/partnerBalanceEdit.html'
+          }
+        }
+      })
       .state('checkStatement', {
         url: '/checkStatement',
         views: {
@@ -155,6 +178,17 @@
             templateUrl: 'pages/checkStatement.html'
           }
         }
+      })
+      .state('checkTourist', {
+          url: '/checkTourist',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@checkTourist': {
+                  templateUrl: 'pages/checkTourist.html'
+              }
+          }
       })
       .state('operatingStatement', {
         url: '/operatingStatement',
@@ -266,6 +300,50 @@
           }
         }
       })
+      .state('ordersCharts',{
+        url:'/ordersCharts',
+        views:{
+          '':{
+            templateUrl:'pages/main.html'
+          },
+          'mainFrame.body@ordersCharts':{
+            templateUrl:'pages/ordersCharts.html'
+          }
+        }
+      })
+      .state('monthlySales', {
+          url: '/monthlySales',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@monthlySales': {
+                  templateUrl: 'pages/monthlySales.html'
+              }
+          }
+      })
+      .state('goodsRate', {
+          url: '/goodsRate',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@goodsRate': {
+                  templateUrl: 'pages/goodsRate.html'
+              }
+          }
+      })
+      .state('yearlySales', {
+          url: '/yearlySales',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@yearlySales': {
+                  templateUrl: 'pages/yearlySales.html'
+              }
+          }
+      })
   });
 
   app.controller('RootController', function() {
@@ -279,8 +357,8 @@
     // extension: '.json'
 
     // requestUrl: 'http://ota.cleartv.cn/ota_backend/v1/',
-    requestUrl: 'http://192.168.30.80/ota_backend/v1/',
-    // requestUrl: 'http://otatest.cleartv.cn/ota_backend/v1/',
+    // requestUrl: 'http://192.168.30.80/ota_backend/v1/',
+    requestUrl: 'http://otatest.cleartv.cn/ota_backend/v1/',
     extension: ''
   };
 

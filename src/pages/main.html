@@ -90,6 +90,11 @@
                             </a>
                     </li>
                     <li class="nav-header">
+                        <a ui-sref="checkTourist">
+                                游客查询
+                            </a>
+                    </li>
+                    <li class="nav-header">
                         <a ui-sref="operatingStatement">
                                 营业汇总
                             </a>
@@ -130,6 +135,35 @@
 
                 </ul>
                 <hr ng-show="main.auth('admin')">
+                <!--图标统计-->
+                <a ng-show="main.auth('charts')" class="font-bold no-underline cursor-default" data-toggle="collapse" data-target="#rd-rzkzmf">
+                    <i class="glyphicon glyphicon-equalizer"></i> 图表统计
+                    <i ng-class="{'glyphicon-chevron-down': $state.includes('charts'), 'glyphicon-chevron-right': !$state.includes('charts')}" class="glyphicon pull-right margin-right-15"></i>
+                </a>
+                <ul ng-show="main.auth('charts')" ng-class="{in: $state.includes('charts')}" class="nav nav-stacked collapse" id="rd-rzkzmf">
+                    <hr>
+                    <li class="nav-header">
+                        <a ui-sref="ordersCharts">
+                            订单统计图表
+                        </a>
+                    </li>
+                    <li class="nav-header">
+                        <a ui-sref="monthlySales">
+                            月度销售统计
+                        </a>
+                    </li>
+                    <li class="nav-header">
+                        <a ui-sref="goodsRate">
+                            商品销售比例
+                        </a>
+                    </li>
+                    <li class="nav-header">
+                        <a ui-sref="yearlySales">
+                            年度销售统计
+                        </a>
+                    </li>
+                </ul>
+                <hr ng-show="main.auth('charts')">
             </div>
             <!-- 页面 -->
             <div ui-view="mainFrame.body" class="col-sm-9 col-right page">
