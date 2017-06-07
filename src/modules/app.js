@@ -146,6 +146,28 @@
           }
         }
       })
+      .state('partnerAdd', {
+        url: '/partnerAdd',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@partnerAdd': {
+            templateUrl: 'pages/partnerAdd.html'
+          }
+        }
+      })
+      .state('partnerBalanceEdit', {
+        url: '/partnerBalanceEdit/{id}',
+        views: {
+          '': {
+            templateUrl: 'pages/main.html'
+          },
+          'mainFrame.body@partnerBalanceEdit': {
+            templateUrl: 'pages/partnerBalanceEdit.html'
+          }
+        }
+      })
       .state('checkStatement', {
         url: '/checkStatement',
         views: {
@@ -335,8 +357,8 @@
     // extension: '.json'
 
     // requestUrl: 'http://ota.cleartv.cn/ota_backend/v1/',
-    requestUrl: 'http://192.168.30.80/ota_backend/v1/',
-    // requestUrl: 'http://otatest.cleartv.cn/ota_backend/v1/',
+    // requestUrl: 'http://192.168.30.80/ota_backend/v1/',
+    requestUrl: 'http://otatest.cleartv.cn/ota_backend/v1/',
     extension: ''
   };
 

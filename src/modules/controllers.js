@@ -3599,6 +3599,37 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         return ret;
       }
 
+      self.resetPW = function(OTACode) {
+        if (!confirm('确认重置密码？')) {
+          return
+        }
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        var data = {
+          "action": "ResetAdminPassword",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "data": {
+            OTACode: OTACode
+          }
+        };
+        data = JSON.stringify(data);
+        
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              alert('密码重置成功！新密码为：123456');
+            }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('重置失败，请重试');
+          });
+      }
+
       self.changeStatus = function(status, id) {
         var c = $scope.root.config;
         var url = c.requestUrl + '/partners' + c.extension;
@@ -3683,6 +3714,177 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             }
           }
         );
+      }
+    }
+  ]);
+
+  app.controller('partnerAddController', ['$scope', '$location', '$cookies', '$http', function($scope, $location, $cookies, $http) {
+    console.log('partnerAdd');
+    var self = this;
+
+    this.init = function() {
+      self.Status = 'off';
+      self.OrderType = '2'
+      self.PrePayment = '0'
+      self.PaymentAmount = 0;
+    }
+    
+    self.setSubmit = function (status) {
+      if(status) {
+        self.addBtnText = "添加中...";
+        self.submitting = true;
+      }else {
+        self.addBtnText = "添加";
+        self.submitting = false;
+      }
+    }
+
+    self.setSubmit(false);
+
+    this.submit = function() {
+      // 判断是否要填预付款
+      if (this.PrePayment - 0 === 1) {
+        console.log(this.PaymentAmount)
+        if (!this.PaymentAmount) {
+          alert('请填写预付款额')
+          return
+        }
+      }
+
+      // 分销商Code格式, 只允许连续的字符串（字母+数字）
+      var re = /^[A-Za-z0-9]+$/;
+      var result = re.test(this.OTACode);
+      if (!result) {
+        alert('分销商Code只支持字母和数字')
+        return
+      }
+
+      var data = {
+        "action": "AddOTA",
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "data": {
+          "OTACode": this.OTACode,
+          "OTAName": this.OTAName,
+          "Status": this.Status,
+          "OrderType": this.OrderType - 0,
+          "PrePayment": this.PrePayment - 0,
+          "PaymentAmount": (this.PaymentAmount - 0) * 100
+        }
+      };
+      data = JSON.stringify(data);
+      self.setSubmit(true);
+
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/partners' + c.extension;
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            $location.path('/partnerConfig');
+          }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          }else {
+            self.setSubmit(false);
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          self.setSubmit(false);
+          alert('添加失败，请重试');
+        });
+    }
+  }]);
+
+  app.controller('partnerBalanceEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 
+    function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
+      console.log('partnerBalanceEdit');
+
+      var self = this;
+      self.id = $stateParams.id;
+      self.addOrMinus = 'add'
+
+      // get data
+      var c = $scope.root.config;
+      var url = c.requestUrl + '/partners' + c.extension;
+
+      var data = {
+        "action": "GetOTADetail",
+        "token": $cookies.get('token'),
+        "projectName": $cookies.get('projectName'),
+        "data": {
+          "OTACode": self.id
+        } 
+      };
+      data = JSON.stringify(data);
+
+      $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.PaymentAmount = data.data.PaymentAmount;
+          }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          }else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取信息失败');
+        });
+
+      self.setSubmit = function (status) {
+        if(status) {
+          this.btnText = "提交中...";
+          this.submitting = true;
+        }else {
+          self.btnText = "提交";
+          self.submitting = false;
+        }
+      }
+
+      self.setSubmit(false);
+
+      this.submit = function() {
+
+        var c = $scope.root.config;
+        var action = ''
+        var amount = 0
+        if (self.addOrMinus === 'add') {
+          action = 'AddPrePaymentAmount'
+          amount = (self.addAmount - 0) * 100
+        } else {
+          action = 'MinusPrePaymentAmount'
+          amount = (self.minusAmount - 0) * 100
+        }
+
+        var url = c.requestUrl + '/partners' + c.extension;
+
+        var data = {
+          "action": action,
+          "OTACode": self.id,
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "amount": amount
+        };
+        data = JSON.stringify(data);
+        self.setSubmit(true);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              alert('修改成功')
+              $location.path('/partnerConfig');
+            }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+            }else {
+              self.setSubmit(false);
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            self.setSubmit(false);
+            alert('保存失败，请重试');
+          });
       }
     }
   ]);
