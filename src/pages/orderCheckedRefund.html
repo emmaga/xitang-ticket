@@ -1,0 +1,31 @@
+﻿<div ng-controller="orderCheckedRefundController as orderCheckedRefund" ng-init="orderCheckedRefund.init()">
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display:block">
+        <form class="modal-dialog" role="document" ng-submit="orderCheckedRefund.refund()">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button ng-click="orderCheckedRefund.close()" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">退已检票</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>可退数量：{{orderCheckedRefund.checkedNum}}</h3>
+                    <hr>
+                    <div class="form-group">
+                        <!--退票数量-->
+                        <label class="control-label" for="cancelCount">退票数量</label>
+                        <input ng-model="orderCheckedRefund.refundNum" class="form-control" min="1" max="{{orderCheckedRefund.checkedNum}}" required type="number" placeholder="请输入退票数量">
+                    </div>
+                </div>
+                <div class="modal-footer">       
+                    <div class="controls">
+                        <button ng-click="orderCheckedRefund.close()" class="btn btn-default">
+                            取消
+                        </button>
+                        <button type="submit" class="btn btn-primary" ng-class="{disabled:orderCheckedRefund.submitting}">
+                            {{orderCheckedRefund.saveTxt}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

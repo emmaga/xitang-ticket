@@ -173,6 +173,9 @@
                 <a ng-click="ordersList.showPersonDetail(row.orderId)" title="游客" class="btn btn-default btn-xs table-action-btn"> 
                     <i class="glyphicon glyphicon-user"></i> 游客
                 </a>
+                <a ng-show="ordersList.auth('admin') && row.checkedTickets > 0" ng-click="ordersList.refundChecked(row.orderId, row.checkedTickets)" title="退已检票" class="btn btn-default btn-xs table-action-btn"> 
+                    <i class="glyphicon glyphicon-remove-circle"></i> 退已检票
+                </a>
             </td>
 
         </tr>

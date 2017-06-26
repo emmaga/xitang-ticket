@@ -2418,6 +2418,70 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       }
     
   ]);
+
+  // 退已检票
+  app.controller('orderCheckedRefundController', ['$scope', '$state', '$http', '$cookies', '$location', '$filter', '$window',
+    function($scope, $state, $http, $cookies, $location, $filter, $window) {
+      console.log('orderCheckedRefund');
+      var self = this;
+      // 初始化 隐藏 保存 按钮
+      self.showSave = false;
+
+      self.close = function() {
+        $scope.root.coverUrl = '';
+        $scope.root.coverParams = null;
+      };
+
+      self.alterSubmitTxt = function(boo) {
+        self.submitting = boo;
+        self.saveTxt = boo ? '退票中' : '退票';
+      }
+
+      self.init = function() {
+        self.id = $scope.root.coverParams.orderId;
+        self.checkedNum = $scope.root.coverParams.checkedNum;
+        self.alterSubmitTxt(false)
+      };
+      // 保存按钮
+      self.refund = function(){
+        self.alterSubmitTxt(true)
+
+        // refund tickets
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/orders' + c.extension;
+
+        var data = {
+          "action": "UpdateCheckedNumber",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "data": {
+            "OrderID": self.id,
+            "Ammount": self.refundNum   
+          }
+        };
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              self.alterSubmitTxt(false)
+              alert('退票成功');
+              self.close()
+              $scope.root.refreshList()
+            }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+            }else {
+              self.alterSubmitTxt(false)
+              alert(data.errInfo);
+            }
+        }, function errorCallback(response) {
+            alert('退票失败');
+            self.alterSubmitTxt(false)
+        });
+      }      
+    }
+  ]);
+
   // 游客信息
   app.controller('personDetailController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 'auth', 
     function($scope, $state, $stateParams, $http, $cookies, $location, $filter, auth) {
@@ -2606,8 +2670,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
     ]);
 
-  app.controller('ordersListController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
-    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+  app.controller('ordersListController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 'auth',
+    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams, auth) {
       console.log('ordersList');
       var self = this;
       self.init = function() {
@@ -2718,12 +2782,20 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             alert('导出失败，请重试');
           });
       }
+      
+      // 超级管理员 权限问题
+      self.auth = function(authName) { return auth($cookies.get('roleId'), authName) };
 
       // ngtable
-      self.search = function(flag) {
+      // reload值为true时，记住当前page
+      self.search = function(flag, reload) {
+        var page = 1
+        if (reload && self.tableParams) {
+          page = self.tableParams.page()
+        }
         self.tableParams = new NgTableParams(
           {
-            page: 1, 
+            page: page, 
             count: 15,
             url: ''
           }, 
@@ -2848,6 +2920,15 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.showPersonDetail = function(orderId) {
         $scope.root.coverUrl = 'pages/personDetail.html';
         $scope.root.coverParamId = orderId;
+      }
+      // 退已检票
+      self.refundChecked = function(orderId, checkedNum) {
+        $scope.root.coverUrl = 'pages/orderCheckedRefund.html';
+        $scope.root.coverParams = {orderId: orderId, checkedNum: checkedNum};
+        $scope.root.refreshList = function () {
+          self.search(true, true);
+          $scope.root.refreshList = null;
+        }
       }
     }
   ]);
@@ -3339,7 +3420,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.search = function() {
         self.tableParams = new NgTableParams(
           {
-            page: 1, 
+            page: 1,
             count: 15,
             url: ''
           }, 
