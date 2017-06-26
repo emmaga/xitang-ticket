@@ -8,23 +8,58 @@
 		</strong>
     </a>
     <hr>
-   
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="btn-group ">
+                <a ui-sref="partnerAdd" class="btn btn-default">
+                    <i class="glyphicon glyphicon-plus"></i> 添加分销商
+                </a>
+            </div>
+        </div>
+    </div>
+
     <table ng-table="partnerConfig.tableParams" ng-init="partnerConfig.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
             
-            <!-- <td title="'分销商编码'">
+            <td title="'分销商Code'">
                 {{row.partnerCode}}
-            </td> -->
+            </td>
 
             <td title="'分销商'">
                 {{row.partnerName}}
             </td>
             
+            <td title="'下单类型'">
+                {{(row.OrderType == 1) ? '通过自动化接口下单' : ''}}
+                {{(row.OrderType == 2) ? '通过页面下单' : ''}}
+            </td>
+            
+            <td title="'是否开启预付款'">
+                {{(row.PrePayment == 1) ? '已开启预付款' : ''}}
+                {{(row.PrePayment == 0) ? '未开启预付款' : ''}}
+            </td>
+
             <td title="'操作'">
                 <small>
                     <a ng-click="partnerConfig.changeStatus(row.status, row.partnerCode)" title="{{partnerConfig.getStatusAction(row.status)}}" ng-class="{ 'btn-success': partnerConfig.isOn(row.status), 'btn-warning': !partnerConfig.isOn(row.status) }" class="btn btn-default btn-xs">
                         <i ng-class="{ 'glyphicon-ok': partnerConfig.isOn(row.status), 'glyphicon-lock': !partnerConfig.isOn(row.status) }" class="glyphicon"></i>
                         {{partnerConfig.getStatus(row.status)}}
+                    </a>
+                    
+                    <a ui-sref="partnerEdit({id:row.partnerCode})" title="编辑" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon glyphicon-pencil"></i>
+                        编辑
+                    </a>
+
+                    <a ng-show="row.OrderType == 2" ng-click="partnerConfig.resetPW(row.partnerCode)" title="重置密码" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon glyphicon-user"></i>
+                        重置密码
+                    </a>
+
+                    <a ui-sref="partnerBalanceEdit({id:row.partnerCode})" title="账户余额设置" class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon-piggy-bank"></i>
+                        账户余额设置
                     </a>
                 </small>
             </td>

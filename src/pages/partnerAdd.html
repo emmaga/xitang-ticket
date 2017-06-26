@@ -1,0 +1,79 @@
+﻿<div ng-controller="partnerAddController as partnerAdd" ng-init="partnerAdd.init()">
+    <a>
+        <strong>
+			<i class="glyphicon glyphicon-usd"></i>
+			销售中心
+			<i class="glyphicon glyphicon-chevron-right"></i>
+			分销商设置
+			<i class="glyphicon glyphicon-chevron-right"></i>
+			添加分销商
+		</strong>
+    </a>
+    <hr>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="panel panel-default panel-sm">
+                <div class="panel-heading">
+                    <i class="glyphicon glyphicon-wrench pull-right"></i> 分销商信息
+                </div>
+                <div class="panel-body">
+                    <form name="partnerAddForm" class="form form-vertical" ng-submit="partnerAddForm.$valid && partnerAdd.submit()">
+                        <label class="font-normal">分销商信息</label>
+                        <hr class="hr-half">
+                        <!--分销商Code-->
+                        <div class="form-group">
+                            <label class="required-info">分销商Code</label>
+                            <input ng-model="partnerAdd.OTACode" required type="text" class="form-control" placeholder="请输入分销商Code">
+                        </div>
+                        <label class="label-explain">（分销商Code只支持字母和数字）</label>
+                        <!--分销商名称-->
+                        <div class="form-group">
+                            <label class="required-info">分销商名称</label>
+                            <input ng-model="partnerAdd.OTAName" required type="text" class="form-control" placeholder="请输入分销商名称">
+                        </div>
+                        <!--是否启用-->
+                        <div class="form-group">
+                            <label class="required-info">是否启用</label>
+                            <select ng-model="partnerAdd.Status" class="form-control"> 
+                                <option label="否" value="off">否</option>
+                                <option label="是" value="on">是</option>  
+                            </select>
+                        </div>
+                        <!--分销商下单方式-->
+                        <div class="form-group">
+                            <label class="required-info">分销商下单方式</label>
+                            <select ng-model="partnerAdd.OrderType" class="form-control"> 
+                                <option label="通过页面下单" value="2">通过页面下单</option>
+                                <option label="自动化下单" value="1">自动化下单</option>  
+                            </select>
+                        </div>
+                        <!--是否开启预付款功能-->
+                        <div class="form-group">
+                            <label class="required-info">是否开启预付款功能</label>
+                            <select ng-model="partnerAdd.PrePayment" class="form-control"> 
+                                <option label="否" value="0">否</option>
+                                <option label="是" value="1">是</option>  
+                            </select>
+                        </div>
+                        <!--预付款额-->
+                        <div ng-show="partnerAdd.PrePayment === '1'" class="form-group">
+                            <label class="required-info">预付款额</label>
+                            <input step="0.01" ng-model="partnerAdd.PaymentAmount" type="number" class="form-control" placeholder="请输入预付款额">
+                        </div>
+                        <!--提交按钮-->
+                        <div class="form-group pull-right">
+                            <div class="controls">
+                                <button ui-sref="partnerConfig" class="btn btn-default">
+                                    取消
+                                </button>
+                                <button type="submit" class="btn btn-primary" ng-class="{disabled:partnerAdd.submitting}">
+                                    {{partnerAdd.addBtnText}}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
