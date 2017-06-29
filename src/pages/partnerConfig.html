@@ -8,7 +8,7 @@
 		</strong>
     </a>
     <hr>
-    
+
     <div class="row">
         <div class="col-sm-12">
             <div class="btn-group ">
@@ -19,9 +19,12 @@
         </div>
     </div>
 
+    <hr class="invisible hr-half">
+    <small style="color:rgb(100,150,255)">* 新建分销商用户管理员登录账号为 admin，默认登录密码为 123456，企业码是分销商Code</small>
+
     <table ng-table="partnerConfig.tableParams" ng-init="partnerConfig.search()" class="table table-hover table-striped">
         <tr ng-repeat="row in $data">
-            
+
             <td title="'分销商Code'">
                 {{row.partnerCode}}
             </td>
@@ -29,12 +32,12 @@
             <td title="'分销商'">
                 {{row.partnerName}}
             </td>
-            
+
             <td title="'下单类型'">
                 {{(row.OrderType == 1) ? '通过自动化接口下单' : ''}}
                 {{(row.OrderType == 2) ? '通过页面下单' : ''}}
             </td>
-            
+
             <td title="'是否开启预付款'">
                 {{(row.PrePayment == 1) ? '已开启预付款' : ''}}
                 {{(row.PrePayment == 0) ? '未开启预付款' : ''}}
@@ -46,7 +49,7 @@
                         <i ng-class="{ 'glyphicon-ok': partnerConfig.isOn(row.status), 'glyphicon-lock': !partnerConfig.isOn(row.status) }" class="glyphicon"></i>
                         {{partnerConfig.getStatus(row.status)}}
                     </a>
-                    
+
                     <a ui-sref="partnerEdit({id:row.partnerCode})" title="编辑" class="btn btn-default btn-xs">
                         <i class="glyphicon glyphicon glyphicon-pencil"></i>
                         编辑
@@ -67,5 +70,5 @@
     </table>
     <div ng-show="partnerConfig.loading">loading...</div>
     <div ng-show="partnerConfig.noData">无数据</div>
-    
+
 </div>
