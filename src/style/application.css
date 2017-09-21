@@ -5,6 +5,14 @@ body{
   font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSans,Arimo,"Droid Sans","wenquanyi micro hei","Hiragino Sans GB","Hiragino Sans GB W3",FontAwesome,sans-serif;
   min-width:940px;
 }
+input[type="radio"],input[type="checkbox"] {
+  width: 1em;
+  height: 1em;
+}
+
+a { 
+  cursor: pointer;
+}
 
 .navbar-static-top {
   margin-bottom:20px;
@@ -38,6 +46,27 @@ footer {
   border-radius: 10px;
 }
 
+.dateAndTime {
+  display: flex;
+}
+.flexDate {
+  width: 65%;
+}
+
+.flexTime {
+  position: relative;
+  left: -40px;
+  width: 35%;
+}
+.clearLeft {
+  padding: 0;
+}
+/*隐藏input为type="time"时的上下箭头*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0; 
+}
 
 /*modified*/
 .ng-table-group-header{

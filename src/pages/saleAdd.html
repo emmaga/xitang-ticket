@@ -1,13 +1,13 @@
 <div ng-controller="saleAddController as saleAdd" ng-init="saleAdd.init()">
     <a>
         <strong>
-			<i class="glyphicon glyphicon-usd"></i>
-			销售中心
-			<i class="glyphicon glyphicon-chevron-right"></i>
-			价格管理
-			<i class="glyphicon glyphicon-chevron-right"></i>
-			添加价格            
-		</strong>
+            <i class="glyphicon glyphicon-usd"></i>
+            销售中心
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            价格管理
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            编辑价格            
+        </strong>
     </a>
     <hr>
     <div class="row">
@@ -18,56 +18,29 @@
                 </div>
                 <div class="panel-body">
                     <form name="saleAddForm" class="form form-vertical" ng-submit="saleAddForm.$valid && saleAdd.submit()">
-                        <label class="font-normal">基本信息</label>
-                        <hr class="hr-half">
-                        <div class="form-group">
+                        <div  class="form-group">
                             <label class="required-info">商品</label>
-                            <div class="controls">
-                                <select required ng-model="saleAdd.myGoods" class="form-control" ng-options="goods.goodsName for goods in saleAdd.goods">
-                                    <option value="">- 请选择商品 -</option>
-                                </select>
-                            </div>
-                        </div>
+                            <select class="form-control" required ng-model="saleAdd.myGoods"  ng-options="goods.goodsName for goods in saleAdd.goods" style="padding: 0 12px;">
+                                <option value="">- 请选择商品 -</option>
+                            </select> 
+                        </div>                        
                         <div class="form-group">
                             <label class="required-info">分销商</label>
-                            <div class="controls">
-                                <select required ng-model="saleAdd.myPartner" class="form-control" ng-options="partner.partnerName for partner in saleAdd.partners">
-                                    <option value="">- 请选择分销商 -</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group required-info">
-                            <label>单价</label>
+                            <select required ng-model="saleAdd.myPartner" class="form-control" ng-options="partner.partnerName for partner in saleAdd.partners" style="padding: 0 12px;">
+                                <option value="">- 请选择分销商 -</option>
+                            </select>
+                        </div>                        
+                        <div class="form-group">
+                            <label class="required-info">单价</label>
                             <div class="controls input-group">
                                 <span class="input-group-addon">
-									￥
-								</span>
+                                    ￥
+                                </span>
                                 <input ng-model="saleAdd.sale.price" type="number" step="0.01" class="form-control" placeholder="00.00" required>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="required-info">可销售时间</label>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_dmukgs" data-link-format="yyyy-mm-dd">
-                                        <span class="input-group-addon">开始</span>
-                                        <input class="form-control cursor-pointer" size="16" type="text" value="" readonly>
-                                        <input type="hidden" id="rd_dmukgs" value="" />
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
-                                        <span class="input-group-addon">结束</span>
-                                        <input class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
-                                        <input type="hidden" id="rd_qcaxwa" value="" />
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="">可游玩时间</label>
+                        </div>                        
+                        <div class="form-group">     
+                            <label class="required-info">可游玩日期</label>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="visitDateStart" data-link-format="yyyy-mm-dd">
@@ -87,61 +60,398 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
-                            <label class="required-info">二维码</label>
-                            <div class="controls">
-                                <select required ng-model="saleAdd.TwoDBarCodeOn" class="form-control" id="twoCode">
-                                    <option value="">- 二维码是否开启 -</option>
-                                    <option value="1">是</option>
-                                    <option value="0">否</option>
-                                </select>
+                            <label class="required-info">可销售日期</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="saleDateStart" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">开始</span>
+                                        <input id="sale-date-start" class="form-control cursor-pointer" size="16" type="text" value="" readonly>
+                                        <input type="hidden" id="saleDateStart" value="" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="saleDateEnd" data-link-format="yyyy-mm-dd">
+                                        <span class="input-group-addon">结束</span>
+                                        <input id="sale-date-end" class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                                        <input type="hidden" id="saleDateEnd" value="" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div >
-                            <div class="form-group">
-                                <label class="required-info">易高产品的ID</label>
-                                <div class="controls">
-                                    <input ng-required="saleAdd.TwoDBarCodeOn == 1" ng-model="saleAdd.GateGoodsID  " class="form-control"   type="text" ng-disabled="!(saleAdd.TwoDBarCodeOn == 1)"/>
-                                       
+                        <div class="form-group">
+                            <label class="required-info">可销售时间</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">开始</span>
+                                        <input id="orderTimeStart" required type="time" class="form-control" placeholder="开始" step="1">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="controls input-group">
+                                        <span class="input-group-addon">结束</span>
+                                        <input id="orderTimeEnd" required type="time" class="form-control" placeholder="结束" step="1">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="required-info">易高票的数量</label>
-                                <div class="controls">
-                                     <input ng-required="saleAdd.TwoDBarCodeOn == 1" ng-model="saleAdd.GateGoodsCount" class="form-control"   type="number" ng-disabled="!(saleAdd.TwoDBarCodeOn == 1)"/>
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class="required-info">当日下单截止时间&nbsp;</label>
+                            <!-- 客户要求去掉，买票开始时间 -->
+                            <!-- <div class="col-sm-6">
+                                <div class="controls input-group">
+                                    <span class="input-group-addon">开始</span>
+                                    <input id="validTimeStart" required type="time" class="form-control" placeholder="开始">
                                 </div>
+                            </div> -->
+                            <!-- <label class="label-explain">填写格式为 [时:分] ，如 [00:00]</label> -->    
+                            
+                            <input id="validTimeEnd" required type="time" class="form-control" placeholder="截止时间">
+                            前                           
+                        </div>
+                        <div class="form-group">
+                            <label>提前预定天数</label>
+                            <div class="controls input-group">
+                                <input ng-model="saleAdd.sale.MinPreOrderDays" type="number" step="1" min="0" class="form-control" placeholder="提前预定天数" required>
+                            </div>
+                        </div>
+                        <div class="form-group">                      
+                            <label>可购最远周期</label>&nbsp;("0"代表不限)
+                            <div class="form-inline">
+                                可购最近&nbsp;
+                                <input ng-model="saleAdd.sale.MaxPreOrderDays" type="number" step="1" min="0" class="form-control" required style="width: 15%;">
+                                &nbsp;天
                             </div>
                         </div>
 
-                        <hr class="break-space">
-                        <label class="font-normal">预定信息</label>
-                        <hr class="hr-half">
                         <div class="form-group">
-                            <label class="required-info">当天可买票时间</label>
-                            <div class="row">
-                                <!-- 客户要求去掉 买票开始时间 -->
-                                    <!-- <div class="controls input-group">
-                                        <span class="input-group-addon">开始</span>
-                                        <input id="validTimeStart" required type="time" class="form-control" placeholder="当天可买票时间">
-                                    </div> -->
-                                    <!-- <label class="label-explain">填写格式为 [时:分] ，如 [00:00]</label> -->
-                                
-                                <div class="col-sm-6">
-                                	<div class="controls input-group">
-                                        
-                                        <input id="validTimeEnd" required type="time" class="form-control" placeholder="当天可买票时间">
-                                        <span class="input-group-addon">前</span>
-                                    </div>
-                                    <!-- <label class="label-explain">填写格式为 [时:分] ，如 [10:00]</label> -->
+                            <label>最小起订数</label>
+                            <div class="controls input-group">
+                                <input ng-model="saleAdd.sale.MinOrderNumber" type="number" step="1" min="1" class="form-control" placeholder="最小起订数" required>
+                            </div>
+                        </div>                        
+                        <div class="form-group ">
+                            <label>最大限订数</label>&nbsp;("0"代表不限)
+                            <div class="controls input-group">
+                                <input ng-model="saleAdd.sale.MaxOrderNumber" type="number" step="1" min="0" class="form-control" placeholder="最大限订数" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group form-inline">                
+                            <label>每个手机号码&nbsp;</label>                            
+                            <input ng-model="saleAdd.sale.PerPhoneLimit.Days" type="number" step="1" min="0" class="form-control" required style="width: 15%;">  
+                            <b>&nbsp;天内购买&nbsp; </b>                    
+                            <input ng-disabled="saleAdd.sale.PerPhoneLimit.Days == 0" ng-model="saleAdd.sale.PerPhoneLimit.Number" type="number" step="1" min="1" class="form-control" style="width: 15%;">
+                            <b>&nbsp;张</b>&nbsp;("0"天代表不限)                  
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="required-info">二维码</label>
+                            <select required ng-model="saleAdd.sale.TwoDBarCodeOn" class="form-control"  ng-options="option.value for option in saleAdd.twoCodeOptions" style="padding: 0 12px;">
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="required-info">易高产品的ID</label>
+                            <div class="controls">
+                                <input ng-required="saleAdd.sale.TwoDBarCodeOn.code == 1" ng-model="saleAdd.sale.GateGoodsID  " class="form-control"   type="text" ng-disabled="!(saleAdd.sale.TwoDBarCodeOn.code == 1)"/>       
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="required-info">易高票的数量</label>
+                            <div class="controls">
+                                 <input ng-required="saleAdd.sale.TwoDBarCodeOn.code == 1" ng-model="saleAdd.sale.GateGoodsCount" class="form-control"   type="number" ng-disabled="!(saleAdd.sale.TwoDBarCodeOn.code == 1)"/>
+                            </div>
+                        </div>
+                        
+                        <hr class="hr-half">
+                        <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#identityRules">
+                            身份证规则设置
+                            <span class="caret"></span>
+                        </button>
+                        <br>
+                        <div class="collapse" id="identityRules">
+                            <br>
+                            <!-- <div class="form-group">
+                                <label>身份证是否必填&nbsp;:&nbsp;</label>
+                                <label>
+                                    <input type="radio" 
+                                    value=0
+                                    ng-model="saleAdd.sale.IDCardNeeded">
+                                    否
+                                </label>
+                                &nbsp;
+                                <label>
+                                    <input type="radio" 
+                                    value=1 
+                                    ng-model="saleAdd.sale.IDCardNeeded">
+                                    是
+                                </label>
+                            </div> -->
+                            
+                            <div class="form-group">
+                                <label>性别限定&nbsp;:&nbsp;</label>
+                                <label>
+                                    <input type="radio" ng-model="saleAdd.sale.SexLimit" value="-1">
+                                    不限制
+                                </label>
+                                &nbsp;
+                                <label>
+                                    <input type="radio" ng-model="saleAdd.sale.SexLimit" value="1">
+                                    仅男士
+                                </label>
+                                 &nbsp;
+                                <label>
+                                    <input type="radio" ng-model="saleAdd.sale.SexLimit" value="0">
+                                    仅女士
+                                </label>
+                            </div>
+                            
+                            <div class="form-group form-inline">
+                                <label>每个身份证&nbsp;</label>                             
+                                <input ng-model="saleAdd.sale.PerIDLimit.Days" type="number" step="1" min="0" class="form-control" required style="width: 15%;">                               
+                                <label>&nbsp;天内购买&nbsp; </label>                    
+                                <input ng-disabled="saleAdd.sale.PerIDLimit.Days == 0" ng-model="saleAdd.sale.PerIDLimit.Number" type="number" step="1" min="1" class="form-control" style="width: 15%;">
+                                <label>&nbsp;张</label>&nbsp;("0"天代表不限)
+                            </div>
+                            
+                            <div class="form-group form-inline">    
+                                <label>年龄限定</label>&nbsp;("0"代表不限)
+                                <input ng-model="saleAdd.sale.AgeLimit.min" type="number" step="1" min="0" class="form-control" required style="width: 15%;">  
+                                <label>-</label>                    
+                                <input ng-model="saleAdd.sale.AgeLimit.max" type="number" step="1" min="0" class="form-control" required style="width: 15%;">                  
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>限制可购买区域&nbsp;:&nbsp;</label>
+                                <label>
+                                    <input type="radio" 
+                                    value= 0
+                                    ng-model="saleAdd.sale.AreaLimit">
+                                    否
+                                </label>
+                                &nbsp;
+                                <label>
+                                    <input type="radio" 
+                                    value= 1 
+                                    ng-model="saleAdd.sale.AreaLimit">
+                                    是
+                                </label>
+                            </div>
+                            <!-- 省份列表 -->
+                            <div ng-show="saleAdd.sale.AreaLimit == 1">
+                                <ul class="list-group">
+                                  <li class="list-group-item" ng-repeat="orientation in saleAdd.orientationList" style="border: none;">  
+                                    <!-- 区域全选 -->
+                                    <label>
+                                      <input type="checkbox" 
+                                        ng-true-value="true"
+                                        ng-false-value="false"
+                                        ng-model="orientation.allSelected"
+                                        ng-click="saleAdd.chooseAll(orientation)"
+                                      >
+                                      {{orientation.name}}
+                                    </label>
+                                    &emsp;
+                                    <!-- 省 -->
+                                    <ul class="list-inline" style="display: inline-block;">
+                                      <li ng-repeat="province in orientation.province">
+                                        <input type="checkbox" 
+                                          ng-true-value=-1
+                                          ng-false-value=0
+                                          ng-model="province.number"
+                                          ng-click="saleAdd.checkPvc(province)"
+                                        >
+                                        <a ng-click="saleAdd.updateCityList(province)">  
+                                        {{province.name}}
+                                        <strong ng-show="province.number>0" class="text-success">({{province.number}})</strong>
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                                <!-- 城市列表 -->
+                                <div ng-show=saleAdd.showCityList>
+                                    <b>{{ saleAdd.expandProvince.name }}</b>的市级:&nbsp;
+                                    <span ng-repeat="city in saleAdd.cityList">
+                                        <input type="checkbox"
+                                          ng-true-value=-1
+                                          ng-false-value=0
+                                          ng-model="city.number"
+                                          ng-click="saleAdd.checkCity(city)"
+                                        >                                  
+                                        <a ng-click="saleAdd.updateRegionList(city)">
+                                        {{city.city}}
+                                        <strong ng-show="city.number>0" class="text-success">({{city.number}})</strong>
+                                        </a>
+                                    </span> 
+                                </div>
+                                <!-- 区县列表 -->
+                                <div ng-show=saleAdd.showRegionList>
+                                    <b>{{ saleAdd.expandCity.city }}</b>的区县:&nbsp;
+                                    <span ng-repeat="region in saleAdd.regionList">
+                                        <input type="checkbox"
+                                          ng-true-value=1
+                                          ng-false-value=0
+                                          ng-model="region.selected"
+                                          ng-click="saleAdd.checkRegion(region)"
+                                        >                                  
+                                        <label>{{region.area}}</label>
+                                    </span> 
                                 </div>
                             </div>
                         </div>
+                        <br>
+                        <hr class="hr-half">
+                        <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#realIdentityRules">
+                            实名制身份证规则设置
+                            <span class="caret"></span>
+                        </button>
+                        <br>
+                        <div class="collapse" id="realIdentityRules">
+                            <br>
+                            <!-- <div class="input-group">
+                                实名身份证是否必填&nbsp;:&nbsp;                            
+                                <label>
+                                    <input type="radio" 
+                                    value=-1 
+                                    ng-model="saleAdd.sale.IDCardNeeded">
+                                    否
+                                </label>
+                                &nbsp;
+                                <label>
+                                    <input type="radio" 
+                                    value=1 
+                                    ng-model="saleAdd.sale.IDCardNeeded">
+                                    是
+                                </label>
+                            </div> -->
+                            <!--  <br> -->
+                            <div class="form-group">
+                                <label>实名游客性别限定&nbsp;:&nbsp;</label>                 
+                                <label>
+                                    <input type="radio" ng-model="saleAdd.sale.RealSexLimit" value="-1">
+                                    不限制
+                                </label>
+                                &nbsp;
+                                <label>
+                                    <input type="radio" ng-model="saleAdd.sale.RealSexLimit" value="1">
+                                    仅男士
+                                </label>
+                                 &nbsp;
+                                <label>
+                                    <input type="radio" ng-model="saleAdd.sale.RealSexLimit" value="0">
+                                    仅女士
+                                </label>
+                            </div>
+                            
+                            <div class="form-group form-inline">
+                                <label>每个实名游客身份证 &nbsp;</label>
+                                <input ng-model="saleAdd.sale.RealPerIDLimit.Days" type="number" step="1" min="0" class="form-control" required style="width: 15%;">                               
+                                <label>&nbsp;天内购买&nbsp; </label>                    
+                                <input ng-disabled="saleAdd.sale.RealPerIDLimit.Days == 0"
+                                ng-model="saleAdd.sale.RealPerIDLimit.Number" type="number" step="1" min="1" class="form-control" style="width: 15%;">
+                                <label>&nbsp;张</label>&nbsp;("0"天代表不限)
+                            </div>
+                            
+                            <div class="form-group form-inline">    
+                                <label>年龄限定</label>&nbsp;("0"代表不限)
+                                <input ng-model="saleAdd.sale.RealAgeLimit.min" type="number" step="1" min="0" class="form-control" required style="width: 15%;">  
+                                <label>-</label>                    
+                                <input ng-model="saleAdd.sale.RealAgeLimit.max" type="number" step="1" min="0" class="form-control" required style="width: 15%;">                  
+                            </div>
+                            
+                            <div class="form-group input-group">
+                                <label>限制可购买区域(省、市、区)&nbsp;:&nbsp;</label>
+                                <label>
+                                    <input type="radio" 
+                                    value=0
+                                    ng-model="saleAdd.sale.RealAreaLimit">
+                                    否
+                                </label>
+                                &nbsp;
+                                <label>
+                                    <input type="radio" 
+                                    value=1 
+                                    ng-model="saleAdd.sale.RealAreaLimit">
+                                    是
+                                </label>
+                            </div>
+                            <!-- 省份列表 -->
+                            <div ng-show="saleAdd.sale.RealAreaLimit == 1">
+                                <ul class="list-group">
+                                  <li class="list-group-item" ng-repeat="orientation in saleAdd.orientationListR" style="border: none;">  
+                                    <!-- 区域全选 -->
+                                    <label>
+                                      <input type="checkbox" 
+                                        ng-true-value="true"
+                                        ng-false-value="false"
+                                        ng-model="orientation.allSelected"
+                                        ng-click="saleAdd.chooseAll(orientation)"
+                                      >
+                                      {{orientation.name}}
+                                    </label>
+                                    &emsp;
+                                    <!-- 省 -->
+                                    <ul class="list-inline" style="display: inline-block;">
+                                      <li ng-repeat="province in orientation.province">
+                                        <input type="checkbox" 
+                                          ng-true-value=-1
+                                          ng-false-value=0
+                                          ng-model="province.number"
+                                          ng-click="saleAdd.checkPvcR(province)"
+                                        >
+                                        <a ng-click="saleAdd.updateCityListR(province)">  
+                                        {{province.name}}
+                                        <strong ng-show="province.number>0" class="text-success">({{province.number}})</strong>
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                                <!-- 城市列表 -->
+                                <div ng-show=saleAdd.showCityListR>
+                                    <b>{{ saleAdd.expandProvinceR.name }}</b>的市级:&nbsp;
+                                    <span ng-repeat="city in saleAdd.cityListR">
+                                        <input type="checkbox"
+                                          ng-true-value=-1
+                                          ng-false-value=0
+                                          ng-model="city.number"
+                                          ng-click="saleAdd.checkCityR(city)"
+                                        >                                  
+                                        <a ng-click="saleAdd.updateRegionListR(city)">
+                                        {{city.city}}
+                                        <strong ng-show="city.number>0" class="text-success">({{city.number}})</strong>
+                                        </a>
+                                    </span> 
+                                </div>
+                                <!-- 区县列表 -->
+                                <div ng-show=saleAdd.showRegionListR>
+                                    <b>{{ saleAdd.expandCityR.city }}</b>的区县:&nbsp;
+                                    <span ng-repeat="region in saleAdd.regionListR">
+                                        <input type="checkbox"
+                                          ng-true-value=1
+                                          ng-false-value=0
+                                          ng-model="region.selected"
+                                          ng-click="saleAdd.checkRegionR(region)"
+                                        >                                  
+                                        <label>{{region.area}}</label>
+                                    </span> 
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
                         <div class="form-group pull-right">
                             <div class="controls">
                                 <button ui-sref="saleList" class="btn btn-default">
                                     取消
                                 </button>
-                                <button type="submit" class="btn btn-primary" ng-class="{disabled:saleAdd.submitting}">
+                                <button ng-click="saleAdd.submit()" class="btn btn-primary" ng-class="{disabled:saleAdd.submitting}">
                                     {{saleAdd.addBtnText}}
                                 </button>
                             </div>

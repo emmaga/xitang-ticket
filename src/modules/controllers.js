@@ -574,7 +574,7 @@
     }
   ]);
 
-app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+  app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
     function($scope, $http, $cookies, $location, $window, NgTableParams) {
       console.log('toBeChecked');
       var self = this;
@@ -803,19 +803,32 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       console.log('checkDetailStatement');
       var self = this;
       self.init = function() {
-        $('.form_datetime').datetimepicker({
-          language:  'zh-CN',
-          weekStart: 1,
-          todayBtn:  1,
-          autoclose: 1,
-          todayHighlight: 1,
-          startView: 2,
-          forceParse: 0,
-          showMeridian: 1
+        $('.form_date').datetimepicker({
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            showMeridian: 1
         });
         self.search(false);
+        $('#check-time-start').val('00:00:00')
+        $('#check-time-end').val('23:59:59')
       }
 
+      self.clearCheckStart = function () {
+        $('#check-time-start').val('00:00:00')
+        $('#rd_qcaxwa').val('')
+        $('#check-date-start').val('')
+      }
+      self.clearCheckEnd = function () {
+        $('#check-time-end').val('23:59:59')
+        $('#rd_khaydt').val('')
+        $('#check-date-end').val('')
+      }
       self.sumFloat = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
@@ -835,11 +848,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.ticket = function(data, field) {
         var ret = "";
         var tickets = [];
-
         for (var i = 0; i < data.length; i++) {
           checkTickets(data[i][field], data[i]['checkedTickets']);
         }
-
         for(var i = 0; i < tickets.length; i++) {
           ret += tickets[i].name +'：'+ tickets[i].num ;
           if (i  < tickets.length -1) {
@@ -880,42 +891,32 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
 
           var sDate = new Date();
-          sDate.setHours(0);
-          sDate.setMinutes(0);
-          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+          
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
           $('#rd_qcaxwa').val(sDate);
           $('#check-date-start').val(sDate);
 
           var eDate = new Date();
-          eDate.setHours(23);
-          eDate.setMinutes(59);
-          eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+          
+          eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
           $('#rd_khaydt').val(eDate);
           $('#check-date-end').val(eDate);
 
         }
         // 仅开始时间为空时
-        else if(!$('#rd_qcaxwa').val()) {
-          var d = new Date($('#rd_khaydt').val());
-          d.setHours(0);
-          d.setMinutes(0);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_qcaxwa').val(d);
-          $('#check-date-start').val(d);
+        else if(!$('#rd_qcaxwa').val()) {          
+          $('#rd_qcaxwa').val($('#rd_khaydt').val());
+          $('#check-date-start').val($('#rd_khaydt').val());
         }
         // 仅结束时间为空时
         else if(!$('#rd_khaydt').val()) {
-          var d = new Date($('#rd_qcaxwa').val());
-          d.setHours(23);
-          d.setMinutes(59);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_khaydt').val(d);
-          $('#check-date-end').val(d);
+          $('#rd_khaydt').val($('#rd_qcaxwa').val());
+          $('#check-date-end').val($('#rd_qcaxwa').val());
         }
 
         //读取成交日期
-        self.checkDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-        self.checkDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+        self.checkDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#check-time-start').val()).getTime() : '';
+        self.checkDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#check-time-end').val()).getTime() : '';
       
         var data = {
           "action": "ExportcheckDetailStatement",
@@ -971,47 +972,33 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               if (!flag) {
                   //如果检票时间为空，默认设置为当天查询，如果某个时间为空
                   if (!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
-
-                      var sDate = new Date();
-                      sDate.setHours(0);
-                      sDate.setMinutes(0);
-                      sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+                      var sDate = new Date(); 
+                      sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
                       $('#rd_qcaxwa').val(sDate);
                       $('#check-date-start').val(sDate);
 
                       var eDate = new Date();
-                      eDate.setHours(23);
-                      eDate.setMinutes(59);
-                      eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                     
+                      eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
                       $('#rd_khaydt').val(eDate);
                       $('#check-date-end').val(eDate);
 
                   }
                   // 仅开始时间为空时
-                  else if (!$('#rd_qcaxwa').val()) {
-                      var d = new Date($('#rd_khaydt').val());
-                      d.setHours(0);
-                      d.setMinutes(0);
-                      d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                      $('#rd_qcaxwa').val(d);
-                      $('#check-date-start').val(d);
+                  else if (!$('#rd_qcaxwa').val()) {                     
+                      $('#rd_qcaxwa').val($('#rd_khaydt').val());
+                      $('#check-date-start').val($('#rd_khaydt').val());
                   }
                   // 仅结束时间为空时
                   else if (!$('#rd_khaydt').val()) {
-                      var d = new Date($('#rd_qcaxwa').val());
-                      d.setHours(23);
-                      d.setMinutes(59);
-                      d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                      $('#rd_khaydt').val(d);
-                      $('#check-date-end').val(d);
+                      $('#rd_khaydt').val($('#rd_qcaxwa').val());
+                      $('#check-date-end').val($('#rd_qcaxwa').val());
                   }
               }
 
-
-
-              //读取成交日期
-              self.checkDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-              self.checkDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+              //读取检票日期
+              self.checkDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#check-time-start').val()).getTime() : '';
+              self.checkDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#check-time-end').val()).getTime() : '';
             
               var data = {
                 "action": "GetcheckDetailStatement",
@@ -1048,10 +1035,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     self.totalCheckedTickets = data.lists.totalCheckedTickets;
                     self.totalCheckedPrice = data.lists.totalCheckedPrice;
                     return data.lists.lists;
-                  }else if(data.rescode === 401){
+                  } else if(data.rescode === 401){
                     alert('登录超时，请重新登录');
                     $location.path('/index');
-                  }else {
+                  } else {
                     alert(data.errInfo);
                   }  
                 }, function errorCallback(response) {
@@ -1228,19 +1215,43 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       self.showTable(true);
 
       self.init = function() {
-        $('.form_datetime').datetimepicker({
+        $('.form_date').datetimepicker({
           language:  'zh-CN',
           weekStart: 1,
           todayBtn:  1,
           autoclose: 1,
           todayHighlight: 1,
           startView: 2,
+          minView: 2,
           forceParse: 0,
           showMeridian: 1
         });
-
+        $('#order-create-time-start').val('00:00:00')
+        $('#order-create-time-end').val('23:59:59')
+        $('#check-time-start').val('00:00:00')
+        $('#check-time-end').val('23:59:59')
       }
-
+      // 成交 检票的清除按钮
+      self.clearOrderStart = function () {
+        $('#order-create-time-start').val('00:00:00')
+        $('#rd_qcaxwa').val('')
+        $('#order-create-date-start').val('')
+      }
+      self.clearOrderEnd = function () {
+        $('#order-create-time-end').val('23:59:59')
+        $('#rd_khaydt').val('')
+        $('#order-create-date-end').val('')
+      }
+      self.clearCheckStart = function () {
+        $('#check-time-start').val('00:00:00')
+        $('#rd_lptvht').val('')
+        $('#check-date-start').val('')
+      }
+      self.clearCheckEnd = function () {
+        $('#check-time-end').val('23:59:59')
+        $('#rd_idwdiz').val('')
+        $('#check-date-end').val('')
+      }
       self.sum = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
@@ -1263,48 +1274,34 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
         //如果检票时间为空，默认设置为当天查询，如果某个时间为空，补全整个时间段前移或后移
         if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
-
           var sDate = new Date();
-          sDate.setHours(0);
-          sDate.setMinutes(0);
-          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd  HH:mm');
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
           $('#rd_lptvht').val(sDate);
           $('#check-date-start').val(sDate);
           var eDate = new Date();
-          eDate.setHours(23);
-          eDate.setMinutes(59);
-          eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+          eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
           $('#rd_idwdiz').val(eDate);
           $('#check-date-end').val(eDate);
-
         }
+
         // 仅开始时间为空时
         else if(!$('#rd_lptvht').val()) {
-          var d = new Date($('#rd_idwdiz').val());
-          d.setHours(0);
-          d.setMinutes(0);
-          
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_lptvht').val(d);
-          $('#check-date-start').val(d);
+          $('#rd_lptvht').val($('#rd_idwdiz').val());
+          $('#check-date-start').val($('#rd_idwdiz').val());
         }
         // 仅结束时间为空时
         else if(!$('#rd_idwdiz').val()) {
-          var d = new Date($('#rd_lptvht').val());
-           d.setHours(23);
-           d.setMinutes(59);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_idwdiz').val(d);
-          $('#check-date-end').val(d);
+          $('#rd_idwdiz').val($('#rd_lptvht').val());
+          $('#check-date-end').val($('#rd_lptvht').val());
         }
 
         //读取成交日期
-        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-        self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#order-create-time-start').val()).getTime() : '';
+        self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#order-create-time-end').val()).getTime() : '';
         
         //读取检票日期
-        self.checkDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val())).getTime() : '';
-        self.checkDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
+        self.checkDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' ' + $('#check-time-start').val()).getTime() : '';
+        self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' ' + $('#check-time-end').val()).getTime() : '';
 
         var data = {
           "action": "ExportCheckStatement",
@@ -1366,53 +1363,35 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
 
                   var sDate = new Date();
-                  sDate.setHours(0);
-                  sDate.setMinutes(0);
-                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd  HH:mm');
+                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
                   $('#rd_lptvht').val(sDate);
                   $('#check-date-start').val(sDate);
                   var eDate = new Date();
-                  eDate.setHours(23);
-                  eDate.setMinutes(59);
-                  eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
                   $('#rd_idwdiz').val(eDate);
                   $('#check-date-end').val(eDate);
 
                 }
                 // 仅开始时间为空时
                 else if(!$('#rd_lptvht').val()) {
-                  var d = new Date($('#rd_idwdiz').val());
-                  d.setHours(0);
-                  d.setMinutes(0);
-                  
-                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                  $('#rd_lptvht').val(d);
-                  $('#check-date-start').val(d);
+                  $('#rd_lptvht').val($('#rd_idwdiz').val());
+                  $('#check-date-start').val($('#rd_idwdiz').val());
                 }
                 // 仅结束时间为空时
                 else if(!$('#rd_idwdiz').val()) {
-                  var d = new Date($('#rd_lptvht').val());
-                   d.setHours(23);
-                   d.setMinutes(59);
-                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                  $('#rd_idwdiz').val(d);
-                  $('#check-date-end').val(d);
+                  $('#rd_idwdiz').val($('#rd_lptvht').val());
+                  $('#check-date-end').val($('#rd_lptvht').val());
                 }
               }
                
-
-   
-              //读取成交日期
-              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-              self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
-              // //
-              // self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
-              // self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
+              //读取成交日期             
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#order-create-time-start').val()).getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#order-create-time-end').val()).getTime() : '';
               
               //读取检票日期
-              self.checkDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val()) ).getTime() : '';
-              self.checkDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
-
+              self.checkDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' ' + $('#check-time-start').val()).getTime() : '';
+              self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' ' + $('#check-time-end').val()).getTime() : '';
+              
               var data = {
                 "action": "GetCheckStatement",
                 "account": $cookies.get('account'),
@@ -1484,17 +1463,18 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               if (!flag) { 
                 //如果检票时间为空，默认设置为当天查询，如果某个时间为空，补全整个时间段前移或后移
                 if(!$('#rd_lptvht').val() && !$('#rd_idwdiz').val()) {
-
                   var sDate = new Date();
                   sDate.setHours(0);
                   sDate.setMinutes(0);
-                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd  HH:mm');
+                  sDate.setSeconds(0)
+                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd  HH:mm:ss');
                   $('#rd_lptvht').val(sDate);
                   $('#check-date-start').val(sDate);
                   var eDate = new Date();
                   eDate.setHours(23);
                   eDate.setMinutes(59);
-                  eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  sDate.setSeconds(59)
+                  eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm:ss');
                   $('#rd_idwdiz').val(eDate);
                   $('#check-date-end').val(eDate);
 
@@ -1504,8 +1484,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   var d = new Date($('#rd_idwdiz').val());
                   d.setHours(0);
                   d.setMinutes(0);
-                  
-                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                  d.setSeconds(0)
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:ss');
                   $('#rd_lptvht').val(d);
                   $('#check-date-start').val(d);
                 }
@@ -1514,7 +1494,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                   var d = new Date($('#rd_lptvht').val());
                    d.setHours(23);
                    d.setMinutes(59);
-                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
+                   d.setSeconds(59)
+                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm:mm');
                   $('#rd_idwdiz').val(d);
                   $('#check-date-end').val(d);
                 }
@@ -1522,15 +1503,15 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       
               //读取成交日期
-              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-              self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val()).getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val()).getTime() : '';
               // //
               // self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
               // self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
               
               //读取检票日期
-              self.checkDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val()) ).getTime() : '';
-              self.checkDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
+              self.checkDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val()).getTime() : '';
+              self.checkDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val()).getTime() : '';
 
               var data = {
                 "action": "GetCheckStatementList",
@@ -1591,21 +1572,44 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     function($scope, $http, $cookies, $location, $window, $filter, NgTableParams) {
       console.log('operatingStatement');
       var self = this;
-
       self.init = function() {
-        $('.form_datetime').datetimepicker({
-          language:  'zh-CN',
-          weekStart: 1,
-          todayBtn:  1,
-          autoclose: 1,
-          todayHighlight: 1,
-          startView: 2,
-          forceParse: 0,
-          showMeridian: 1
+        $('.form_date').datetimepicker({
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            showMeridian: 1
         });
         self.search(false);
+        $('#order-create-time-start').val('00:00:00')
+        $('#order-create-time-end').val('23:59:59')
+        $('#visit-time-start').val('00:00:00')
+        $('#visit-time-end').val('23:59:59')
       }
-
+      self.clearOrderStart = function () {
+        $('#order-create-time-start').val('00:00:00')
+        $('#rd_qcaxwa').val('')
+        $('#order-create-date-start').val('')
+      }
+      self.clearOrderEnd = function () {
+        $('#order-create-time-end').val('23:59:59')
+        $('#rd_khaydt').val('')
+        $('#order-create-date-end').val('')
+      }
+      self.clearVisitStart = function () {
+        $('#visit-time-start').val('00:00:00')
+        $('#rd_lptvht').val('')
+        $('#visit-date-start').val('')
+      }
+      self.clearVisitEnd = function () {
+        $('#visit-time-end').val('23:59:59')
+        $('#rd_idwdiz').val('')
+        $('#visit-date-end').val('')
+      }
       self.sum = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
@@ -1627,48 +1631,34 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var url = c.requestUrl + '/statement' + c.extension;
 
         //如果成交时间为空，默认设置为当天查询，如果某个时间为空，补全当天时间段
-        if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
-          
+        if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {          
           var sDate = new Date();
-          sDate.setHours(0);
-          sDate.setMinutes(0);
-          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
           $('#rd_qcaxwa').val(sDate);
           $('#order-create-date-start').val(sDate);
           var eDate = new Date();
-          eDate.setHours(23);
-          eDate.setMinutes(59);
-          var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+          var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
           $('#rd_khaydt').val(eDate);
           $('#order-create-date-end').val(eDate);
-
         }
         // 仅开始时间为空时
         else if(!$('#rd_qcaxwa').val()) {
-          var d = new Date($('#rd_khaydt').val());
-          d.setHours(0);
-          d.setMinutes(0);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_qcaxwa').val(d);
-          $('#order-create-date-start').val(d);
+          $('#rd_qcaxwa').val($('#rd_khaydt').val());
+          $('#order-create-date-start').val($('#rd_khaydt').val());
         }
         // 仅结束时间为空时
         else if(!$('#rd_khaydt').val()) {
-          var d = new Date($('#rd_qcaxwa').val());
-          d.setHours(23);
-          d.setMinutes();
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_khaydt').val(d);
-          $('#order-create-date-end').val(d);
+          $('#rd_khaydt').val($('#rd_qcaxwa').val());
+          $('#order-create-date-end').val($('#rd_qcaxwa').val());
         }
 
         //读取成交日期
-        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-        self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#order-create-time-start').val()).getTime() : '';
+        self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#order-create-time-end').val()).getTime() : '';
         
         //读取游玩日期
-        self.visitDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val())).getTime() : '';
-        self.visitDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
+        self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' ' + $('#visit-time-start').val()).getTime() : '';
+        self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' ' + $('#visit-time-end').val()).getTime() : '';
 
         var data = {
           "action": "ExportOperatingStatement",
@@ -1727,49 +1717,35 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 //如果成交时间为空，默认设置为当天查询，如果某个时间为空，补全当天时间段
                 if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
                   
-                  var sDate = new Date();
-                  sDate.setHours(0);
-                  sDate.setMinutes(0);
-                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  var sDate = new Date();          
+                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
                   $('#rd_qcaxwa').val(sDate);
                   $('#order-create-date-start').val(sDate);
-                  var eDate = new Date();
-                  eDate.setHours(23);
-                  eDate.setMinutes(59);
-                  var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  var eDate = new Date();                  
+                  var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
                   $('#rd_khaydt').val(eDate);
                   $('#order-create-date-end').val(eDate);
 
                 }
                 // 仅开始时间为空时
                 else if(!$('#rd_qcaxwa').val()) {
-                  var d = new Date($('#rd_khaydt').val());
-                  d.setHours(0);
-                  d.setMinutes(0);
-                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                  $('#rd_qcaxwa').val(d);
-                  $('#order-create-date-start').val(d);
+                  $('#rd_qcaxwa').val($('#rd_khaydt').val());
+                  $('#order-create-date-start').val($('#rd_khaydt').val());
                 }
                 // 仅结束时间为空时
-                else if(!$('#rd_khaydt').val()) {
-                  var d = new Date($('#rd_qcaxwa').val());
-                  d.setHours(23);
-                  d.setMinutes(59);
-                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                  $('#rd_khaydt').val(d);
-                  $('#order-create-date-end').val(d);
+                else if(!$('#rd_khaydt').val()) {              
+                  $('#rd_khaydt').val($('#rd_qcaxwa').val());
+                  $('#order-create-date-end').val($('#rd_qcaxwa').val());
                 }
               }
               
-
-              
               //读取成交日期
-              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-              self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
-
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#order-create-time-start').val()).getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#order-create-time-end').val()).getTime() : '';
+              
               //读取游玩日期
-              self.visitDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val())).getTime() : '';
-              self.visitDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
+              self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' ' + $('#visit-time-start').val()).getTime() : '';
+              self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' ' + $('#visit-time-end').val()).getTime() : '';
 
               var data = {
                 "action": "GetOperatingStatement",
@@ -1822,8 +1798,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           }
         );
       };
-
-
     }
   ]);
   // 改签报表 
@@ -1832,19 +1806,31 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       console.log('operatingStatement');
       var self = this;
       self.init = function() {
-        $('.form_datetime').datetimepicker({
+        $('.form_date').datetimepicker({
           language:  'zh-CN',
           weekStart: 1,
           todayBtn:  1,
           autoclose: 1,
           todayHighlight: 1,
           startView: 2,
+          minView: 2,
           forceParse: 0,
           showMeridian: 1
         });
+        $('#order-create-time-start').val('00:00:00')
+        $('#order-create-time-end').val('23:59:59')
         self.search(false)
       }
-
+      self.clearOrderStart = function () {
+        $('#order-create-time-start').val('00:00:00')
+        $('#rd_qcaxwa').val('')
+        $('#order-create-date-start').val('')
+      }
+      self.clearOrderEnd = function () {
+        $('#order-create-time-end').val('23:59:59')
+        $('#rd_khaydt').val('')
+        $('#order-create-date-end').val('')
+      }
       self.sum = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
@@ -1869,43 +1855,31 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
 
           var sDate = new Date();
-          sDate.setHours(0);
-          sDate.setMinutes(0);
-          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+         
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
           $('#rd_qcaxwa').val(sDate);
           $('#order-create-date-start').val(sDate);
 
           var eDate = new Date();
-          eDate.setHours(23);
-          eDate.setMinutes(59);
-          var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+         
+          var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
           $('#rd_khaydt').val(eDate);
           $('#order-create-date-end').val(eDate);
 
         }
         // 仅开始时间为空时
         else if(!$('#rd_qcaxwa').val()) {
-          var d = new Date($('#rd_khaydt').val());
-          d.setHours(0);
-          d.setMinutes(0);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_qcaxwa').val(d);
-          $('#order-create-date-start').val(d);
+          $('#rd_qcaxwa').val($('#rd_khaydt').val());
+          $('#order-create-date-start').val($('#rd_khaydt').val());
         }
         // 仅结束时间为空时
         else if(!$('#rd_khaydt').val()) {
-          var d = new Date($('#rd_qcaxwa').val());
-          d.setHours(23);
-          d.setMinutes(59);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_khaydt').val(d);
-          $('#order-create-date-end').val(d);
+          $('#rd_khaydt').val($('#rd_qcaxwa').val());
+          $('#order-create-date-end').val($('#rd_qcaxwa').val());
         }
 
- 
-
-        self.updateVisitDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-        self.updateVisitDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+        self.updateVisitDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#order-create-time-start').val()).getTime() : '';
+        self.updateVisitDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#order-create-time-end').val()).getTime() : '';
         var data = {
           "action": "ExportUpdateVisitDateStatus",
           "account": $cookies.get('account'),
@@ -1962,45 +1936,37 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
 
                   var sDate = new Date();
-                  sDate.setHours(0);
-                  sDate.setMinutes(0);
-                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+                 
+                  sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
                   $('#rd_qcaxwa').val(sDate);
                   $('#order-create-date-start').val(sDate);
 
                   var eDate = new Date();
-                  eDate.setHours(23);
-                  eDate.setMinutes(59);
-                  var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd HH:mm');
+                  
+                  var eDate = $filter('date')(eDate.getTime(), 'yyyy-MM-dd');
                   $('#rd_khaydt').val(eDate);
                   $('#order-create-date-end').val(eDate);
 
                 }
                 // 仅开始时间为空时
                 else if(!$('#rd_qcaxwa').val()) {
-                  var d = new Date($('#rd_khaydt').val());
-                  d.setHours(0);
-                  d.setMinutes(0);
-                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                  $('#rd_qcaxwa').val(d);
-                  $('#order-create-date-start').val(d);
+
+                  $('#rd_qcaxwa').val($('#rd_khaydt').val());
+                  $('#order-create-date-start').val($('#rd_khaydt').val());
                 }
                 // 仅结束时间为空时
                 else if(!$('#rd_khaydt').val()) {
-                  var d = new Date($('#rd_qcaxwa').val());
-                  d.setHours(23);
-                  d.setMinutes(59);
-                  d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                  $('#rd_khaydt').val(d);
-                  $('#order-create-date-end').val(d);
+
+                  $('#rd_khaydt').val($('#rd_qcaxwa').val());
+                  $('#order-create-date-end').val($('#rd_qcaxwa').val());
                 }
               }
 
 
 
               //改签时间
-              self.updateVisitDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-              self.updateVisitDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+              self.updateVisitDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#order-create-time-start').val()).getTime() : '';
+              self.updateVisitDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#order-create-time-end').val()).getTime() : '';
 
 
               var data = {
@@ -2027,8 +1993,7 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               
               return $http.post(url, data).then(function successCallback(response) {
                   self.loading = false;
-                  var data = response.data;
-                  
+                  var data = response.data;                  
                   if(data.rescode === 200) {
                     //查无数据
                     if(data.orders.totalCount === 0) {
@@ -2066,20 +2031,43 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       var self = this;
 
       self.init = function() {
-        $('.form_datetime').datetimepicker({
+        $('.form_date').datetimepicker({
           language:  'zh-CN',
           weekStart: 1,
           todayBtn:  1,
           autoclose: 1,
           todayHighlight: 1,
           startView: 2,
+          minView: 2,
           forceParse: 0,
           showMeridian: 1
         });
-
+        $('#order-create-time-start').val('00:00:00')
+        $('#order-create-time-end').val('23:59:59')
+        $('#visit-time-start').val('00:00:00')
+        $('#visit-time-end').val('23:59:59')
         self.search(false);
       }
-
+      self.clearOrderStart = function () {
+        $('#order-create-time-start').val('00:00:00')
+        $('#rd_qcaxwa').val('')
+        $('#order-create-date-start').val('')
+      }
+      self.clearOrderEnd = function () {
+        $('#order-create-time-end').val('23:59:59')
+        $('#rd_khaydt').val('')
+        $('#order-create-date-end').val('')
+      }
+      self.clearVisitStart = function () {
+        $('#visit-time-start').val('00:00:00')
+        $('#rd_lptvht').val('')
+        $('#visit-date-start').val('')
+      }
+      self.clearVisitEnd = function () {
+        $('#visit-time-end').val('23:59:59')
+        $('#rd_idwdiz').val('')
+        $('#visit-date-end').val('')
+      }
       self.sum = function(data, field){
         var t = 0;
         for (var i = 0; i < data.length; i++) {
@@ -2101,46 +2089,34 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         var url = c.requestUrl + '/statement' + c.extension;
         // 如果成交时间为空，默认设置为当天查询，
         if(!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
-          var sDate = new Date();
-          sDate.setHours(0);
-          sDate.setMinutes(0);
-          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+          var sDate = new Date();          
+          sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
           $('#rd_qcaxwa').val(sDate);
           $('#check-date-start').val(sDate);
-          var eDate = new Date();
-          eDate.setHours(23);
-          eDate.setMinutes(59);
-          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
+
+          var eDate = new Date();         
+          var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
           $('#rd_khaydt').val(eDate);
           $('#check-date-end').val(eDate);
-
         }
         // 仅开始时间为空时
         else if(!$('#rd_qcaxwa').val()) {
-          var d = new Date($('#rd_khaydt').val());
-          d.setHours(0);
-          d.setMinutes(0);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_qcaxwa').val(d);
-          $('#check-date-start').val(d);
+          $('#rd_qcaxwa').val($('#rd_khaydt').val());
+          $('#check-date-start').val($('#rd_khaydt').val());
         }
         // 仅结束时间为空时
         else if(!$('#rd_khaydt').val()) {
-          var d = new Date($('#rd_qcaxwa').val());
-          d.setHours(23);
-          d.setMinutes(59);
-          d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-          $('#rd_khaydt').val(d);
-          $('#check-date-end').val(d);
+          $('#rd_khaydt').val($('#rd_qcaxwa').val());
+          $('#check-date-end').val($('#rd_qcaxwa').val());
         }
 
         //读取成交日期
-        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-        self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+        self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#order-create-time-start').val()).getTime() : '';
+        self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#order-create-time-end').val()).getTime() : '';
         
         //读取游玩日期
-        self.visitDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val())).getTime() : '';
-        self.visitDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
+        self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' ' + $('#visit-time-start').val()).getTime() : '';
+        self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' ' + $('#visit-time-end').val()).getTime() : '';
 
         var data = {
           "action": "ExportBookerDetailStatement",
@@ -2201,49 +2177,36 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               if (!flag) {
                   // 如果成交时间为空，默认设置为当天查询，
                   if (!$('#rd_qcaxwa').val() && !$('#rd_khaydt').val()) {
-                      var sDate = new Date();
-                      sDate.setHours(0);
-                      sDate.setMinutes(0);
-                      sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd HH:mm');
+                      var sDate = new Date();            
+                      sDate = $filter('date')(sDate.getTime(), 'yyyy-MM-dd');
                       $('#rd_qcaxwa').val(sDate);
                       $('#check-date-start').val(sDate);
-                      var eDate = new Date();
-                      eDate.setHours(23);
-                      eDate.setMinutes(59);
-                      var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd HH:mm');
+                      var eDate = new Date();                     
+                      var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
                       $('#rd_khaydt').val(eDate);
                       $('#check-date-end').val(eDate);
-
                   }
                   // 仅开始时间为空时
                   else if (!$('#rd_qcaxwa').val()) {
-                      var d = new Date($('#rd_khaydt').val());
-                      d.setHours(0);
-                      d.setMinutes(0);
-                      d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                      $('#rd_qcaxwa').val(d);
-                      $('#check-date-start').val(d);
+                      $('#rd_qcaxwa').val($('#rd_khaydt').val());
+                      $('#check-date-start').val($('#rd_khaydt').val());
                   }
                   // 仅结束时间为空时
                   else if (!$('#rd_khaydt').val()) {
-                      var d = new Date($('#rd_qcaxwa').val());
-                      d.setHours(23);
-                      d.setMinutes(59);
-                      d = $filter('date')(d.getTime(), 'yyyy-MM-dd HH:mm');
-                      $('#rd_khaydt').val(d);
-                      $('#check-date-end').val(d);
+                      $('#rd_khaydt').val($('#rd_qcaxwa').val());
+                      $('#check-date-end').val($('#rd_qcaxwa').val());
                   }
               }
 
 
 
               //读取成交日期
-              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? $filter('emptySec')(new Date($('#rd_qcaxwa').val())).getTime() : '';
-              self.orderCreateDateEnd = $('#rd_khaydt').val() ? $filter('emptySec')(new Date($('#rd_khaydt').val())).getTime() : '';
+              self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' ' + $('#order-create-time-start').val()).getTime() : '';
+              self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' ' + $('#order-create-time-end').val()).getTime() : '';
 
               //读取游玩日期
-              self.visitDateStart = $('#rd_lptvht').val() ? $filter('emptySec')(new Date($('#rd_lptvht').val())).getTime() : '';
-              self.visitDateEnd = $('#rd_idwdiz').val() ? $filter('emptySec')(new Date($('#rd_idwdiz').val())).getTime() : '';
+              self.visitDateStart = $('#rd_lptvht').val() ? new Date($('#rd_lptvht').val() + ' ' + $('#visit-time-start').val()).getTime() : '';
+              self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' ' + $('#visit-time-end').val()).getTime() : '';
 
               var data = {
                 "action": "GetBookerDetailStatement",
@@ -2310,6 +2273,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
 
       self.formatOrderTicketCode = function(str) {
         return str && str.split(',').join(', ');
+      }
+      self.formatCheckTime = function (time) {
+        return $filter('date')(time, 'yyyy-MM-dd HH:mm:ss');
       }
 
       // 保存按钮，不可重复点击
@@ -2608,20 +2574,15 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         function($scope, $state, $stateParams, $http, $cookies, $location, $filter, auth) {
             console.log('checkDetail');
             var self = this;
-
             self.id = $scope.root.coverParamId;
-
             self.close = function() {
                 $scope.root.coverUrl = '';
                 $scope.root.coverParamId = '';
-
-
             };
             // 保存按钮，不可重复点击
             self.submitting = false;
             self.saveTxt = '保存';
             self.updateVisitDate=function(){
-
                 $('#visitTimeHidden').datetimepicker('show').on('changeDate', function(ev){
                     $scope.$apply(function(){
                             self.orders.visitDateStart = $('#updateDate').val();
@@ -2686,18 +2647,22 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           forceParse: 0,
           showMeridian: 1
         });
-        $('.form_datetime').datetimepicker({
-          language:  'zh-CN',
-          weekStart: 1,
-          todayBtn:  1,
-          autoclose: 1,
-          todayHighlight: 1,
-          startView: 2,
-          forceParse: 0,
-          showMeridian: 1
-        });
+        $('#check-time-start').val('00:00:00')
+        $('#check-time-end').val('23:59:59')
         self.search(false);
       }
+      // 自制清空按钮
+      self.clearCheckStart = function () {
+        $('#check-time-start').val('00:00:00')
+        $('#rd_zpqvrt').val('')
+        $('#check-date-start').val('')
+      }
+      self.clearCheckEnd = function () {
+        $('#check-time-end').val('23:59:59')
+        $('#rd_fiekwn').val('')
+        $('#check-date-end').val('')
+      }
+
       self.export = function() {
         var c = $scope.root.config;
         var url = c.requestUrl + '/orders' + c.extension;
@@ -2838,9 +2803,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 }
 
               }
-              
-
-
               //读取成交日期
               self.orderCreateDateStart = $('#rd_qcaxwa').val() ? new Date($('#rd_qcaxwa').val() + ' 00:00:00').getTime() : '';
               self.orderCreateDateEnd = $('#rd_khaydt').val() ? new Date($('#rd_khaydt').val() + ' 23:59:59').getTime() : '';
@@ -2850,9 +2812,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
               self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' 23:59:59').getTime() : '';
 
               // 检票时间
-              self.checkDateStart = $('#rd_zpqvrt').val() ? $filter('emptySec')(new Date($('#rd_zpqvrt').val())).getTime() : '';
-              self.checkDateEnd = $('#rd_fiekwn').val() ? $filter('emptySec')(new Date($('#rd_fiekwn').val())).getTime() : '';
-
+              self.checkDateStart = $('#rd_zpqvrt').val() ? new Date($('#rd_zpqvrt').val() + ' ' + $('#check-time-start').val()).getTime() : '';
+              self.checkDateEnd = $('#rd_fiekwn').val() ? new Date($('#rd_fiekwn').val() + ' ' + $('#check-time-end').val()).getTime() : '';
+              
               var data = {
                 "action": "GetList",
                 "account": $cookies.get('account'),
@@ -4054,167 +4016,881 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     }
   ]);
 
-  app.controller('saleAddController', ['$scope', '$location', '$cookies', '$http', function($scope, $location, $cookies, $http) {
-    console.log('saleAdd');
-    var self = this;
-
-    this.init = function() {
-      $('.form_date').datetimepicker({
-        language:  'zh-CN',
-        weekStart: 1,
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0
-      });
-      this.initPartnersList();
-      this.initpartnerConfig();
-    };
-
-    this.initPartnersList = function() {
-
-      var c = $scope.root.config;
-      var url = c.requestUrl + '/partners' + c.extension;
-
-      var data = {
-        "action": "GetList",
-        "account": $cookies.get('account'),
-        "token": $cookies.get('token'),
-        "projectName": $cookies.get('projectName'),
-        "sortBy": "CreateDate",
-        "orderBy": "desc",
-        "count": 10000,
-        "page": 1,
-        "search": {
-          "partnerName": ""
-        }
-      };
-      data = JSON.stringify(data);
-
-      $http.post(url, data).then(function successCallback(response) {
-          var data = response.data;
-          if(data.rescode === 200) {
-            self.partners = data.partners.lists;
-            // self.myPartner = self.partners[0];
-          }else if(data.rescode === 401){
-            alert('登录超时，请重新登录');
-            $location.path('/index');
-          }else {
-            alert(data.errInfo);
-          }  
-        }, function errorCallback(response) {
-          alert('读取分销商信息失败，请刷新页面重试');
+  app.controller('saleAddController', ['$scope', '$state', '$stateParams', '$location', '$cookies', '$http', '$filter',
+    function($scope,$state, $stateParams, $location, $cookies, $http, $filter) {
+      console.log('saleAdd');
+      var self = this;
+      self.id = $stateParams.id;
+      self.init = function() {
+        self.setSubmit(false);
+        // 二维码 
+        self.twoCodeOptions = [
+          {code:1,value:"是"},
+          {code:0,value:"否"}
+        ]
+        $('.form_date').datetimepicker({
+          language:  'zh-CN',
+          weekStart: 1,
+          todayBtn:  1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0
         });
-    };
-    
-    this.initpartnerConfig = function() {
-      var c = $scope.root.config;
-      var url = c.requestUrl + '/goods' + c.extension;
-
-      var data = {
-        "action": "GetList",
-        "account": $cookies.get('account'),
-        "token": $cookies.get('token'),
-        "projectName": $cookies.get('projectName'),
-        "sortBy": "CreateTime",
-        "orderBy": "desc",
-        "count": 10000,
-        "page": 1,
-        "search": {
-          "goodsName": ""
+        self.showCityList = false;
+        self.showRegionList = false;      
+        self.provinceList = [
+          {
+            "name": "北京",
+            "id": 1,
+            "number": 0
+          }, {
+            "name": "天津",
+            "id": 2,
+            "number": 0
+          }, {
+            "name": "河北",
+            "id": 3,
+            "number": 0
+          }, {
+            "name": "山西",
+            "id": 4,
+            "number": 0
+          }, {
+            "name": "内蒙古", 
+            "id": 5,
+            "number": 0
+          }, {
+            "name": "辽宁",
+            "id": 6,
+            "number": 0
+          }, {
+            "name": "吉林",
+            "id": 7,
+            "number": 0
+          }, {
+            "name": "黑龙江",
+            "id": 8,
+            "number": 0
+          }, {
+            "name": "上海",
+            "id": 9,
+            "number": 0
+          }, {
+            "name": "江苏",
+            "id": 10,
+            "number": 0
+          }, {
+            "name": "浙江",
+            "id": 11,
+            "number": 0
+          }, {
+            "name": "安徽",
+            "id": 12,
+            "number": 0
+          }, {
+            "name": "福建",
+            "id": 13,
+            "number": 0
+          }, {
+            "name": "江西",
+            "id": 14,
+            "number": 0
+          }, {
+            "name": "山东",
+            "id": 15,
+            "number": 0
+          }, {
+            "name": "河南",
+            "id": 16,
+            "number": 0
+          }, {
+            "name": "湖北",
+            "id": 17,
+            "number": 0
+          }, {
+            "name": "湖南",
+            "id": 18,
+            "number": 0
+          }, {
+            "name": "广东",
+            "id": 19,
+            "number": 0
+          }, {
+            "name": "广西",
+            "id": 20,
+            "number": 0
+          }, {
+            "name": "海南",
+            "id": 21,
+            "number": 0
+          }, {
+            "name": "重庆",
+            "id": 22,
+            "number": 0
+          }, {
+            "name": "四川",
+            "id": 23,
+            "number": 0
+          }, {
+            "name": "贵州",
+            "id": 24,
+            "number": 0
+          }, {
+            "name": "云南",
+            "id": 25,
+            "number": 0
+          }, {
+            "name": "西藏",  
+            "id": 26,
+            "number": 0
+          }, {
+            "name": "陕西",
+            "id": 27,
+            "number": 0
+          }, {
+            "name": "甘肃",
+            "id": 28,
+            "number": 0
+          }, {
+            "name": "青海",
+            "id": 29,
+            "number": 0
+          }, {
+            "name": "宁夏",
+            "id": 30,
+            "number": 0
+          }, {
+            "name": "新疆",
+            "id": 31,
+            "number": 0
+          }, {
+            "name": "台湾",
+            "id": 32,
+            "number": 0
+          }, {
+            "name": "香港",
+            "id": 33,
+            "number": 0
+          }, {
+            "name": "澳门",
+            "id": 34,
+            "number": 0
+          }, {
+            "name": "国外",
+            "id": 35,
+            "number": 0
+          }
+        ]
+        self.orientationList = [
+          {
+            id: 0,
+            name: "华北",
+            allSelected: false,
+            province:[]
+          },{
+            id: 1,
+            name: "东北",
+            allSelected: false,
+            province: []
+          },{
+            id: 2,
+            name: "华东",
+            allSelected: false,
+            province: []
+          },{
+            id: 3,
+            name: "中南",
+            allSelected: false,
+            province: []
+          },{
+            id: 4,
+            name: "西南",
+            allSelected: false,
+            province: []
+          },{
+            id: 5,
+            name: "西北",
+            allSelected: false,
+            province: []
+          },{
+            id: 6,
+            name: "其他",
+            allSelected: false,
+            province: []
+          }
+        ]
+        
+        self.provinceListR = JSON.parse(JSON.stringify(self.provinceList))
+        self.orientationListR = JSON.parse(JSON.stringify(self.orientationList))
+        self.initSaleDetailInfo();
+      };
+      self.chooseAll = function (item) {
+        // 全选
+        if (item.allSelected) {
+          item.province.forEach(function(province){
+            province.number=-1
+          })
+        } else { //全不选
+          item.province.forEach(function(province){
+            province.number=0
+          })
         }
+      }
+
+      // 点选省份
+      self.checkPvc = function (province) {
+        self.showRegionList = false
+        // 省份的√联动城市的√
+        if (self.expandProvince && (self.expandProvince.id == province.id)) {
+          self.expandProvince.citys.forEach(function(city){
+            city.number = province.number
+          })
+        }
+        // 省份的√联动大区的√
+
+      }
+      // 实名制点选省份
+      self.checkPvcR = function (province) {
+        self.showRegionList = false
+        // 省份的√联动城市的√
+        if (self.expandProvinceR && (self.expandProvinceR.id == province.id)) {
+          self.expandProvinceR.citys.forEach(function(city){
+            city.number = province.number
+          })
+        }
+        // 省份的√联动大区的√
+
+      }
+      // 点选城市
+      self.checkCity = function (city) {
+        // 城市的√联动区县的√
+        if (self.expandCity && (self.expandCity.id == city.id)) {
+          self.expandCity.regions.forEach(function(region){
+            if (city.number == -1) {
+              region.selected = 1
+            } else {
+              region.selected = 0
+            }
+          })
+        }   
+        // 城市的√联动省份的number
+        var fullCity = 0, halfCity = 0
+        self.cityList.forEach(function(city){
+          if (city.number == -1) {
+            fullCity += 1
+          } else if (city.number > 0) {
+            halfCity += 1
+          }
+        })
+        if (self.cityList.length == fullCity) {
+          self.expandProvince.number = -1
+        } else {
+          self.expandProvince.number = fullCity + halfCity
+        }
+      }
+      // 实名制点选城市
+      self.checkCityR = function (city) {
+        // 城市的√联动区县的√
+        if (self.expandCityR && (self.expandCityR.id == city.id)) {
+          self.expandCityR.regions.forEach(function(region){
+            if (city.number == -1) {
+              region.selected = 1
+            } else {
+              region.selected = 0
+            }
+          })
+        }   
+        // 城市的√联动省份的number
+        var fullCity = 0, halfCity = 0
+        self.cityListR.forEach(function(city){
+          if (city.number == -1) {
+            fullCity += 1
+          } else if (city.number > 0) {
+            halfCity += 1
+          }
+        })
+        if (self.cityListR.length == fullCity) {
+          self.expandProvinceR.number = -1
+        } else {
+          self.expandProvinceR.number = fullCity + halfCity
+        }
+      }
+      // 点选区县
+      self.checkRegion = function (region) {
+        // 区县的√联动城市的√
+        if (region.selected == 1) {
+          self.expandCity.number += 1
+          if (self.expandCity.number == self.regionList.length) {
+            self.expandCity.number = -1
+          }
+        } else {
+          self.expandCity.number -= 1
+          if (self.expandCity.number == -2) {
+            self.expandCity.number = self.regionList.length -1
+          }
+        }
+        // 区县的点选还要联动到省份
+        var fullCity = 0, halfCity = 0
+        self.cityList.forEach(function(city){
+          if (city.number == -1) {
+            fullCity += 1
+          } else if (city.number > 0) {
+            halfCity += 1
+          }
+        })
+        if (self.cityList.length == fullCity) {
+          self.expandProvince.number = -1
+        } else {
+          self.expandProvince.number = fullCity + halfCity
+        }
+      }
+      // 实名制点选区县
+      self.checkRegionR = function (region) {
+        // 区县的√联动城市的√
+        if (region.selected == 1) {
+          self.expandCityR.number += 1
+          if (self.expandCityR.number == self.regionListR.length) {
+            self.expandCityR.number = -1
+          }
+        } else {
+          self.expandCityR.number -= 1
+          if (self.expandCityR.number == -2) {
+            self.expandCityR.number = self.regionListR.length -1
+          }
+        }
+        // 区县的点选还要联动到省份
+        var fullCity = 0, halfCity = 0
+        self.cityListR.forEach(function(city){
+          if (city.number == -1) {
+            fullCity += 1
+          } else if (city.number > 0) {
+            halfCity += 1
+          }
+        })
+        if (self.cityListR.length == fullCity) {
+          self.expandProvinceR.number = -1
+        } else {
+          self.expandProvinceR.number = fullCity + halfCity
+        }
+      }
+
+      self.getCityList = function (province,real) {
+        var promise = new Promise(function(resolve, reject){
+          var c = $scope.root.config;
+          var url = c.requestUrl + '/sale' + c.extension;
+          var realname = real ? 1 : 0
+          var data = {
+            "action": "GetCity",
+            "account": $cookies.get('account'),
+            "token": $cookies.get('token'),
+            "projectName": $cookies.get('projectName'),
+            "id": province.id,
+            "saleId": "",
+            "realname": realname
+          };
+          data = JSON.stringify(data);
+          $http.post(url, data).then(function successCallback (res) {
+            var data = res.data;
+              if (data.rescode === 200) {  
+                province.citys = data.city
+                resolve(province.citys)                  
+              } else if (data.rescode === 401) {
+                reject()
+                alert('登录超时，请重新登录');
+                $location.path('/index');
+              } else {
+                reject()
+                alert(data.errInfo);
+              }  
+          }, function errorCallback (res) {
+            reject()
+            alert('获取城市列表失败')
+          })
+        })
+        return promise 
+      }
+
+      self.getRegionList = function (city, real) {
+        var promise = new Promise(function(resolve, reject){
+          var c = $scope.root.config;
+          var url = c.requestUrl + '/sale' + c.extension;
+          var realname = real ? 1 : 0
+          var data = {
+            "action": "GetRegion",
+            "account": $cookies.get('account'),
+            "token": $cookies.get('token'),
+            "projectName": $cookies.get('projectName'),
+            "id": city.id,
+            "saleId": "",
+            "realname": realname
+          };
+          data = JSON.stringify(data);
+
+          $http.post(url, data).then(function successCallback (res) {
+            var data = res.data;
+              if (data.rescode === 200) {
+                city.regions = data.region;   
+                resolve(city.regions)            
+              } else if (data.rescode === 401) {
+                alert('登录超时，请重新登录');
+                $location.path('/index');
+              } else {
+                alert(data.errInfo);
+              }  
+          }, function errorCallback (res) {
+            alert('获取区县列表失败')
+          })
+        })
+        return promise
+      }
+
+      // 点击省份名字
+      self.updateCityList = function (province) {
+        self.showCityList = true
+        self.showRegionList = false
+        self.expandProvince = province
+        if (!province.citys) {
+          self.getCityList(province, false).then(function(citys){
+            self.cityList = self.expandProvince.citys
+            if (self.expandProvince.number < 1) {
+              self.cityList.forEach(function(city){
+                city.number = self.expandProvince.number
+              })
+            }
+            $scope.$digest()
+          })
+        } else {
+          self.cityList = self.expandProvince.citys
+          if (self.expandProvince.number < 1) {
+            self.cityList.forEach(function(city){
+              city.number = self.expandProvince.number
+            })
+          }
+        }      
+      }
+      // 实名制点击省份名字
+      self.updateCityListR = function (province) {
+        self.showCityListR = true
+        self.showRegionListR = false
+        self.expandProvinceR = province
+        if (!province.citys) {
+          self.getCityList(province, true).then(function(citys){
+            self.cityListR = self.expandProvinceR.citys
+            if (self.expandProvinceR.number < 1) {
+              self.cityListR.forEach(function(city){
+                city.number = self.expandProvinceR.number
+              })
+            }
+            $scope.$digest()
+          })
+        } else {
+          self.cityListR = self.expandProvinceR.citys
+          if (self.expandProvinceR.number < 1) {
+            self.cityListR.forEach(function(city){
+              city.number = self.expandProvinceR.number
+            })
+          }
+        }      
+      }
+      // 点击城市名字
+      self.updateRegionList = function (city) {
+        self.expandCity = city
+        if (!city.regions) {
+          self.getRegionList(city, false).then(function(regions){
+            self.regionList = self.expandCity.regions
+            if (self.expandCity.number < 1) {
+              self.regionList.forEach(function(region){
+                if (self.expandCity.number == -1) {
+                  region.selected = 1
+                } else {
+                  region.selected = 0
+                }
+              })
+            }
+            self.showRegionList = true
+            $scope.$digest()
+            
+          })
+        } else {
+          self.regionList = self.expandCity.regions
+          if (self.expandCity.number < 1) {
+            self.regionList.forEach(function(region){
+              if (self.expandCity.number == -1) {
+                region.selected = 1
+              } else {
+                region.selected = 0
+              }
+            })
+          }
+          self.showRegionList = true
+        }
+      }
+      // 实名制点击城市名字
+      self.updateRegionListR = function (city) {
+        self.expandCityR = city
+        if (!city.regions) {
+          self.getRegionList(city, true).then(function(regions){
+            self.regionListR = self.expandCityR.regions
+            if (self.expandCityR.number < 1) {
+              self.regionListR.forEach(function(region){
+                if (self.expandCityR.number == -1) {
+                  region.selected = 1
+                } else {
+                  region.selected = 0
+                }
+              })
+            }
+            self.showRegionListR = true
+            $scope.$digest()
+          })
+        } else {
+          self.regionListR = self.expandCityR.regions
+          if (self.expandCityR.number < 1) {
+            self.regionListR.forEach(function(region){
+              if (self.expandCityR.number == -1) {
+                region.selected = 1
+              } else {
+                region.selected = 0
+              }
+            })
+          }
+          self.showRegionListR = true
+        }
+      }
+      self.initSaleDetailInfo = function () {
+        self.sale = {}
+        self.sale.price = 0
+        self.sale.TwoDBarCodeOn = self.twoCodeOptions[1];   
+        // 可销售日期初始化
+        var sDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+        var eDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+        $('#saleDateStart').val(sDate);
+        $('#sale-date-start').val(sDate);
+        $('#saleDateEnd').val(eDate);
+        $('#sale-date-end').val(eDate);
+
+        // visit date 可游玩时间设置
+        var vDateStart = $filter('date')(new Date(), 'yyyy-MM-dd');
+        var vDateEnd = $filter('date')(new Date(), 'yyyy-MM-dd');
+        $('#visit-date-start').val(vDateStart);
+        $('#visitDateStart').val(vDateStart);
+        $('#visit-date-end').val(vDateEnd);
+        $('#visitDateEnd').val(vDateEnd);
+
+        // 当天可买票时间设置
+        // $('#validTimeStart').val(data.sale.validTimeStart);
+        $('#validTimeEnd').val('08:00');
+        // 可预定时间设置
+        $('#orderTimeStart').val('00:00:00');
+        $('#orderTimeEnd').val('23:59:59');
+
+
+        //二维码是否开启
+        // self.twoCode = data.sale.TwoDBarCodeOn;
+        $('#twoCode').val(0)
+        $('#twoCode').removeClass('ng-invalid-required');
+        self.sale.GateGoodsCount = 1
+        self.sale.GateGoodsID = 70
+
+        self.sale.MinPreOrderDays = 0
+        self.sale.MaxPreOrderDays = 0
+        self.sale.MinOrderNumber = 1
+        self.sale.MaxOrderNumber = 0
+        self.sale.PerPhoneLimit = {"Days": 0, "Number": 0}
+        // 身份限制
+        self.sale.IDCardNeeded = 0
+        self.sale.SexLimit = -1
+        self.sale.PerIDLimit = {"Days": 0, "Number": 0}
+        self.sale.AgeLimit = {"min": 0, "max": 0}
+        self.sale.AreaLimit = 0
+        // 实名制身份限制
+        self.sale.RealSexLimit = -1
+        self.sale.RealPerIDLimit = {"Days": 0, "Number": 0}
+        self.sale.RealAgeLimit = {"min": 0, "max": 0}
+        self.sale.RealAreaLimit = 0
+              
+        // 改数据用provinceList，展示视图用orientationList
+        for (var i=0;i<5;i++) {
+          self.orientationList[0].province.push(self.provinceList[i])
+        }
+        for (var i=5;i<8;i++) {
+          self.orientationList[1].province.push(self.provinceList[i])
+        }
+        for (var i=8;i<15;i++) {
+          self.orientationList[2].province.push(self.provinceList[i])
+        }
+        for (var i=15;i<21;i++) {
+          self.orientationList[3].province.push(self.provinceList[i])
+        }
+        for (var i=21;i<26;i++) {
+          self.orientationList[4].province.push(self.provinceList[i])
+        }
+        for (var i=26;i<31;i++) {
+          self.orientationList[5].province.push(self.provinceList[i])
+        }
+        for (var i=31;i<35;i++) {
+          self.orientationList[6].province.push(self.provinceList[i])
+        }
+
+        for (var i=0;i<5;i++) {
+          self.orientationListR[0].province.push(self.provinceListR[i])
+        }
+        for (var i=5;i<8;i++) {
+          self.orientationListR[1].province.push(self.provinceListR[i])
+        }
+        for (var i=8;i<15;i++) {
+          self.orientationListR[2].province.push(self.provinceListR[i])
+        }
+        for (var i=15;i<21;i++) {
+          self.orientationListR[3].province.push(self.provinceListR[i])
+        }
+        for (var i=21;i<26;i++) {
+          self.orientationListR[4].province.push(self.provinceListR[i])
+        }
+        for (var i=26;i<31;i++) {
+          self.orientationListR[5].province.push(self.provinceListR[i])
+        }
+        for (var i=31;i<35;i++) {
+          self.orientationListR[6].province.push(self.provinceListR[i])
+        }
+
+        self.initPartnersList();
+        self.initpartnerConfig();    
+
       };
-      data = JSON.stringify(data);
+      this.initPartnersList = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateDate",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "partnerName": ""
+          }
+        };
+        data = JSON.stringify(data);
 
-      $http.post(url, data).then(function successCallback(response) {
-          var data = response.data;
-          if(data.rescode === 200) {
-            self.goods = data.goods.lists;
-            // self.myGoods = self.goods[0];
-          }else if(data.rescode === 401){
-            alert('登录超时，请重新登录');
-            $location.path('/index');
-          }else {
-            alert(data.errInfo);
-          }  
-        }, function errorCallback(response) {
-          alert('读取商品信息失败，请刷新页面重试');
-        });
-    };
-
-    self.setSubmit = function (status) {
-      if(status) {
-        self.addBtnText = "添加中...";
-        self.submitting = true;
-      }else {
-        self.addBtnText = "添加";
-        self.submitting = false;
-      }
-    }
-
-    self.setSubmit(false);
-
-    this.submit = function() {
-
-      // 有效时间 必填
-      if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
-        alert('请输入有效时间');
-        return;
-      }
-
-      // 当天可买票时间 必填
-      if($('#validTimeEnd').val() == '' || $('#validTimeStart').val() == '') {
-        alert('请输入当天可买票时间');
-        return;
-      }
-
-      var c = $scope.root.config;
-      var url = c.requestUrl + '/sale' + c.extension;
-      self.sale.state = 'on';
-      self.sale.saleDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
-      self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
-      self.sale.validTimeStart = '00:00';
-      self.sale.validTimeEnd = $('#validTimeEnd').val();
-
-      // 可游玩时间
-      self.sale.visitDateStart = $('#visitDateStart').val() ? $('#visitDateStart').val() + ' 00:00:00' : '1970-01-01 00:00:00';
-      self.sale.visitDateEnd = $('#visitDateEnd').val() ? $('#visitDateEnd').val() + ' 23:59:59' : '2060-01-01 23:59:59';
-
-
-      self.sale.goodsId = self.myGoods.id;
-      self.sale.partnerCode = self.myPartner.partnerCode;
-      self.sale.TwoDBarCodeOn = (self.TwoDBarCodeOn - 0) || 0;
-      self.sale.GateGoodsID = self.GateGoodsID || "0";
-      self.sale.GateGoodsCount = self.GateGoodsCount || 0;
-
-      var data = {
-        "action": "Add",
-        "account": $cookies.get('account'),
-        "token": $cookies.get('token'),
-        "projectName": $cookies.get('projectName'),
-        "sale": self.sale
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              self.partners = data.partners.lists;
+              // for (var i = 0; i < self.partners.length; i++) {
+              //   if(self.partners[i].partnerCode === self.sale.partnerCode) {
+              //     self.myPartner = self.partners[i];
+              //     break;
+              //   }
+              // }
+            }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('读取分销商信息失败，请刷新页面重试');
+          });
       };
-      data = JSON.stringify(data);
-      self.setSubmit(true);
-      
-      $http.post(url, data).then(function successCallback(response) {
-          var data = response.data;
-          if(data.rescode === 200) {
-            $location.path('/saleList');
-          }else if(data.rescode === 401){
-            alert('登录超时，请重新登录');
-            $location.path('/index');
-          }else {
+      this.initpartnerConfig = function() {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateTime",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "goodsName": ""
+          }
+        };
+        data = JSON.stringify(data);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              self.goods = data.goods.lists;
+              // for (var i = 0; i < self.goods.length; i++) {
+              //   if(self.goods[i].id === self.sale.goodsId) {
+              //     self.myGoods = self.goods[i];
+              //     break;
+              //   }
+              // }
+            }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+            }else {
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
+            alert('读取商品信息失败，请刷新页面重试');
+          });
+      };
+      self.setSubmit = function (status) {
+        if(status) {
+          self.addBtnText = "保存中...";
+          self.submitting = true;
+        }else {
+          self.addBtnText = "保存修改";
+          self.submitting = false;
+        }
+      }
+
+      self.submit = function() {
+        console.log(self.sale)
+        
+        // 当天可买票时间 必填
+        if($('#validTimeEnd').val() == '') {
+          alert('请输入当天可买票时间');
+          return;
+        }
+        // 日期时间等的大小顺序校验
+        if ($('#saleDateStart').val() > $('#saleDateEnd').val()) {
+          alert('可销售日期设置错误')
+          return
+        }
+        if ($('#visitDateStart').val() > $('#visitDateEnd').val()) {
+          alert('可游玩日期设置错误')
+          return
+        }
+        if ($('#orderTimeStart').val() > $('#orderTimeEnd').val()) {
+          alert('可销售时间设置错误')
+          return
+        }
+        if (self.sale.MaxPreOrderDays != 0 && self.sale.MinPreOrderDays > self.sale.MaxPreOrderDays - 1) {
+          alert('提前购买时间设置错误')
+          return
+        }
+        if (self.sale.MaxOrderNumber != 0 && self.sale.MinOrderNumber > self.sale.MaxOrderNumber) {
+          alert('最小起订数不得大于最大限订数')
+          return
+        }
+        if (self.sale.AgeLimit.max !=0 && self.sale.AgeLimit.min > self.sale.AgeLimit.max) {
+          alert('年龄限定设置错误')
+          return
+        }
+        if (self.sale.RealAgeLimit.max !=0 && self.sale.RealAgeLimit.min > self.sale.RealAgeLimit.max) {
+          alert('年龄限定设置错误')
+          return
+        }
+   
+        // 要提交的三个数组
+        self.sale.Province = []
+        self.sale.City = []
+        self.sale.Area = []
+        // 如果要求身份信息和区域信息，就更新数组
+        if (self.sale.AreaLimit == 0 && self.sale.AgeLimit.min == 0 
+          && self.sale.AgeLimit.max == 0  && self.sale.SexLimit == -1 
+          && self.sale.PerIDLimit.Days == 0){
+          self.sale.IDCardNeeded = 0
+        } else {
+          self.sale.IDCardNeeded = 1
+        }
+        if (self.sale.AreaLimit == 1) {
+          self.provinceList.forEach(function(province){
+            if (province.number == -1) {
+              self.sale.Province.push(province.id)
+            } else if (province.number > 0) {
+              province.citys.forEach(function(city){
+                if (city.number == -1) {
+                  self.sale.City.push(city.id)
+                } else if (city.number > 0) {
+                  city.regions.forEach(function(region){
+                    if (region.selected == 1) {
+                      self.sale.Area.push(region.id)
+                    }
+                  })
+                }
+              })
+            }
+          })
+        }
+        self.sale.RealProvince = []
+        self.sale.RealCity = []
+        self.sale.RealArea = []
+        if (self.sale.RealAreaLimit == 1) {
+          self.provinceListR.forEach(function(province){
+            if (province.number == -1) {
+              self.sale.RealProvince.push(province.id)
+            } else if (province.number > 0) {
+              province.citys.forEach(function(city){
+                if (city.number == -1) {
+                  self.sale.RealCity.push(city.id)
+                } else if (city.number > 0) {
+                  city.regions.forEach(function(region){
+                    if (region.selected == 1) {
+                      self.sale.RealArea.push(region.id)
+                    }
+                  })
+                }
+              })
+            }
+          })
+        }
+
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/sale' + c.extension;
+        self.sale.status = 'on';
+        // 可销售日期
+        self.sale.saleDateStart = new Date($('#saleDateStart').val() + ' 00:00:00').getTime();
+        self.sale.saleDateEnd = new Date($('#saleDateEnd').val() + ' 23:59:59').getTime();
+        // 可游玩日期
+        self.sale.visitDateStart =$('#visitDateStart').val() + ' 00:00:00';
+        self.sale.visitDateEnd = $('#visitDateEnd').val() + ' 23:59:59';
+        // 当日下单时间
+        self.sale.validTimeEnd = $('#validTimeEnd').val();
+        self.sale.validTimeStart = '00:00';
+        // 通用可销售时间
+        self.sale.OrderTimeLimit = {
+          "StartTime": $('#orderTimeStart').val(),
+          "EndTime": $('#orderTimeEnd').val()
+        }
+        
+        self.sale.goodsId = self.myGoods.id;
+        self.sale.partnerCode = self.myPartner.partnerCode;
+
+        self.sale.TwoDBarCodeOn = self.sale.TwoDBarCodeOn.code || 0;
+        self.sale.GateGoodsID = self.sale.GateGoodsID || 0;
+        self.sale.GateGoodsCount = self.sale.GateGoodsCount || 0;
+
+        var data = {
+          "action": "Add",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sale": self.sale
+        };
+        data = JSON.stringify(data);
+        self.setSubmit(true);
+
+        $http.post(url, data).then(function successCallback(response) {
+            var data = response.data;
+            if(data.rescode === 200) {
+              $location.path('/saleList');
+            }else if(data.rescode === 401){
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+            }else {
+              self.setSubmit(false);
+              alert(data.errInfo);
+            }  
+          }, function errorCallback(response) {
             self.setSubmit(false);
-            alert(data.errInfo);
-          }  
-        }, function errorCallback(response) {
-          self.setSubmit(false);
-          alert('添加失败，请重试');
-        });
-    }
+            alert('保存失败，请重试');
+          });
+      }
+
   }]);
   
   app.controller('saleEditController', ['$scope', '$state', '$stateParams', '$location', '$cookies', '$http', '$filter',
@@ -4222,8 +4898,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
     console.log('saleEdit');
     var self = this;
     self.id = $stateParams.id;
-    
     this.init = function() {
+      self.setSubmit(false);
       // 二维码 
       self.twoCodeOptions = [
         {code:1,value:"是"},
@@ -4240,12 +4916,528 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         forceParse: 0
       });
       this.initSaleDetailInfo();
+      self.showCityList = false;
+      self.showRegionList = false;      
+      self.provinceList = [
+        {
+          "name": "北京",
+          "id": 1,
+          "number": 0
+        }, {
+          "name": "天津",
+          "id": 2,
+          "number": 0
+        }, {
+          "name": "河北",
+          "id": 3,
+          "number": 0
+        }, {
+          "name": "山西",
+          "id": 4,
+          "number": 0
+        }, {
+          "name": "内蒙古", 
+          "id": 5,
+          "number": 0
+        }, {
+          "name": "辽宁",
+          "id": 6,
+          "number": 0
+        }, {
+          "name": "吉林",
+          "id": 7,
+          "number": 0
+        }, {
+          "name": "黑龙江",
+          "id": 8,
+          "number": 0
+        }, {
+          "name": "上海",
+          "id": 9,
+          "number": 0
+        }, {
+          "name": "江苏",
+          "id": 10,
+          "number": 0
+        }, {
+          "name": "浙江",
+          "id": 11,
+          "number": 0
+        }, {
+          "name": "安徽",
+          "id": 12,
+          "number": 0
+        }, {
+          "name": "福建",
+          "id": 13,
+          "number": 0
+        }, {
+          "name": "江西",
+          "id": 14,
+          "number": 0
+        }, {
+          "name": "山东",
+          "id": 15,
+          "number": 0
+        }, {
+          "name": "河南",
+          "id": 16,
+          "number": 0
+        }, {
+          "name": "湖北",
+          "id": 17,
+          "number": 0
+        }, {
+          "name": "湖南",
+          "id": 18,
+          "number": 0
+        }, {
+          "name": "广东",
+          "id": 19,
+          "number": 0
+        }, {
+          "name": "广西",
+          "id": 20,
+          "number": 0
+        }, {
+          "name": "海南",
+          "id": 21,
+          "number": 0
+        }, {
+          "name": "重庆",
+          "id": 22,
+          "number": 0
+        }, {
+          "name": "四川",
+          "id": 23,
+          "number": 0
+        }, {
+          "name": "贵州",
+          "id": 24,
+          "number": 0
+        }, {
+          "name": "云南",
+          "id": 25,
+          "number": 0
+        }, {
+          "name": "西藏",  
+          "id": 26,
+          "number": 0
+        }, {
+          "name": "陕西",
+          "id": 27,
+          "number": 0
+        }, {
+          "name": "甘肃",
+          "id": 28,
+          "number": 0
+        }, {
+          "name": "青海",
+          "id": 29,
+          "number": 0
+        }, {
+          "name": "宁夏",
+          "id": 30,
+          "number": 0
+        }, {
+          "name": "新疆",
+          "id": 31,
+          "number": 0
+        }, {
+          "name": "台湾",
+          "id": 32,
+          "number": 0
+        }, {
+          "name": "香港",
+          "id": 33,
+          "number": 0
+        }, {
+          "name": "澳门",
+          "id": 34,
+          "number": 0
+        }, {
+          "name": "国外",
+          "id": 35,
+          "number": 0
+        }
+      ]
+      self.orientationList = [
+        {
+          id: 0,
+          name: "华北",
+          allSelected: false,
+          province:[]
+        },{
+          id: 1,
+          name: "东北",
+          allSelected: false,
+          province: []
+        },{
+          id: 2,
+          name: "华东",
+          allSelected: false,
+          province: []
+        },{
+          id: 3,
+          name: "中南",
+          allSelected: false,
+          province: []
+        },{
+          id: 4,
+          name: "西南",
+          allSelected: false,
+          province: []
+        },{
+          id: 5,
+          name: "西北",
+          allSelected: false,
+          province: []
+        },{
+          id: 6,
+          name: "其他",
+          allSelected: false,
+          province: []
+        }
+      ]
+      self.provinceListR = JSON.parse(JSON.stringify(self.provinceList))
+      self.orientationListR = JSON.parse(JSON.stringify(self.orientationList))
     };
+    self.chooseAll = function (item) {
+      // 全选
+      if (item.allSelected) {
+        item.province.forEach(function(province){
+          province.number=-1
+        })
+      } else { //全不选
+        item.province.forEach(function(province){
+          province.number=0
+        })
+      }
+    }
 
+    // 点选省份
+    self.checkPvc = function (province) {
+      self.showRegionList = false
+      // 省份的√联动城市的√
+      if (self.expandProvince && (self.expandProvince.id == province.id)) {
+        self.expandProvince.citys.forEach(function(city){
+          city.number = province.number
+        })
+      }
+      // 省份的√联动大区的√
+
+    }
+    // 实名制点选省份
+    self.checkPvcR = function (province) {
+      self.showRegionList = false
+      // 省份的√联动城市的√
+      if (self.expandProvinceR && (self.expandProvinceR.id == province.id)) {
+        self.expandProvinceR.citys.forEach(function(city){
+          city.number = province.number
+        })
+      }
+      // 省份的√联动大区的√
+
+    }
+    // 点选城市
+    self.checkCity = function (city) {
+      // 城市的√联动区县的√
+      if (self.expandCity && (self.expandCity.id == city.id)) {
+        self.expandCity.regions.forEach(function(region){
+          if (city.number == -1) {
+            region.selected = 1
+          } else {
+            region.selected = 0
+          }
+        })
+      }   
+      // 城市的√联动省份的number
+      var fullCity = 0, halfCity = 0
+      self.cityList.forEach(function(city){
+        if (city.number == -1) {
+          fullCity += 1
+        } else if (city.number > 0) {
+          halfCity += 1
+        }
+      })
+      if (self.cityList.length == fullCity) {
+        self.expandProvince.number = -1
+      } else {
+        self.expandProvince.number = fullCity + halfCity
+      }
+    }
+    // 实名制点选城市
+    self.checkCityR = function (city) {
+      // 城市的√联动区县的√
+      if (self.expandCityR && (self.expandCityR.id == city.id)) {
+        self.expandCityR.regions.forEach(function(region){
+          if (city.number == -1) {
+            region.selected = 1
+          } else {
+            region.selected = 0
+          }
+        })
+      }   
+      // 城市的√联动省份的number
+      var fullCity = 0, halfCity = 0
+      self.cityListR.forEach(function(city){
+        if (city.number == -1) {
+          fullCity += 1
+        } else if (city.number > 0) {
+          halfCity += 1
+        }
+      })
+      if (self.cityListR.length == fullCity) {
+        self.expandProvinceR.number = -1
+      } else {
+        self.expandProvinceR.number = fullCity + halfCity
+      }
+    }
+    // 点选区县
+    self.checkRegion = function (region) {
+      // 区县的√联动城市的√
+      if (region.selected == 1) {
+        self.expandCity.number += 1
+        if (self.expandCity.number == self.regionList.length) {
+          self.expandCity.number = -1
+        }
+      } else {
+        self.expandCity.number -= 1
+        if (self.expandCity.number == -2) {
+          self.expandCity.number = self.regionList.length -1
+        }
+      }
+      // 区县的点选还要联动到省份
+      var fullCity = 0, halfCity = 0
+      self.cityList.forEach(function(city){
+        if (city.number == -1) {
+          fullCity += 1
+        } else if (city.number > 0) {
+          halfCity += 1
+        }
+      })
+      if (self.cityList.length == fullCity) {
+        self.expandProvince.number = -1
+      } else {
+        self.expandProvince.number = fullCity + halfCity
+      }
+    }
+    // 实名制点选区县
+    self.checkRegionR = function (region) {
+      // 区县的√联动城市的√
+      if (region.selected == 1) {
+        self.expandCityR.number += 1
+        if (self.expandCityR.number == self.regionListR.length) {
+          self.expandCityR.number = -1
+        }
+      } else {
+        self.expandCityR.number -= 1
+        if (self.expandCityR.number == -2) {
+          self.expandCityR.number = self.regionListR.length -1
+        }
+      }
+      // 区县的点选还要联动到省份
+      var fullCity = 0, halfCity = 0
+      self.cityListR.forEach(function(city){
+        if (city.number == -1) {
+          fullCity += 1
+        } else if (city.number > 0) {
+          halfCity += 1
+        }
+      })
+      if (self.cityListR.length == fullCity) {
+        self.expandProvinceR.number = -1
+      } else {
+        self.expandProvinceR.number = fullCity + halfCity
+      }
+    }
+
+    self.getCityList = function (province,real) {
+      var promise = new Promise(function(resolve, reject){
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/sale' + c.extension;
+        var realname = real ? 1 : 0
+        var data = {
+          "action": "GetCity",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "id": province.id,
+          "saleId": self.sale.saleId,
+          "realname": realname
+        };
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback (res) {
+          var data = res.data;
+            if (data.rescode === 200) {  
+              province.citys = data.city
+              resolve(province.citys)                  
+            } else if (data.rescode === 401) {
+              reject()
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+            } else {
+              reject()
+              alert(data.errInfo);
+            }  
+        }, function errorCallback (res) {
+          reject()
+          alert('获取城市列表失败')
+        })
+      })
+      return promise 
+    }
+
+    self.getRegionList = function (city, real) {
+      var promise = new Promise(function(resolve, reject){
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/sale' + c.extension;
+        var realname = real ? 1 : 0
+        var data = {
+          "action": "GetRegion",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "id": city.id,
+          "saleId": self.sale.saleId,
+          "realname": realname
+        };
+        data = JSON.stringify(data);
+
+        $http.post(url, data).then(function successCallback (res) {
+          var data = res.data;
+            if (data.rescode === 200) {
+              city.regions = data.region;   
+              resolve(city.regions)            
+            } else if (data.rescode === 401) {
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+            } else {
+              alert(data.errInfo);
+            }  
+        }, function errorCallback (res) {
+          alert('获取区县列表失败')
+        })
+      })
+      return promise
+    }
+
+    // 点击省份名字
+    self.updateCityList = function (province) {
+      self.showCityList = true
+      self.showRegionList = false
+      self.expandProvince = province
+      if (!province.citys) {
+        self.getCityList(province, false).then(function(citys){
+          self.cityList = self.expandProvince.citys
+          if (self.expandProvince.number < 1) {
+            self.cityList.forEach(function(city){
+              city.number = self.expandProvince.number
+            })
+          }
+          $scope.$digest()
+        })
+      } else {
+        self.cityList = self.expandProvince.citys
+        if (self.expandProvince.number < 1) {
+          self.cityList.forEach(function(city){
+            city.number = self.expandProvince.number
+          })
+        }
+      }      
+    }
+    // 实名制点击省份名字
+    self.updateCityListR = function (province) {
+      self.showCityListR = true
+      self.showRegionListR = false
+      self.expandProvinceR = province
+      if (!province.citys) {
+        self.getCityList(province, true).then(function(citys){
+          self.cityListR = self.expandProvinceR.citys
+          if (self.expandProvinceR.number < 1) {
+            self.cityListR.forEach(function(city){
+              city.number = self.expandProvinceR.number
+            })
+          }
+          $scope.$digest()
+        })
+      } else {
+        self.cityListR = self.expandProvinceR.citys
+        if (self.expandProvinceR.number < 1) {
+          self.cityListR.forEach(function(city){
+            city.number = self.expandProvinceR.number
+          })
+        }
+      }      
+    }
+    // 点击城市名字
+    self.updateRegionList = function (city) {
+      self.expandCity = city
+      if (!city.regions) {
+        self.getRegionList(city, false).then(function(regions){
+          self.regionList = self.expandCity.regions
+          if (self.expandCity.number < 1) {
+            self.regionList.forEach(function(region){
+              if (self.expandCity.number == -1) {
+                region.selected = 1
+              } else {
+                region.selected = 0
+              }
+            })
+          }
+          self.showRegionList = true
+          $scope.$digest()
+          
+        })
+      } else {
+        self.regionList = self.expandCity.regions
+        if (self.expandCity.number < 1) {
+          self.regionList.forEach(function(region){
+            if (self.expandCity.number == -1) {
+              region.selected = 1
+            } else {
+              region.selected = 0
+            }
+          })
+        }
+        self.showRegionList = true
+      }
+    }
+    // 实名制点击城市名字
+    self.updateRegionListR = function (city) {
+      self.expandCityR = city
+      if (!city.regions) {
+        self.getRegionList(city, true).then(function(regions){
+          self.regionListR = self.expandCityR.regions
+          if (self.expandCityR.number < 1) {
+            self.regionListR.forEach(function(region){
+              if (self.expandCityR.number == -1) {
+                region.selected = 1
+              } else {
+                region.selected = 0
+              }
+            })
+          }
+          self.showRegionListR = true
+          $scope.$digest()
+        })
+      } else {
+        self.regionListR = self.expandCityR.regions
+        if (self.expandCityR.number < 1) {
+          self.regionListR.forEach(function(region){
+            if (self.expandCityR.number == -1) {
+              region.selected = 1
+            } else {
+              region.selected = 0
+            }
+          })
+        }
+        self.showRegionListR = true
+      }
+    }
     this.initSaleDetailInfo = function() {
       var c = $scope.root.config;
       var url = c.requestUrl + '/sale' + c.extension;
-
       var data = {
         "action": "GetDetail",
         "account": $cookies.get('account'),
@@ -4254,7 +5446,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
         "saleId": self.id
       };
       data = JSON.stringify(data);
-
       $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
           if(data.rescode === 200) {
@@ -4263,16 +5454,15 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             self.sale = d;
             // 返回的不是对象，在ng-options没法用
             self.sale.TwoDBarCodeOn = (self.sale.TwoDBarCodeOn == 1) ? self.twoCodeOptions[0] :self.twoCodeOptions[1];
-
-            // 有效时间设置
+            // 可销售时间初始化
             var sDate = $filter('date')(data.sale.saleDateStart, 'yyyy-MM-dd');
             var eDate = $filter('date')(data.sale.saleDateEnd, 'yyyy-MM-dd');
-            $('#rd_dmukgs').val(sDate);
+            $('#saleDateStart').val(sDate);
             $('#sale-date-start').val(sDate);
-            $('#rd_qcaxwa').val(eDate);
+            $('#saleDateEnd').val(eDate);
             $('#sale-date-end').val(eDate);
 
-            // visit date 可游玩时间设置
+            // visit date 可游玩时间初始化
             var vDateStart = $filter('date')(new Date(data.sale.visitDateStart), 'yyyy-MM-dd');
             var vDateEnd = $filter('date')(new Date(data.sale.visitDateEnd), 'yyyy-MM-dd');
             $('#visit-date-start').val(vDateStart);
@@ -4283,12 +5473,86 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
             // 当天可买票时间设置
             $('#validTimeStart').val(data.sale.validTimeStart);
             $('#validTimeEnd').val(data.sale.validTimeEnd);
+            // 可预定时间设置
+            $('#orderTimeStart').val(data.sale.OrderTimeLimit.StartTime);
+            $('#orderTimeEnd').val(data.sale.OrderTimeLimit.EndTime);
 
             //二维码是否开启
             // self.twoCode = data.sale.TwoDBarCodeOn;
             $('#twoCode').val(data.sale.TwoDBarCodeOn)
             $('#twoCode').removeClass('ng-invalid-required');
+            // 更新省份的选择情况
+            self.sale.Province.forEach(function(province){
+              self.provinceList[province.id-1].number = province.number
+              if (province.number > 0) {
+                self.getCityList(self.provinceList[province.id-1], false)
+                .then(function(citys){
+                  citys.forEach(function(city){
+                    if (city.number > 0) {
+                      self.getRegionList(city, false)
+                    }
+                  })
+                })
+              }              
+            })
+            self.sale.RealProvince.forEach(function(province){
+              self.provinceListR[province.id-1].number = province.number
+              if (province.number > 0) {
+                self.getCityList(self.provinceListR[province.id-1], true)
+                .then(function(citys){
+                  citys.forEach(function(city){
+                    if (city.number > 0) {
+                      self.getRegionList(city, true)
+                    }
+                  })
+                })
+              }              
+            })
+            
+            // 改数据用provinceList，展示视图用orientationList
+            for (var i=0;i<5;i++) {
+              self.orientationList[0].province.push(self.provinceList[i])
+            }
+            for (var i=5;i<8;i++) {
+              self.orientationList[1].province.push(self.provinceList[i])
+            }
+            for (var i=8;i<15;i++) {
+              self.orientationList[2].province.push(self.provinceList[i])
+            }
+            for (var i=15;i<21;i++) {
+              self.orientationList[3].province.push(self.provinceList[i])
+            }
+            for (var i=21;i<26;i++) {
+              self.orientationList[4].province.push(self.provinceList[i])
+            }
+            for (var i=26;i<31;i++) {
+              self.orientationList[5].province.push(self.provinceList[i])
+            }
+            for (var i=31;i<35;i++) {
+              self.orientationList[6].province.push(self.provinceList[i])
+            }
 
+            for (var i=0;i<5;i++) {
+              self.orientationListR[0].province.push(self.provinceListR[i])
+            }
+            for (var i=5;i<8;i++) {
+              self.orientationListR[1].province.push(self.provinceListR[i])
+            }
+            for (var i=8;i<15;i++) {
+              self.orientationListR[2].province.push(self.provinceListR[i])
+            }
+            for (var i=15;i<21;i++) {
+              self.orientationListR[3].province.push(self.provinceListR[i])
+            }
+            for (var i=21;i<26;i++) {
+              self.orientationListR[4].province.push(self.provinceListR[i])
+            }
+            for (var i=26;i<31;i++) {
+              self.orientationListR[5].province.push(self.provinceListR[i])
+            }
+            for (var i=31;i<35;i++) {
+              self.orientationListR[6].province.push(self.provinceListR[i])
+            }
 
             self.initPartnersList();
             self.initpartnerConfig();
@@ -4334,10 +5598,10 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                 break;
               }
             }
-          }else if(data.rescode === 401){
+          } else if(data.rescode === 401){
             alert('登录超时，请重新登录');
             $location.path('/index');
-          }else {
+          } else {
             alert(data.errInfo);
           }  
         }, function errorCallback(response) {
@@ -4395,47 +5659,128 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
       }
     }
 
-    self.setSubmit(false);
-
     this.submit = function() {
-
-      // 有效时间 必填
-      if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
-        alert('请输入有效时间');
-        return;
-      }
-
-      // // 游玩时间 必填
-      // if ($('#rd_dmukgs').val() === "" || $('#rd_qcaxwa').val() === "") {
-      //   alert('请输入有效时间');
-      //   return;
-      // }
-
       // 当天可买票时间 必填
       if($('#validTimeEnd').val() == '') {
         alert('请输入当天可买票时间');
         return;
       }
+      // 日期时间等的大小顺序校验
+      if (new Date($('#saleDateStart').val() + ' 00:00:00') > new Date($('#saleDateStart').val() + ' 23:59:59')) {
+        alert('可销售日期设置错误')
+        return
+      }
+      if ($('#visitDateStart').val() + ' 00:00:00' > $('#visitDateEnd').val() + ' 23:59:59') {
+        alert('可游玩日期设置错误')
+        return
+      }
+      if ($('#orderTimeStart').val() > $('#orderTimeEnd').val()) {
+        alert('可销售时间设置错误')
+        return
+      }
+      if (self.sale.MaxPreOrderDays != 0 && self.sale.MinPreOrderDays > self.sale.MaxPreOrderDays - 1) {
+        alert('提前购买时间设置错误')
+        return
+      }
+      if (self.sale.MaxOrderNumber != 0 && self.sale.MinOrderNumber > self.sale.MaxOrderNumber) {
+        alert('最小起订数不得大于最大限订数')
+        return
+      }
+      if (self.sale.AgeLimit.max !=0 && self.sale.AgeLimit.min > self.sale.AgeLimit.max) {
+        alert('年龄限定设置错误')
+        return
+      }
+      if (self.sale.RealAgeLimit.max !=0 && self.sale.RealAgeLimit.min > self.sale.RealAgeLimit.max) {
+        alert('年龄限定设置错误')
+        return
+      }
+ 
+      // 要提交的三个数组
+      self.sale.Province = []
+      self.sale.City = []
+      self.sale.Area = []
+      // 如果要求身份信息和区域信息，就更新数组
+      if (self.sale.AreaLimit == 0 && self.sale.AgeLimit.min == 0 
+        && self.sale.AgeLimit.max == 0  && self.sale.SexLimit == -1 
+        && self.sale.PerIDLimit.Days == 0){
+        self.sale.IDCardNeeded = 0
+      } else {
+        self.sale.IDCardNeeded = 1
+      }
+      if (self.sale.AreaLimit == 1) {
+        self.provinceList.forEach(function(province){
+          if (province.number == -1) {
+            self.sale.Province.push(province.id)
+          } else if (province.number > 0) {
+            province.citys.forEach(function(city){
+              if (city.number == -1) {
+                self.sale.City.push(city.id)
+              } else if (city.number > 0) {
+                city.regions.forEach(function(region){
+                  if (region.selected == 1) {
+                    self.sale.Area.push(region.id)
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
+      self.sale.RealProvince = []
+      self.sale.RealCity = []
+      self.sale.RealArea = []
+      if (self.sale.RealAreaLimit == 1) {
+        self.provinceListR.forEach(function(province){
+          if (province.number == -1) {
+            self.sale.RealProvince.push(province.id)
+          } else if (province.number > 0) {
+            province.citys.forEach(function(city){
+              if (city.number == -1) {
+                self.sale.RealCity.push(city.id)
+              } else if (city.number > 0) {
+                city.regions.forEach(function(region){
+                  if (region.selected == 1) {
+                    self.sale.RealArea.push(region.id)
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
 
       var c = $scope.root.config;
       var url = c.requestUrl + '/sale' + c.extension;
       self.sale.status = 'on';
-      self.sale.saleDateStart = new Date($('#rd_dmukgs').val() + ' 00:00:00').getTime();
-      self.sale.saleDateEnd = new Date($('#rd_qcaxwa').val() + ' 23:59:59').getTime();
-      // 可游玩时间
-      self.sale.visitDateStart = $('#visitDateStart').val() ? $('#visitDateStart').val() + ' 00:00:00' : '1970-01-01 00:00:00';
-      self.sale.visitDateEnd = $('#visitDateEnd').val() ? $('#visitDateEnd').val() + ' 23:59:59' : '2060-01-01 23:59:59';
-
+      // 可销售日期
+      self.sale.saleDateStart = new Date($('#saleDateStart').val() + ' 00:00:00').getTime();
+      self.sale.saleDateEnd = new Date($('#saleDateEnd').val() + ' 23:59:59').getTime();
+      // 可游玩日期
+      self.sale.visitDateStart = $('#visitDateStart').val() + ' 00:00:00';
+      self.sale.visitDateEnd = $('#visitDateEnd').val() + ' 23:59:59';
+      // 当日下单时间
       self.sale.validTimeEnd = $('#validTimeEnd').val();
       self.sale.validTimeStart = '00:00';
+      // 通用可销售时间
+      // 如果秒为0的话，jquery会把秒省略掉
+      var orderS = $('#orderTimeStart').val()
+      if (orderS.length == 5) {
+        orderS = orderS + ':00'
+      }
+      var orderE = $('#orderTimeEnd').val()
+      if (orderE.length == 5) {
+        orderE = orderE + ':00'
+      }
+      self.sale.OrderTimeLimit = {
+        StartTime: orderS,
+        EndTime: orderE
+      }      
       self.sale.goodsId = self.myGoods.id;
       self.sale.partnerCode = self.myPartner.partnerCode;
-      
 
       self.sale.TwoDBarCodeOn = self.sale.TwoDBarCodeOn.code || 0;
-      self.sale.GateGoodsID = self.sale.GateGoodsID || "0";
+      self.sale.GateGoodsID = self.sale.GateGoodsID || 0;
       self.sale.GateGoodsCount = self.sale.GateGoodsCount || 0;
-
 
       var data = {
         "action": "Modify",
@@ -4463,7 +5808,9 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
           alert('保存失败，请重试');
         });
     }
+
   }]);
+
   app.controller('checkTouristController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
         function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
             console.log('checkTourist');
@@ -4480,17 +5827,19 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     forceParse: 0,
                     showMeridian: 1
                 });
-                $('.form_datetime').datetimepicker({
-                    language:  'zh-CN',
-                    weekStart: 1,
-                    todayBtn:  1,
-                    autoclose: 1,
-                    todayHighlight: 1,
-                    startView: 2,
-                    forceParse: 0,
-                    showMeridian: 1
-                });
                 self.bookPerson = '';
+                $('#check-time-start').val('00:00:00')
+                $('#check-time-end').val('23:59:59')
+            }
+            self.clearCheckStart = function () {
+              $('#check-time-start').val('00:00:00')
+              $('#rd_zpqvrt').val('')
+              $('#check-date-start').val('')
+            }
+            self.clearCheckEnd = function () {
+              $('#check-time-end').val('23:59:59')
+              $('#rd_fiekwn').val('')
+              $('#check-date-end').val('')
             }
             self.export = function() {
                 var c = $scope.root.config;
@@ -4507,7 +5856,6 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                     var eDate = $filter('date')(new Date().getTime(), 'yyyy-MM-dd');
                     $('#rd_khaydt').val(eDate);
                     $('#order-create-date-end').val(eDate);
-
                 }
                 // 仅开始时间为空时
                 else if(!$('#rd_qcaxwa').val()) {
@@ -4601,8 +5949,8 @@ app.controller('toBeCheckedController', ['$scope', '$http', '$cookies', '$locati
                             self.visitDateEnd = $('#rd_idwdiz').val() ? new Date($('#rd_idwdiz').val() + ' 23:59:59').getTime() : '';
 
                             // 检票时间
-                            self.checkDateStart = $('#rd_zpqvrt').val() ? $filter('emptySec')(new Date($('#rd_zpqvrt').val())).getTime() : '';
-                            self.checkDateEnd = $('#rd_fiekwn').val() ? $filter('emptySec')(new Date($('#rd_fiekwn').val())).getTime() : '';
+                            self.checkDateStart = $('#rd_zpqvrt').val() ? new Date($('#rd_zpqvrt').val() + ' ' + $('#check-time-start').val()).getTime() : '';
+                            self.checkDateEnd = $('#rd_fiekwn').val() ? new Date($('#rd_fiekwn').val() + ' ' + $('#check-time-end').val()).getTime() : '';
 
                             var data = {
                                 "action": "GetOrderCheckList",

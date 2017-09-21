@@ -30,71 +30,75 @@
     </div>
         <hr class="break-space">
     <div class="row">
-
-        <div class="col-sm-2 col-condensed">
+        <div class="col-sm-7 row">
+            <div class="col-sm-3 col-condensed">
             <label>成交时间开始</label>
             <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
                 <!-- <span class="input-group-addon ">开始</span> -->
-                <input id="order-create-date-start" class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                <input id="order-create-date-start" class="form-control overflow-ellipsis cursor-pointer" size="16" type="text" value="" readonly>
                 <input type="hidden" id="rd_qcaxwa" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>    
             </div>
         </div>
-        <div class="col-sm-2 col-condensed">
+        <div class="col-sm-3 col-condensed">
             <label>成交时间结束</label>
             <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
                 <!-- <span class="input-group-addon ">结束</span> -->
-                <input id="order-create-date-end" class="form-control overflow-ellipsis" size="16" type="text" value="" readonly>
+                <input id="order-create-date-end" class="form-control overflow-ellipsis cursor-pointer" size="16" type="text" value="" readonly>
                 <input type="hidden" id="rd_khaydt" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>                
             </div>
         </div>
-        <div class="col-sm-2 col-condensed">
+        <div class="col-sm-3 col-condensed">
             <label>游玩时间开始</label>
             <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_lptvht" data-link-format="yyyy-mm-dd">
                 <!-- <span class="input-group-addon ">开始</span> -->
-                <input class="form-control " size="16" type="text" value="" readonly>
+                <input class="form-control cursor-pointer" type="text" value="" readonly>
                 <input type="hidden" id="rd_lptvht" value="" />
                 <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                
             </div>
         </div>
-        <div class="col-sm-2 col-condensed">
+        <div class="col-sm-3 col-condensed">
             <label>游玩时间结束</label>
             <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_idwdiz" data-link-format="yyyy-mm-dd">
                 <!-- <span class="input-group-addon ">结束</span> -->
-                <input class="form-control " size="16" type="text" value="" readonly>
+                <input class="form-control cursor-pointer" type="text" value="" readonly>
                 <input type="hidden" id="rd_idwdiz" value="" />
                 <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                
             </div>
         </div>
-        <div class="col-sm-2 col-condensed">
-            <label>检票时间开始</label>
-            <div class="input-group date form_datetime"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_zpqvrt">
-                <!-- <span class="input-group-addon ">开始</span> -->
-                <input id="check-date-start" class="form-control " size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_zpqvrt" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            </div>
         </div>
-        <div class="col-sm-2 col-condensed">
-            <label>检票时间结束</label>
-            <div class="input-group date form_datetime"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="rd_fiekwn">
-                <!-- <span class="input-group-addon ">结束</span> -->
-                <input id="check-date-end" class="form-control " size="16" type="text" value="" readonly>
-                <input type="hidden" id="rd_fiekwn" value="" />
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+        <div class="col-sm-5 row clearLeft" >
+            <div class="col-sm-6">
+                <label>检票时间开始</label>            
+                <div class="dateAndTime">
+                    <div class="input-group date form_date flexDate" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_zpqvrt" data-link-format="yyyy-mm-dd">
+                        <input id="check-date-start" class="form-control cursor-pointer" type="text" value="" readonly>
+                        <input type="hidden" id="rd_zpqvrt" value=""/>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                    <div class="input-group flexTime">
+                        <input id="check-time-start" required type="time" step="1" class="form-control cursor-pointer">
+                        <span ng-click="ordersList.clearCheckStart()" class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    </div>                
+                </div>        
             </div>
-        </div>
+            <div class="col-sm-6">
+                <label>检票时间结束</label>
+                <div class="dateAndTime">
+                    <div class="input-group date form_date flexDate" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_fiekwn" data-link-format="yyyy-mm-dd">
+                        <input id="check-date-end" class="form-control cursor-pointer" type="text" value="" readonly>
+                        <input type="hidden" id="rd_fiekwn" value=""/>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                    <div class="input-group flexTime">
+                        <input id="check-time-end" required type="time" step="1" class="form-control cursor-pointer">
+                        <span ng-click="ordersList.clearCheckEnd()" class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    </div>                
+                </div>        
+            </div>
+        </div>      
     </div>
-
-
-
-
-
     
     <hr class="break-space">
 
