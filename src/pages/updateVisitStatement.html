@@ -10,7 +10,7 @@
     <hr>
 
     <div class="row">
-        <div class="col-sm-6 col-condensed">
+        <div class="col-sm-4 col-condensed">
             <label>改签时间开始</label>            
             <div class="dateAndTime">
                 <div class="input-group date form_date flexDate" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">
@@ -19,12 +19,12 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="input-group flexTime">
-                    <input id="order-create-time-start" required type="time" step="1" class="form-control cursor-pointer">
+                    <input id="order-create-time-start" required type="time" step="1" class="form-control cursor-pointer noArrow">
                     <span ng-click="updateVisitStatement.clearOrderStart()" class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                 </div>                
             </div>               
         </div>
-        <div class="col-sm-6 col-condensed">
+        <div class="col-sm-4 col-condensed">
             <label>改签时间结束</label>            
             <div class="dateAndTime">
                 <div class="input-group date form_date flexDate" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">
@@ -33,7 +33,7 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="input-group flexTime">
-                    <input id="order-create-time-end" required type="time" step="1" class="form-control cursor-pointer">
+                    <input id="order-create-time-end" required type="time" step="1" class="form-control cursor-pointer noArrow">
                     <span ng-click="updateVisitStatement.clearOrderEnd()" class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                 </div>                
             </div> 

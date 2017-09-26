@@ -11,34 +11,22 @@
     <div class="row">
         <label class="col-sm-1 inline-title">年份</label>
         <div class="col-sm-2 col-condensed">
-            <input id="monthly-year" class="form-control overflow-ellipsis" size="16" type="number" ng-model="year">
+            <input id="monthly-year" class="form-control overflow-ellipsis" size="16" type="number" ng-model="yearlyCharts.year">
         </div>
-
-        <label class="col-sm-1 inline-title good-name">查询结果</label>
-        <form class="form-inline">
-            <div class="form-group">
-                <label>
-                    <input ng-click="yearlyCharts.search(1)" class="form-control" size="16" type="radio" value="1" ng-model="searchType" name="search-type" checked>金额
-                </label>
-
-                <label>
-                    <input ng-click="yearlyCharts.search(0)" class="form-control" size="16" type="radio" value="0" ng-model="searchType" name="search-type">数量
-                </label>
-            </div>
-        </form>
-        <div class="controls pull-right orders-chart-search">
-            <button class="btn btn-primary" ng-click="yearlyCharts.search()" href>
-                <i class="glyphicon glyphicon-search"></i>搜索
-            </button>
-        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">
+          <label>查询结果:</label>
+          &nbsp;
+          <button class="btn btn-primary" ng-click="yearlyCharts.search(0)">
+            <i class="glyphicon glyphicon-search"></i> 数量
+          </button>
+          &nbsp;
+          <button class="btn btn-primary" ng-click="yearlyCharts.search(1)">
+            <i class="glyphicon glyphicon-search"></i> 金额
+          </button>
+        </div>        
     </div>
-    <div fusioncharts
-         class="orders-chart"
-         width="900"
-         height="500"
-         type="msline"
-         dataSource="{{yearlyChartsData}}" >
-    </div>
-    <div ng-show="yearlyCharts.loading">loading...</div>
-    <div ng-show="yearlyCharts.noData">无数据</div>
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <div id="e-line" style="width: 1000px;height:400px;"></div>
 </div>

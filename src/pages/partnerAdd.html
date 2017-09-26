@@ -60,6 +60,11 @@
                             <label class="required-info">预付款额</label>
                             <input step="0.01" ng-model="partnerAdd.PaymentAmount" type="number" class="form-control" placeholder="请输入预付款额">
                         </div>
+                        <!-- 低余额警告 -->
+                        <div class="form-group">
+                            <label class="required-info">低余额警告值</label>
+                            <input ng-model="partnerAdd.PaymentLimit" required type="number" class="form-control" placeholder="余额低于此值时警告">
+                        </div>
                         <!--提交按钮-->
                         <div class="form-group pull-right">
                             <div class="controls">

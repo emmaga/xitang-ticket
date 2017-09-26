@@ -34,13 +34,15 @@
             </td>
 
             <td title="'下单类型'">
-                {{(row.OrderType == 1) ? '通过自动化接口下单' : ''}}
-                {{(row.OrderType == 2) ? '通过页面下单' : ''}}
+                {{row.OrderType}}
             </td>
 
             <td title="'是否开启预付款'">
-                {{(row.PrePayment == 1) ? '已开启预付款' : ''}}
-                {{(row.PrePayment == 0) ? '未开启预付款' : ''}}
+                {{(row.PrePayment == 1) ? '已开启' : ''}}
+                {{(row.PrePayment == 0) ? '未开启' : ''}}
+            </td>
+            <td title="'低余额警告'">
+                <b class="text-danger">{{(row.PaymentLimit == 1) ? '低于限值，请充值' : ''}}</b>          
             </td>
 
             <td title="'操作'">

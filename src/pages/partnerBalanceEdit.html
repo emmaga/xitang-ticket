@@ -18,7 +18,7 @@
                 </div>
                 <div class="panel-body">
                     <form name="partnerBalanceEditForm" class="form form-vertical" ng-submit="partnerBalanceEditForm.$valid && partnerBalanceEdit.submit()">
-                        <label class="font-normal">当前账户余额：¥ {{ partnerBalanceEdit.PaymentAmount/100 }}</label>
+                        <label class="font-normal">当前账户余额：¥ {{ partnerBalanceEdit.info.PaymentAmount/100 }}</label>
                         <hr class="hr-half">
                         <div class="form-group">
                             <input type="radio"
@@ -28,8 +28,7 @@
                                    >
                             <label>增加余额</label>
                             <input ng-disabled="partnerBalanceEdit.addOrMinus == 'minus'" 
-                                    step="0.01" 
-                                    ng-required="partnerBalanceEdit.addOrMinus == 'add'" 
+                                    step="0.01"  
                                     ng-model="partnerBalanceEdit.addAmount" 
                                     type="number" 
                                     class="form-control" 
@@ -43,12 +42,24 @@
                                    >
                             <label>减少余额</label>
                             <input ng-disabled="partnerBalanceEdit.addOrMinus == 'add'" 
-                                    ng-required="partnerBalanceEdit.addOrMinus == 'minus'" 
                                     step="0.01" 
                                     ng-model="partnerBalanceEdit.minusAmount" 
                                     type="number" 
                                     class="form-control" 
                                     placeholder="请输入减少的余额">
+                        </div>
+                        <!-- 预付款功能 -->
+                        <div class="form-group">
+                            <label class="required-info">是否开启预付款功能</label>
+                            <select id="prePayment" class="form-control"> 
+                                <option label="否" value="0">否</option>
+                                <option label="是" value="1">是</option>  
+                            </select>
+                        </div>
+                        <!-- 低余额警告 -->
+                        <div class="form-group">
+                            <label class="required-info">低余额警告值</label>
+                            <input ng-model="partnerBalanceEdit.info.PaymentLimit" required type="number" class="form-control" placeholder="余额低于此值时警告">
                         </div>
                         <!--按钮-->
                         <div class="form-group pull-right">

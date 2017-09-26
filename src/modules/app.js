@@ -355,6 +355,39 @@
               }
           }
       })
+      .state('ageRatio', {
+          url: '/ageRatio',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@ageRatio': {
+                  templateUrl: 'pages/ageRatio.html'
+              }
+          }
+      })
+      .state('provinceRatio', {
+          url: '/provinceRatio',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@provinceRatio': {
+                  templateUrl: 'pages/provinceRatio.html'
+              }
+          }
+      })
+      .state('sexRatio', {
+          url: '/sexRatio',
+          views: {
+              '': {
+                  templateUrl: 'pages/main.html'
+              },
+              'mainFrame.body@sexRatio': {
+                  templateUrl: 'pages/sexRatio.html'
+              }
+          }
+      })
   });
 
   app.controller('RootController', function() {

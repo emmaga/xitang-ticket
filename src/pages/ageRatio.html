@@ -1,0 +1,58 @@
+<div ng-controller="ageRatioController as ageRatio" ng-init="ageRatio.init()">
+    <a>
+        <strong>
+            <i class="glyphicon glyphicon-equalizer"></i>
+            图表统计
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            年龄段统计
+        </strong>
+    </a>
+    <hr>
+    <div class="row">
+        <label class="col-sm-1 inline-title">下单时间</label>
+        <div class="col-sm-2">
+            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_qcaxwa" data-link-format="yyyy-mm-dd">                
+                <input id="order-create-date-start" class="form-control overflow-ellipsis cursor-pointer" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_qcaxwa" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="rd_khaydt" data-link-format="yyyy-mm-dd">                
+                <input id="order-create-date-end" class="form-control overflow-ellipsis cursor-pointer" size="16" type="text" value="" readonly>
+                <input type="hidden" id="rd_khaydt" value="" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div>
+        <div class="col-sm-7 row">
+            <label class="col-xs-1 inline-title">商品</label>
+            <div  class="col-xs-4 col-sm-4">            
+                <select class="form-control cursor-pointer" ng-model="ageRatio.myGoods"  ng-options="goods.goodsName for goods in ageRatio.goods" style="padding: 0 12px;">
+                    <option value="">- 请选择商品 -</option>
+                </select> 
+            </div>
+            <label class="col-sm-1 inline-title">分销商</label>
+            <div  class="col-xs-4 col-sm-4">            
+                <select class="form-control cursor-pointer" ng-model="ageRatio.myPartner"  ng-options="partner.partnerName for partner in ageRatio.partners" style="padding: 0 12px;">
+                    <option value="">- 请选择分销商 -</option>
+                </select> 
+            </div>
+            <div class="col-sm-1">
+                <button class="btn btn-primary" ng-click="ageRatio.search(true)">
+                    <i class="glyphicon glyphicon-search"></i>搜索
+                </button>
+            </div>            
+        </div>        
+    </div>
+    <hr class="break-space-double">
+    <hr class="break-space-double">
+    <!-- echarts饼图 -->
+    <div style="width: 600px;height:500px;position: relative;">
+        <div id="e-pie" style="width: 600px;height:500px;"></div>
+        <div id="orderByWhat" ng-show="ageRatio.showToggle">
+            <div><a ng-click="ageRatio.toggleLink(0)" ng-class="{'activeLink': ageRatio.activeIndex === 0, 'inactiveLink': ageRatio.activeIndex === 1}">按年龄排序</a></div>
+            <div><a ng-click="ageRatio.toggleLink(1)" ng-class="{'activeLink': ageRatio.activeIndex === 1, 'inactiveLink': ageRatio.activeIndex === 0}">按人数排序</a></div>
+        </div>
+    </div>
+    
+</div>

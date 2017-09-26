@@ -61,9 +61,26 @@ footer {
 .clearLeft {
   padding: 0;
 }
+
+.activeLink, .activeLink:hover{
+  color: black;
+  font-size: 17px;
+}
+
+.inactiveLink,  .inactiveLink:hover {
+  color: #61A0A8;
+  font-size: 14px;
+  padding-left: 15px;
+}
+
+#orderByWhat {
+  position: absolute;
+  top: 50px;
+  right: 100px;
+}
 /*隐藏input为type="time"时的上下箭头*/
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+input.noArrow::-webkit-outer-spin-button,
+input.noArrow::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
   margin: 0; 
 }
@@ -367,7 +384,7 @@ font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSa
   text-align: right;
   height: 34px;
   line-height: 34px;
-  padding: 0 12px;
+  padding: 0 12px 0 0;
 }
 .good-name{
   margin-left: 10px;
@@ -382,11 +399,6 @@ font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSa
   width: 600px;
   height: 400px;
 }
-#orders-charts-content{
-  width: 400px;
-  height: 400px;
-  float:left;
-}
 #orders-charts-title{
   float: right;
   width: 240px;
@@ -398,8 +410,13 @@ font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSa
 .orders-chart{
   float: left;
 }
+#orders-charts-content {
+  margin-top: 15px;
+  color: #000;
+}
 #orders-charts-list{
-  margin-top: 135px;
+  margin-top: 120px;
+  margin-left: -80px;
 }
 #orders-charts-tab td{
   border: 1px solid;

@@ -95,6 +95,9 @@
         case 'monthlySales':
         case 'goodsRate':
         case 'yearlySales':
+        case 'sexRatio':
+        case 'ageRatio':
+        case 'provinceRatio':
             $scope.$state = 'charts';
             break;
       }
@@ -3626,7 +3629,6 @@
   app.controller('partnerConfigController', ['$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams', 
     function($scope, $http, $cookies, $location, $window, NgTableParams) {
       var self = this;
-      
       self.getStatus = function(status) {
         var ret = status === 'on' ? '已启用' : '已禁用';
         return ret;
@@ -3714,7 +3716,6 @@
             counts: [15, 30],
             getData: function(params) {
               var paramsUrl = params.url();
-
               var c = $scope.root.config;
               var url = c.requestUrl + '/partners' + c.extension;
               var data = {
@@ -3812,7 +3813,8 @@
           "Status": this.Status,
           "OrderType": this.OrderType - 0,
           "PrePayment": this.PrePayment - 0,
-          "PaymentAmount": (this.PaymentAmount - 0) * 100
+          "PaymentAmount": (this.PaymentAmount - 0) * 100,
+          "PaymentLimit": this.PaymentLimit
         }
       };
       data = JSON.stringify(data);
@@ -3841,30 +3843,29 @@
 
   app.controller('partnerBalanceEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 
     function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
-      console.log('partnerBalanceEdit');
-
-      var self = this;
-      self.id = $stateParams.id;
-      self.addOrMinus = 'add'
-
-      // get data
-      var c = $scope.root.config;
-      var url = c.requestUrl + '/partners' + c.extension;
-
-      var data = {
-        "action": "GetOTADetail",
-        "token": $cookies.get('token'),
-        "projectName": $cookies.get('projectName'),
-        "data": {
-          "OTACode": self.id
-        } 
-      };
-      data = JSON.stringify(data);
-
-      $http.post(url, data).then(function successCallback(response) {
+      console.log('partnerBalanceEdit')
+      var self = this
+      self.init = function () {
+        self.id = $stateParams.id;
+        self.addOrMinus = 'add'
+        self.setSubmit(false);
+        // get data
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        var data = {
+          "action": "GetOTADetail",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "data": {
+            "OTACode": self.id
+          } 
+        };
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
           if(data.rescode === 200) {
-            self.PaymentAmount = data.data.PaymentAmount;
+            self.info = data.data;
+            $('#prePayment').val(self.info.PrePayment)
           }else if(data.rescode === 401){
             alert('登录超时，请重新登录');
             $location.path('/index');
@@ -3874,6 +3875,7 @@
         }, function errorCallback(response) {
           alert('读取信息失败');
         });
+      }
 
       self.setSubmit = function (status) {
         if(status) {
@@ -3884,24 +3886,57 @@
           self.submitting = false;
         }
       }
+      self.submit = function () {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        self.info.PrePayment = Number($('#prePayment').val())
+        self.info.OTACode = self.id
+        console.log(self.info)
+        var data = {
+          "action": "UpdateOTA",
+          "OTACode": self.id,
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "data": self.info
+        };
+        data = JSON.stringify(data);
+        self.setSubmit(true);
+        $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.setMoney()
+          }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          }else {
+            self.setSubmit(false);
+            alert('错误信息' + data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          self.setSubmit(false);
+          alert('保存失败，请重试');
+        });
+      }
 
-      self.setSubmit(false);
-
-      this.submit = function() {
-
+      self.setMoney = function() {
         var c = $scope.root.config;
         var action = ''
         var amount = 0
         if (self.addOrMinus === 'add') {
           action = 'AddPrePaymentAmount'
+          if (!self.addAmount) {
+            self.addAmount = 0
+          }
           amount = (self.addAmount - 0) * 100
         } else {
           action = 'MinusPrePaymentAmount'
+          if (!self.minusAmount) {
+            self.minusAmount = 0
+          }
           amount = (self.minusAmount - 0) * 100
         }
 
         var url = c.requestUrl + '/partners' + c.extension;
-
         var data = {
           "action": action,
           "OTACode": self.id,
@@ -3915,7 +3950,7 @@
         $http.post(url, data).then(function successCallback(response) {
             var data = response.data;
             if(data.rescode === 200) {
-              alert('修改成功')
+              alert('保存成功')
               $location.path('/partnerConfig');
             }else if(data.rescode === 401){
               alert('登录超时，请重新登录');
@@ -3935,30 +3970,26 @@
   app.controller('partnerEditController', ['$scope', '$state', '$stateParams', '$http', '$cookies', '$location', '$filter', 
     function($scope, $state, $stateParams, $http, $cookies, $location, $filter) {
       console.log('partnerEdit');
-
       var self = this;
-      self.id = $stateParams.id;
-      self.info = {}
-
-      // get data
-      var c = $scope.root.config;
-      var url = c.requestUrl + '/partners' + c.extension;
-
-      var data = {
-        "action": "GetOTADetail",
-        "token": $cookies.get('token'),
-        "projectName": $cookies.get('projectName'),
-        "data": {
-          "OTACode": self.id
-        } 
-      };
-      data = JSON.stringify(data);
-
-      $http.post(url, data).then(function successCallback(response) {
+      self.init = function () {
+        self.id = $stateParams.id;
+        self.info = {}
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        var data = {
+          "action": "GetOTADetail",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "data": {
+            "OTACode": self.id
+          } 
+        };
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback(response) {
           var data = response.data;
-          if(data.rescode === 200) {
-            self.info = data.data;
-          }else if(data.rescode === 401){
+          if(data.rescode === 200) {            
+            self.info = data.data;            
+          } else if (data.rescode === 401){
             alert('登录超时，请重新登录');
             $location.path('/index');
           }else {
@@ -3967,6 +3998,8 @@
         }, function errorCallback(response) {
           alert('读取信息失败');
         });
+        self.setSubmit(false);
+      }
 
       self.setSubmit = function (status) {
         if(status) {
@@ -3978,14 +4011,10 @@
         }
       }
 
-      self.setSubmit(false);
-
-      this.submit = function() {
-
+      self.submit = function() {
         var c = $scope.root.config;
         var url = c.requestUrl + '/partners' + c.extension;
         self.info.OTACode = self.id
-        
         var data = {
           "action": "UpdateOTA",
           "OTACode": self.id,
@@ -3995,23 +4024,22 @@
         };
         data = JSON.stringify(data);
         self.setSubmit(true);
-
         $http.post(url, data).then(function successCallback(response) {
-            var data = response.data;
-            if(data.rescode === 200) {
-              alert('保存成功')
-              $location.path('/partnerConfig');
-            }else if(data.rescode === 401){
-              alert('登录超时，请重新登录');
-              $location.path('/index');
-            }else {
-              self.setSubmit(false);
-              alert(data.errInfo);
-            }  
-          }, function errorCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            alert('保存成功')
+            $location.path('/partnerConfig');
+          }else if(data.rescode === 401){
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          }else {
             self.setSubmit(false);
-            alert('保存失败，请重试');
-          });
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          self.setSubmit(false);
+          alert('保存失败，请重试');
+        });
       }
     }
   ]);
@@ -4890,7 +4918,6 @@
             alert('保存失败，请重试');
           });
       }
-
   }]);
   
   app.controller('saleEditController', ['$scope', '$state', '$stateParams', '$location', '$cookies', '$http', '$filter',
@@ -5808,7 +5835,6 @@
           alert('保存失败，请重试');
         });
     }
-
   }]);
 
   app.controller('checkTouristController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
@@ -6028,651 +6054,1495 @@
             }
         }
   ]);
+
   app.controller('ordersChartsController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
-        function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
-            console.log('ordersCharts');
-            var self = this;
-            self.init = function () {
-                $('.form_date').datetimepicker({
-                    language: 'zh-CN',
-                    weekStart: 1,
-                    todayBtn: 1,
-                    autoclose: 1,
-                    todayHighlight: 1,
-                    startView: 2,
-                    minView: 2,
-                    forceParse: 0,
-                    showMeridian: 1
-                });
-                $('.form_datetime').datetimepicker({
-                    language: 'zh-CN',
-                    weekStart: 1,
-                    todayBtn: 1,
-                    autoclose: 1,
-                    todayHighlight: 1,
-                    startView: 2,
-                    forceParse: 0,
-                    showMeridian: 1
-                });
-                $scope.days = [];
-                $scope.showList = false;
-                self.search(false);
-                $scope.ordersChartsData = {
-                    chart: {
-                        caption: "订单统计",
-                        startingangle: "120",
-                        showlabels: "0",
-                        showlegend: "1",
-                        enablemultislicing: "0",
-                        slicingdistance: "35",
-                        showpercentvalues: "1",
-                        showpercentintooltip: "0",
-                        plottooltext: "$label : $datavalue",
-                        theme: "fint"
-                    },
+    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+      console.log('ordersCharts');
+      var self = this;
+      self.init = function () {
+        $('.form_date').datetimepicker({
+          language: 'zh-CN',
+          weekStart: 1,
+          todayBtn: 1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0,
+          showMeridian: 1
+        });
+        self.myChart = echarts.init(document.getElementById('e-pie'))
+        self.myChart.setOption({
+          title: {
+            text: '订单统计',
+            right: 'center',
+            top: 20
+          },
+          series : [
+            {
+              name: '订单统计',
+              label: {
+                normal: {
+                  formatter: '{b}\n{c}人，{d}%\n',
+                }                    
+              },
+              type: 'pie',
+              radius: '55%',
+              data:[]
+            }
+          ]
+        })
+        self.initPartnersList()
+        self.initpartnerConfig()
+        self.search(false)                       
+      }
+
+      self.initpartnerConfig = function () {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateTime",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "goodsName": ""
+          }
+        }
+        data = JSON.stringify(data)
+        $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if (data.rescode === 200) {
+            self.goods = data.goods.lists;
+          } else if (data.rescode === 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback (response) {
+          alert('读取商品信息失败，请刷新页面重试')
+        })
+      }
+
+      self.initPartnersList = function () {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateDate",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "partnerName": ""
+          }
+        }
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.partners = data.partners.lists;
+          } else if (data.rescode === 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取分销商信息失败，请刷新页面重试');
+        });
+      }
+      //time to date
+      self.timeToDate = function(time,format){
+        var t = new Date(time);
+        var tf = function(i){return (i < 10 ? '0' : '') + i};
+        return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a){
+          switch(a){
+            case 'yyyy':
+              return tf(t.getFullYear());
+              break;
+            case 'MM':
+              return tf(t.getMonth() + 1);
+              break;
+            case 'mm':
+              return tf(t.getMinutes());
+              break;
+            case 'dd':
+              return tf(t.getDate());
+              break;
+            case 'HH':
+              return tf(t.getHours());
+              break;
+            case 'ss':
+              return tf(t.getSeconds());
+              break;
+          }
+        })
+      }
+      
+      self.search = function (flag) {
+        self.myChart.showLoading();
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/statistics' + c.extension;
+        if (flag) {
+          self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.goodsName = self.myGoods ? self.myGoods.goodsName : ''
+          self.OTAName = self.myPartner ? self.myPartner.partnerName : ''   
+        } else {
+          var n = new Date()
+          var d = new Date().getDate()
+          $('#rd_khaydt').val(self.timeToDate(n,'yyyy-MM-dd'))
+          $('#order-create-date-end').val(self.timeToDate(n,'yyyy-MM-dd'))          
+          $('#rd_qcaxwa').val(self.timeToDate(n.setDate(d - 6),'yyyy-MM-dd'))                    
+          $('#order-create-date-start').val(self.timeToDate(n,'yyyy-MM-dd'))
+          self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.goodsName = "";
+          self.OTAName = "";
+        }
+        var data = {
+          "action": "OrderStatistics",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "search": {
+            "OrderStartTime": self.orderCreateDateStart ? self.orderCreateDateStart + "" : "", //下单日期开始
+            "OrderEndTime": self.orderCreateDateEnd ? self.orderCreateDateEnd + "" : "", //下单日期结束
+            "GoodsName": self.goodsName,
+            "OTAName": self.OTAName
+          }
+        }
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback (response) {
+          self.myChart.hideLoading();
+          var data = response.data;
+          if (data.rescode == 200) {
+            if(data.OrderStatus.CheckedCount+data.OrderStatus.UncheckedCount+data.OrderStatus.RefundedCount == 0){
+              self.showList = false
+              self.myChart.setOption({
+                title: {
+                  text: '无数据',
+                  left: 30
+                },
+                series : [
+                  {
+                    name: '订单统计',
                     data: []
-                };
-            }
-
-            //time to date
-            self.timeToDate = function(time,format){
-                var t = new Date(time);
-                var tf = function(i){return (i < 10 ? '0' : '') + i};
-                return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a){
-                    switch(a){
-                        case 'yyyy':
-                            return tf(t.getFullYear());
-                            break;
-                        case 'MM':
-                            return tf(t.getMonth() + 1);
-                            break;
-                        case 'mm':
-                            return tf(t.getMinutes());
-                            break;
-                        case 'dd':
-                            return tf(t.getDate());
-                            break;
-                        case 'HH':
-                            return tf(t.getHours());
-                            break;
-                        case 'ss':
-                            return tf(t.getSeconds());
-                            break;
-                    }
-                })
-            };
-
-            // chartsData
-            self.search = function (flag) {
-                var c = $scope.root.config;
-                var url = c.requestUrl + '/statistics' + c.extension;
-
-                if(flag) {
-                    //读取下单日期
-                    self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
-                    self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
-
-                    //读取商品名称和分销商名称
-                    self.goodsName = $('#good-name').val()?$('#good-name').val():"";
-                    self.OTAName = $('#distributor-name').val()?$('#distributor-name').val():"";
-                }else {
-                    self.orderCreateDateStart = "";
-                    self.orderCreateDateEnd = "";
-                    self.goodsName = "";
-                    self.OTAName = "";
-                }
-                var data = {
-                    "action": "OrderStatistics",
-                    "token": $cookies.get('token'),
-                    "projectName": $cookies.get('projectName'),
-                    "search": {
-                        "OrderStartTime": self.orderCreateDateStart ? self.orderCreateDateStart + "" : "", //下单日期开始
-                        "OrderEndTime": self.orderCreateDateEnd ? self.orderCreateDateEnd + "" : "", //下单日期结束
-                        "GoodsName": self.goodsName,
-                        "OTAName": self.OTAName
-                    }
-                };
-                data = JSON.stringify(data);
-                self.loading = true;
-                self.noData = false;
-
-                $http.post(url, data).then(function successCallback(response) {
-                    self.loading = false;
-                    var data = response.data;
-                    if (data.rescode == 200) {
-                        // 查无数据
-                        if(data.OrderStatus.CheckedCount+data.OrderStatus.UncheckedCount+data.OrderStatus.RefundedCount == 0){
-                            $scope.ordersChartsData.data = [];
-                        }else {
-                            $scope.ordersChartsData.data = [
-                                {
-                                    label: "已检人数",
-                                    value: data.OrderStatus.CheckedCount
-                                },
-                                {
-                                    label: "未检人数",
-                                    value: data.OrderStatus.UncheckedCount
-                                },
-                                {
-                                    label: "退票人数",
-                                    value: data.OrderStatus.RefundedCount
-                                }
-                            ];
-                        }
-                        $scope.days = data.Futrue7Days;
-                        $scope.totalMoney = data.OrderStatus.TotalMoney;
-                        $scope.checked = data.OrderStatus.CheckedCount;
-                        $scope.unchecked = data.OrderStatus.UncheckedCount;
-                        $scope.refunded = data.OrderStatus.RefundedCount;
-                        $scope.totalPerson = $scope.checked + $scope.unchecked + $scope.refunded;
-                        $scope.showList = true;
-
-                    } else if (data.rescode == 401) {
-                        alert('登录超时，请重新登录');
-                        $location.path('/index');
-                    } else {
-                        alert(data.errInfo);
-                    }
-                }, function errorCallback(response) {
-                    self.loading = false;
-                    alert('加载失败，请重试');
-                });
-            }
-        }
-
-  ]);
-  app.controller('monthlyChartsController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
-        function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
-            console.log('monthlyCharts');
-            var self = this;
-            self.init = function () {
-                $scope.year = new Date().getFullYear();
-                $scope.month = new Date().getMonth()+1;
-                $scope.searchType = "0";
-                $scope.monthlyChartsData = {
-                    chart: {
-                        caption: "月度销售统计",
-                        paletteColors: "#0075c2,#1aaf5d,#c60000",
-                        bgcolor: "#ffffff",
-                        labelStep:"3",
-                        showBorder: "0",
-                        showShadow: "1",
-                        showCanvasBorder: "1",
-                        usePlotGradientColor: "1",
-                        legendBorderAlpha: "0",
-                        legendShadow: "0",
-                        showAxisLines: "0",
-                        showAlternateHGridColor: "1",
-                        divlineThickness: "1",
-                        divLineIsDashed: "1",
-                        divLineDashLen: "1",
-                        divLineGapLen: "1",
-                        showValues: "0",
-                        labelDisplay:"rotate",
-                        slantLabels:"90",
-                        theme: "fint"
-                    },
-                    categories:[],
-                    dataset:[]
-                };
-                self.search();
-            };
-
-            //横坐标月份
-            self.monthDate = function (year,month) {
-                var  day = new Date(year,month,0);
-                var dayCount = day.getDate();
-                $scope.monthlyChartsData.categories =[
-                    {
-                        "category": [
-                            {
-                                "label": year+'-'+month+'-'+"1"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"2"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"3"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"4"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"5"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"6"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"7"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"8"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"9"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"10"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"11"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"12"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"13"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"14"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"15"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"16"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"17"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"18"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"19"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"20"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"21"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"22"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"23"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"24"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"25"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"26"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"27"
-                            },
-                            {
-                                "label": year+'-'+month+'-'+"28"
-                            }
-                        ]
-                    }
-                ]
-                if(dayCount === 29){
-                    $scope.monthlyChartsData.categories[0].category.push({
-                        "label": year+'-'+month+'-'+"29"
-                    })
-                }else if(dayCount === 30){
-                    $scope.monthlyChartsData.categories[0].category.push({
-                        "label": year+'-'+month+'-'+"29"
-                    },{
-                        "label": year+'-'+month+'-'+"30"
-                    })
-                }else if(dayCount === 31){
-                    $scope.monthlyChartsData.categories[0].category.push({
-                        "label": year+'-'+month+'-'+"29"
-                    },{
-                        "label": year+'-'+month+'-'+"30"
-                    },{
-                        "label": year+'-'+month+'-'+"31"
-                    })
-                }
-                console.log($scope.monthlyChartsData.categories)
-            };
-
-            // chartsData
-            self.search = function (type) {
-                if(type != undefined){
-                    $scope.searchType = type;
-                }
-                var c = $scope.root.config;
-                var url = c.requestUrl + '/statistics' + c.extension;
-                self.monthDate($scope.year,$scope.month);
-                var data = {
-                    "action": "MonthlyOrderStatistics",
-                    "token": $cookies.get('token'),
-                    "projectName": $cookies.get('projectName'),
-                    "search": {
-                        "OrderYear": $scope.year ? $scope.year + "" : "",
-                        "OrderMonth": $scope.month ? $scope.month + "" : "",
-                        "SearchType": $scope.searchType + ""
-                    }
-                };
-                data = JSON.stringify(data);
-                self.loading = true;
-                self.noData = false;
-
-                $http.post(url, data).then(function successCallback(response) {
-                    self.loading = false;
-                    var data = response.data;
-                    if (data.rescode == 200) {
-                        // 查无数据
-                        if(data.OrderMonthlyStatus.length == 0){
-                            $scope.monthlyChartsData.dataset = [];
-                        }else {
-                            $scope.monthlyChartsData.dataset = [
-                                {
-                                    "seriesname": "订单数",
-                                    "data": []
-                                },
-                                {
-                                    "seriesname": "检票数",
-                                    "data": []
-                                },
-                                {
-                                    "seriesname": "退票数",
-                                    "data": []
-                                }
-                            ]
-                          for(var day in data.OrderMonthlyStatus){
-                            var dayIndex = parseInt(day.split('-')[2])-1;
-                            $scope.monthlyChartsData.dataset[0].data[dayIndex] = {"value":data.OrderMonthlyStatus[day].OrderCount}
-                            $scope.monthlyChartsData.dataset[1].data[dayIndex] = {"value":data.OrderMonthlyStatus[day].CheckCount}
-                            $scope.monthlyChartsData.dataset[2].data[dayIndex] = {"value":data.OrderMonthlyStatus[day].RefundCount}
-                          }
-                        }
-
-                    } else if (data.rescode == 401) {
-                        alert('登录超时，请重新登录');
-                        $location.path('/index');
-                    } else {
-                        alert(data.errInfo);
-                    }
-                }, function errorCallback(response) {
-                    self.loading = false;
-                    alert('加载失败，请重试');
-                });
-            }
-        }
-
-  ]);
-  app.controller('yearlyChartsController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
-        function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
-            console.log('yearlyCharts');
-            var self = this;
-            self.init = function () {
-                $scope.year = new Date().getFullYear();
-                $scope.searchType = "0";
-                $scope.yearlyChartsData = {
-                    chart: {
-                        caption: "年度销售统计",
-                        paletteColors: "#0075c2,#1aaf5d,#c60000",
-                        bgcolor: "#ffffff",
-                        showBorder: "0",
-                        showShadow: "1",
-                        showCanvasBorder: "1",
-                        usePlotGradientColor: "1",
-                        legendBorderAlpha: "0",
-                        legendShadow: "0",
-                        showAxisLines: "0",
-                        showAlternateHGridColor: "1",
-                        divlineThickness: "1",
-                        divLineIsDashed: "1",
-                        divLineDashLen: "1",
-                        divLineGapLen: "1",
-                        showValues: "0",
-                        labelDisplay:"rotate",
-                        slantLabels:"90",
-                        theme: "fint"
-                    },
-                    categories:[
-                        {
-                            "category": [
-                                {
-                                    "label": "1月"
-                                },
-                                {
-                                    "label": "2月"
-                                },
-                                {
-                                    "label": "3月"
-                                },
-                                {
-                                    "label": "4月"
-                                },
-                                {
-                                    "label": "5月"
-                                },
-                                {
-                                    "label": "6月"
-                                },
-                                {
-                                    "label": "7月"
-                                },
-                                {
-                                    "label": "8月"
-                                },
-                                {
-                                    "label": "9月"
-                                },
-                                {
-                                    "label": "10月"
-                                },
-                                {
-                                    "label": "11月"
-                                },
-                                {
-                                    "label": "12月"
-                                }
-                            ]
-                        }
-                    ],
-                    dataset:[]
-                };
-                self.search();
-            };
-            // chartsData
-            self.search = function (type) {
-                if(type != undefined){
-                      $scope.searchType = type;
                   }
-                var c = $scope.root.config;
-                var url = c.requestUrl + '/statistics' + c.extension;
-                var data = {
-                    "action": "OrderYearStatistics",
-                    "token": $cookies.get('token'),
-                    "projectName": $cookies.get('projectName'),
-                    "search": {
-                        "OrderYear": $scope.year ? $scope.year + "" : "",
-                        "SearchType": $scope.searchType + ""
-                    }
-                };
-                data = JSON.stringify(data);
-                self.loading = true;
-                self.noData = false;
-
-                $http.post(url, data).then(function successCallback(response) {
-                    self.loading = false;
-                    var data = response.data;
-                    if (data.rescode == 200) {
-                        // 查无数据
-                        if(data.OrderSalesStatus.length == 0){
-                            $scope.yearlyChartsData.dataset = [];
-                        }else {
-                            $scope.yearlyChartsData.dataset = [
-                                {
-                                    "seriesname": "订单数",
-                                    "data": []
-                                },
-                                {
-                                    "seriesname": "检票数",
-                                    "data": []
-                                },
-                                {
-                                    "seriesname": "退票数",
-                                    "data": []
-                                }
-                            ]
-                            for(var month in data.OrderSalesStatus){
-                                var monthIndex = parseInt(month)-1;
-                                $scope.yearlyChartsData.dataset[0].data[monthIndex] = {"value":data.OrderSalesStatus[month].OrderCount}
-                                $scope.yearlyChartsData.dataset[1].data[monthIndex] = {"value":data.OrderSalesStatus[month].CheckCount}
-                                $scope.yearlyChartsData.dataset[2].data[monthIndex] = {"value":data.OrderSalesStatus[month].RefundCount}
-                            }
-                        }
-
-                    } else if (data.rescode == 401) {
-                        alert('登录超时，请重新登录');
-                        $location.path('/index');
-                    } else {
-                        alert(data.errInfo);
-                    }
-                }, function errorCallback(response) {
-                    self.loading = false;
-                    alert('加载失败，请重试');
-                });
+                ]
+              })
+            } else {
+              self.showList = true
+              self.orderData = data.OrderStatus
+              self.orderData.totalCount = self.orderData.CheckedCount + self.orderData.UncheckedCount + self.orderData.RefundedCount
+              self.myChart.setOption({
+                title: {
+                  text: '订单统计',
+                  right: 'center'
+                },
+                legend: {
+                  bottom: 10,
+                  data: ['已检人数', '未检人数', '退票人数']
+                },
+                series : [
+                  {
+                    name: '订单统计',
+                    data: [
+                      {
+                        value: data.OrderStatus.CheckedCount,
+                        name: '已检人数'
+                      },{
+                        value: data.OrderStatus.UncheckedCount,
+                        name: '未检人数'
+                      },{
+                        value: data.OrderStatus.RefundedCount,
+                        name: '退票人数'
+                      }
+                    ]
+                  }
+                ]
+              })
             }
-        }
-
+            if (data.Futrue7Days.length > 0) {
+              self.showContent = true
+              self.days = data.Futrue7Days
+            } else {
+              self.showContent = false
+            }
+          } else if (data.rescode == 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }
+        }, function errorCallback(response) {
+          self.myChart.hideLoading();
+          alert('加载失败，请重试');
+        });
+      }
+    }
   ]);
-  app.controller('goodsRateController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
-        function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
-            console.log('goodsRate');
-            var self = this;
-            self.init = function () {
-                $scope.year = new Date().getFullYear();
-                $scope.month = 0;
-                $scope.rateChartsData = {
-                    chart: {
-                        caption: "商品销售统计",
-                        subCaption:"仅显示销量前10位",
-                        paletteColors:'#BFF700,#40F200,#04CD65,#9FD7FB,#006AE0,#4D25FF,#BE0DBF,#FF330E,#FFB200,#F10D58',
-                        pieRadius:"150",
-                        showPercentInTooltip:"1",
-                        showShadow: "1",
-                        showLegend:"1",
-                        legendPosition:"right",
-                        legendIconScale:"1.7",
-                        theme: "fint"
-                    },
+
+  app.controller('monthlyChartsController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+      console.log('monthlyCharts');
+      var self = this;
+      self.init = function () {
+        self.year = new Date().getFullYear()
+        self.month = new Date().getMonth()+1+''
+        self.lineChart = echarts.init(document.getElementById('e-line'))
+        self.lineChart.setOption({
+          title: {
+              text: '月度销售统计 - 金额',
+              left: 80
+          },
+          tooltip: {
+              trigger: 'axis'
+          },
+          legend: {
+              data:['订单数','检票数','退票数']
+          },
+          xAxis:  {
+              type: 'category',
+              boundaryGap: false,
+              data: []
+          },
+          yAxis: {
+              type: 'value'
+          },
+          series: [
+              {
+                  name:'订单数',
+                  type:'line',
+                  data:[]
+              },
+              {
+                  name:'检票数',
+                  type:'line',
+                  data:[]
+              },
+              {
+                  name:'退票数',
+                  type:'line',
+                  data:[]
+              }
+          ]
+        })
+        self.search(1)
+      }
+
+      // chartsData
+      self.search = function (type) {
+        self.lineChart.showLoading()
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/statistics' + c.extension;
+        var data = {
+          "action": "MonthlyOrderStatistics",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "search": {
+            "OrderYear": self.year ? self.year + "" : "",
+            "OrderMonth": self.month ? self.month + "" : "",
+            "SearchType": type + ""
+          }
+        };
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback (response) {
+          self.lineChart.hideLoading()
+          var data = response.data;
+          if (data.rescode == 200) {
+              // 查无数据
+            if (data.OrderMonthlyStatus.length == 0) {
+              self.lineChart.setOption({
+                title: {
+                  text: '无数据',
+                  left: 80
+                },
+                xAxis:  {
+                  type: 'category',
+                  boundaryGap: false,
+                  data: []
+                },         
+                series: [
+                  {
+                    name:'订单数',
+                    type:'line',
                     data:[]
-                };
-                $scope.OTAChartsData = {
-                    chart: {
-                        caption: "分销商销售统计",
-                        subCaption: "仅显示销量前10位",
-                        paletteColors: "#87CEFA,#FF330E",
-                        showBorder: "1",
-                        showShadow: "0",
-                        canvasBorderAlpha: "1",
-                        divlineAlpha: "100",
-                        divlineColor: "#999999",
-                        divlineThickness: "1",
-                        divLineIsDashed: "1",
-                        divLineDashLen: "1",
-                        divLineGapLen: "1",
-                        usePlotGradientColor: "0",
-                        showplotborder: "0",
-                        showHoverEffect: "1",
-                        showXAxisLine: "1",
-                        xAxisLineThickness: "1",
-                        xAxisLineColor: "#999999",
-                        showAlternateHGridColor: "0",
-                        legendBgAlpha: "0",
-                        legendBorderAlpha: "0",
-                        legendShadow: "0"
-                    },
-                    categories: [],
-                    dataset: [],
-                }
-                self.search();
-            };
-
-
-            // chartsData
-            self.search = function () {
-                var c = $scope.root.config;
-                var url = c.requestUrl + '/statistics' + c.extension;
-                var data = {
-                    "action": "OrderSalesStatistics",
-                    "token": $cookies.get('token'),
-                    "projectName": $cookies.get('projectName'),
-                    "search": {
-                        "OrderYear": $scope.year ? $scope.year + "" : "",
-                        "OrderMonth": $scope.month ? $scope.month + "" : "0"
-                    }
-                };
-                data = JSON.stringify(data);
-                self.loading = true;
-                self.noData = false;
-
-                $http.post(url, data).then(function successCallback(response) {
-                    self.loading = false;
-                    var data = response.data;
-                    if (data.rescode == 200) {
-                        // 查无数据
-                        if(data.OrderSalesStatus.length == 0){
-                            $scope.rateChartsData.data = [];
-                        }else {
-                            $scope.rateChartsData.data = [];
-                            data.OrderSalesStatus.forEach(function (val,idx,arr) {
-                                $scope.rateChartsData.data.push({
-                                    "label":val.GoodsName,
-                                    "value":val.SaleCount
-                                })
-                            })
-                        }
-                        if(data.OTASalesStatus.length == 0){
-                            $scope.OTAChartsData.categories = [];
-                            $scope.OTAChartsData.dataset = [];
-                        }else {
-                            $scope.OTAChartsData.categories = [
-                                {
-                                    "category": []
-                                }
-                            ];
-                            $scope.OTAChartsData.dataset = [
-                                {
-                                    "seriesname": "销售金额",
-                                    "data": []
-                                },
-                                {
-                                    "seriesname": "销售数量",
-                                    "data": []
-                                }
-                            ];
-                            data.OTASalesStatus.forEach(function (val,idx,arr) {
-                                $scope.OTAChartsData.categories[0].category.push({
-                                    "label":val.OTAName
-                                });
-
-                                $scope.OTAChartsData.dataset[0].data.push({
-                                    "value":val.SaleMoney
-                                });
-                                $scope.OTAChartsData.dataset[1].data.push({
-                                    "value":val.SaleCount
-                                });
-
-                            })
-                        }
-
-                    } else if (data.rescode == 401) {
-                        alert('登录超时，请重新登录');
-                        $location.path('/index');
-                    } else {
-                        alert(data.errInfo);
-                    }
-                }, function errorCallback(response) {
-                    self.loading = false;
-                    alert('加载失败，请重试');
-                });
+                  },
+                  {
+                    name:'检票数',
+                    type:'line',
+                    data:[]
+                  },
+                  {
+                    name:'退票数',
+                    type:'line',
+                    data:[]
+                  }
+                ]
+              })
+            } else {
+              var monthData = data.OrderMonthlyStatus
+              var xAxisList = Object.keys(monthData)
+              xAxisList.sort()
+              var orderCountList = []
+              var checkCountList = []
+              var refundCountList = []
+              for (var i=0; i<xAxisList.length; i++) {
+                orderCountList.push(monthData[xAxisList[i]].OrderCount) 
+                checkCountList.push(monthData[xAxisList[i]].CheckCount)
+                refundCountList.push(monthData[xAxisList[i]].RefundCount)
+              }
+              var titleText = type === 0 ? '月度销售统计 - 金额' : '月度销售统计 - 数量'
+              self.lineChart.setOption({
+                title: {
+                  text: titleText,
+                  left: 80
+                },
+                xAxis:  {
+                  type: 'category',
+                  boundaryGap: false,
+                  data: xAxisList
+                },         
+                series: [
+                  {
+                    name:'订单数',
+                    type:'line',
+                    data:orderCountList
+                  },
+                  {
+                    name:'检票数',
+                    type:'line',
+                    data:checkCountList
+                  },
+                  {
+                    name:'退票数',
+                    type:'line',
+                    data:refundCountList
+                  }
+                ]
+              })  
             }
+          } else if (data.rescode == 401) {
+            alert('登录超时，请重新登录')
+            $location.path('/index')
+          } else {
+            alert(data.errInfo)
+          }
+        }, function errorCallback(response) {
+          self.lineChart.hideLoading()
+          alert('加载失败，请重试')
+        })
+      }
+    }
+  ])
+
+  app.controller('yearlyChartsController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+      console.log('yearlyCharts');
+      var self = this;
+      self.init = function () {
+        self.year = new Date().getFullYear()  
+        console.log(self.year)
+        self.lineChart = echarts.init(document.getElementById('e-line'))
+        self.lineChart.setOption({
+          title: {
+            text: '年度销售统计 - 数量',
+            left: 80
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data:['订单数','检票数','退票数']
+          },
+          xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              name:'订单数',
+              type:'line',
+              data:[]
+            },
+            {
+              name:'检票数',
+              type:'line',
+              data:[]
+            },
+            {
+              name:'退票数',
+              type:'line',
+              data:[]
+            }
+          ]
+        })
+        self.search(0)
+      }
+      // chartsData
+      self.search = function (type) {
+        self.lineChart.showLoading()
+        var c = $scope.root.config
+        var url = c.requestUrl + '/statistics' + c.extension
+        var data = {
+          "action": "OrderYearStatistics",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "search": {
+            "OrderYear": self.year ? self.year + "" : "",
+            "SearchType": type + ""
+          }
         }
+        data = JSON.stringify(data)   
+        $http.post(url, data).then(function successCallback (response) {
+          self.lineChart.hideLoading()
+          var data = response.data;
+          if (data.rescode == 200) {
+              // 查无数据
+            if (data.OrderSalesStatus == {}) {
+              self.lineChart.setOption({
+                title: {
+                  text: '无数据',
+                  left: 80
+                },
+                xAxis:  {
+                  type: 'category',
+                  boundaryGap: false,
+                  data: []
+                },         
+                series: [
+                  {
+                    name:'订单数',
+                    type:'line',
+                    data:[],
+                  },
+                  {
+                    name:'检票数',
+                    type:'line',
+                    data:[]
+                  },
+                  {
+                    name:'退票数',
+                    type:'line',
+                    data:[]
+                  }
+                ]
+              })
+            } else {
+              var monthData = data.OrderSalesStatus
+              
+              var orderCountList = []
+              var checkCountList = []
+              var refundCountList = []
+              for (var i=1; i<13; i++) {
+                var key = i + ''
+                orderCountList.push(monthData[key].OrderCount) 
+                checkCountList.push(monthData[key].CheckCount)
+                refundCountList.push(monthData[key].RefundCount)
+              }
+              var titleText = type === 1 ? '年度销售统计 - 金额' : '年度销售统计 - 数量'
+              self.lineChart.setOption({
+                title: {
+                  text: titleText,
+                  left: 80
+                },
+                xAxis:  {
+                  type: 'category',
+                  boundaryGap: false,
+                  data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'] 
+                },         
+                series: [
+                  {
+                    name:'订单数',
+                    type:'line',
+                    data:orderCountList,
+                  },
+                  {
+                    name:'检票数',
+                    type:'line',
+                    data:checkCountList
+                  },
+                  {
+                    name:'退票数',
+                    type:'line',
+                    data:refundCountList
+                  }
+                ]
+              })  
+            }
+          } else if (data.rescode == 401) {
+              alert('登录超时，请重新登录');
+              $location.path('/index');
+          } else {
+              alert(data.errInfo);
+          }
+        }, function errorCallback(response) {
+            self.lineChart.hideLoading()
+            alert('加载失败，请重试');
+        })
+      }
+    }
+  ])
 
-    ]);
+  app.controller('goodsRateController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+      console.log('goodsRate');
+      var self = this;
+      self.init = function () {
+        self.year = new Date().getFullYear();
+        self.month = 0;
+        self.pieChart = echarts.init(document.getElementById('e-pie'))
+        self.barChart = echarts.init(document.getElementById('e-bar'))
+        self.pieChart.setOption({
+          title: {
+            text: '票型销售统计',
+            subtext: '仅显示销量前十位'                     
+          },
+          series : [
+            {
+              name: '票型销售统计',
+              center: ['55%', '50%'],
+              label: {
+                normal: {
+                  align: 'center',
+                  formatter: '{b}\n{c}张，{d}%',
+                }                    
+              },
+              type: 'pie',
+              radius: '45%',
+              data:[]
+            }
+          ]
+        })
+        self.barChart.setOption({
+          title: {
+            text: '分销商销售统计',
+            subtext: '仅显示销量前十位\n'     
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data:['销售金额','销售数量']
+          },
+          grid: {
+            y: 90,
+            y2: 200
+          },    
+          barMaxWidth: 50,
+          xAxis: {
+            type : 'category',
+            axisLabel: {
+              interval: 0,
+              formatter: function (val) {
+                return val.split("").join("\n"); 
+              }
+            },
+            data : []
+          },
+          yAxis : [
+            {
+              name:'销售金额',
+              type : 'value'
+            },
+            {
+              name:'销售数量',
+              type : 'value'
+            }
+          ],
+          series : [
+            {
+              name:'销售金额',
+              yAxisIndex: 0,
+              type:'bar',
+              data:[]
+            },
+            {
+              name:'销售数量',
+              yAxisIndex: 1,
+              type:'bar',
+              data:[]
+            }
+          ]
+        })  
+        self.search()
+      }
 
-})();
+      // chartsData
+      self.search = function () {
+        self.pieChart.showLoading()
+        self.barChart.showLoading()
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/statistics' + c.extension;
+        var data = {
+          "action": "OrderSalesStatistics",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "search": {
+            "OrderYear": self.year ? self.year + "" : "",
+            "OrderMonth": self.month ? self.month + "" : "0"
+          }
+        };
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback(response) {
+          self.pieChart.hideLoading()
+          self.barChart.hideLoading()
+          var data = response.data;
+          if (data.rescode == 200) {
+            // 票型无数据
+            if (data.OrderSalesStatus.length == 0) {
+              self.pieChart.setOption({
+                title: {
+                  text: '票型统计数据为空',
+                  subtext: '',
+                  left: 30
+                },
+                series : [
+                  {
+                    name: '票型销售统计',
+                    data: []
+                  }
+                ]
+              })              
+            } else { // 数据处理
+              self.typeRatioData = data.OrderSalesStatus
+              var legendList = []
+              self.typeRatioData.forEach(function (item) {
+                legendList.push(item.name)
+              })
+              self.pieChart.setOption({
+                title: {
+                  text: '票型销售统计',
+                  right: 'center'
+                },
+                legend: {
+                  type: 'scroll',
+                  bottom: 50,
+                  data: legendList
+                },
+                series : [
+                  {
+                    name: '票型销售统计',
+                    data: data.OrderSalesStatus
+                  }
+                ]
+              }) 
+            }
+            // 分销商统计无数据
+            if (data.OTASalesStatus.length == 0) {
+              self.barChart.setOption({
+                title: {
+                  text: '分销商统计数据为空',
+                  subtext: ''
+                },
+                legend: {
+                  data:[]
+                },
+                xAxis: {
+                  show: false,
+                  data : []
+                },
+                yAxis: [
+                  { 
+                    name:'销售金额',
+                    show: false
+                  },
+                  {
+                    name:'销售数量',
+                    show: false
+                  }
+                ],
+                series : [
+                  {
+
+                    name: '销售金额',
+                    data: []
+                  },
+                  {
+                    name: '销售数量',
+                    data: []
+                  }
+                ]
+              })
+            } else {
+              self.OTAData = data.OTASalesStatus
+              var OTANameList = []
+              var OTAMoneyData = []
+              var OTACountData = []
+              self.OTAData.forEach(function (ota) {
+                OTANameList.push(ota.OTAName)
+                OTAMoneyData.push(Number(ota.SaleMoney))
+                OTACountData.push(Number(ota.SaleCount))
+              })
+              self.barChart.setOption({
+                title : {
+                  text: '分销商销售统计',
+                  subtext: '仅显示销量前十位'
+                },
+                legend: {
+                  data:['销售金额','销售数量']
+                },
+                xAxis: {
+                  show: true,
+                  data : OTANameList
+                },
+                yAxis: [
+                  { 
+                    name:'销售金额',
+                    show: true
+                  },
+                  {
+                    name:'销售数量',
+                    show: true
+                  }
+                ],
+                series : [
+                  {
+                    name:'销售金额',
+                    data: OTAMoneyData
+                  },
+                  {
+                    name:'销售数量',
+                    data: OTACountData
+                  }
+                ]
+              })  
+            }
+          } else if (data.rescode == 401) {
+            alert('登录超时，请重新登录')
+            $location.path('/index')
+          } else {
+            alert(data.errInfo)
+          }
+        }, function errorCallback(response) {
+          self.pieChart.hideLoading()
+          self.barChart.hideLoading();
+          alert('加载失败，请重试')
+        })
+      }
+    }
+  ]);
+    
+  app.controller('ageRatioController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+      console.log('ageRatio');
+      var self = this;
+      self.init = function () {
+        $('.form_date').datetimepicker({
+          language: 'zh-CN',
+          weekStart: 1,
+          todayBtn: 1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0,
+          showMeridian: 1
+        })
+        self.activeIndex = 0
+        self.initpartnerConfig()
+        self.initPartnersList()
+        self.myChart = echarts.init(document.getElementById('e-pie'))
+        self.myChart.setOption({
+          title: {
+              text: '年龄段统计',
+              left: 'center',             
+              top: 20
+          },
+          series : [
+              {
+                  name: '年龄段统计',
+                  label: {
+                    normal: {
+                      formatter: '{b}\n{c}人，{d}%\n',
+                    }                    
+                  },
+                  type: 'pie',
+                  radius: '45%',
+                  data:[]
+              }
+          ]
+        })
+        self.search(false)
+      }
+      self.toggleLink = function (index) {
+        self.activeIndex = index
+        if (index === 0) {
+          self.myChart.setOption({
+                title: {
+                  text: '年龄段统计',
+                  x: 'center'                    
+                },
+                legend: {
+                  type: 'scroll',
+                  bottom: 10,
+                  data: self.ageLegend
+                },
+                series : [
+                  {
+                    name: '年龄段统计',
+                    data: self.sortByAge
+                  }
+                ]
+              })      
+        } else {
+          self.myChart.setOption({
+            title: {
+              text: '年龄段统计',
+              x: 'center'                    
+            },
+            legend: {
+              type: 'scroll',
+              bottom: 10,
+              data: self.amountLegend
+            },
+            series : [
+              {
+                name: '年龄段统计',
+                data: self.sortByAmount
+              }
+            ]
+          })
+        }
+      }
+      self.initpartnerConfig = function () {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateTime",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "goodsName": ""
+          }
+        }
+        data = JSON.stringify(data)
+        $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if (data.rescode === 200) {
+            self.goods = data.goods.lists;
+          } else if (data.rescode === 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback (response) {
+          alert('读取商品信息失败，请刷新页面重试')
+        })
+      }
+
+      self.initPartnersList = function () {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateDate",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "partnerName": ""
+          }
+        };
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.partners = data.partners.lists;
+          } else if (data.rescode === 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取分销商信息失败，请刷新页面重试');
+        });
+      }
+
+      self.search = function (flag) {
+        self.myChart.showLoading();
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/statistics' + c.extension;
+        if (flag) {
+          //读取下单日期
+          self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.goodsName = self.myGoods ? self.myGoods.goodsName : ''
+          self.OTAName = self.myPartner ? self.myPartner.partnerName : ''   
+        } else {
+          var n = new Date()
+          var d = new Date().getDate()
+          $('#rd_khaydt').val(self.timeToDate(n,'yyyy-MM-dd'))
+          $('#order-create-date-end').val(self.timeToDate(n,'yyyy-MM-dd'))          
+          $('#rd_qcaxwa').val(self.timeToDate(n.setDate(d - 6),'yyyy-MM-dd'))                    
+          $('#order-create-date-start').val(self.timeToDate(n,'yyyy-MM-dd'))
+          self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.goodsName = "";
+          self.OTAName = "";
+        }
+        var data = {
+          "action": "AgeGroupStatistics",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "search": {
+            "OrderStartTime": self.orderCreateDateStart ? self.orderCreateDateStart + "" : "", //下单日期开始
+            "OrderEndTime": self.orderCreateDateEnd ? self.orderCreateDateEnd + "" : "", //下单日期结束
+            "GoodsName": self.goodsName,
+            "OTAName": self.OTAName
+          }
+        }
+        data = JSON.stringify(data);
+        
+        $http.post(url, data).then(function successCallback (response) {
+          self.myChart.hideLoading();
+          var data = response.data;
+          if (data.rescode == 200) {
+            if (data.AgeGroupStatus.length == 0) {
+              self.showToggle = false
+              self.ageRatioData = [];
+              self.myChart.setOption({
+                title: {
+                    text: '无数据',
+                    left: 30
+                },
+                series : [
+                  {
+                    name: '年龄段统计',
+                    data: []
+                  }
+                ]
+              })
+            } else {
+              self.showToggle = true
+              self.sortByAge = data.AgeGroupStatus.concat()
+              self.ageLegend = []
+              self.sortByAge.forEach(function (item) {
+                self.ageLegend.push(item.name)
+              })
+              self.sortByAmount = data.AgeGroupStatus.concat().sort(function(a,b){
+                return (b.value - a.value)
+              })
+              self.amountLegend = []
+              self.sortByAmount.forEach(function (item) {
+                self.amountLegend.push(item.name)
+              })
+              self.toggleLink(self.activeIndex)
+            }
+          } else if (data.rescode == 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }
+        }, function errorCallback (response) {
+          self.myChart.hideLoading();
+          alert('加载失败，请重试');
+        });
+      }
+
+      self.timeToDate = function (time,format) {
+        var t = new Date(time);
+        var tf = function(i){return (i < 10 ? '0' : '') + i};
+        return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a){
+          switch (a) {
+            case 'yyyy':
+              return tf(t.getFullYear());
+              break;
+            case 'MM':
+              return tf(t.getMonth() + 1);
+              break;
+            case 'mm':
+              return tf(t.getMinutes());
+              break;
+            case 'dd':
+              return tf(t.getDate());
+              break;
+            case 'HH':
+              return tf(t.getHours());
+              break;
+            case 'ss':
+              return tf(t.getSeconds());
+              break;
+          }
+        })
+      }      
+    }
+  ])
+  
+  app.controller('sexRatioController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+      console.log('sexRatio');
+      var self = this;
+      self.init = function () {
+        $('.form_date').datetimepicker({
+          language: 'zh-CN',
+          weekStart: 1,
+          todayBtn: 1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0,
+          showMeridian: 1
+        })
+        self.initpartnerConfig()
+        self.initPartnersList()
+        self.myChart = echarts.init(document.getElementById('e-pie'))
+        self.myChart.setOption({
+          title: {
+              text: '客户性别统计',
+              left: 'center',
+              top: 20
+          },
+          legend: {
+            data: []
+          },
+          series : [
+              {
+                  name: '客户性别统计',
+                  label: {
+                    normal: {
+                      formatter: '{b}\n{c}人，{d}%\n',
+                    }                    
+                  },
+                  type: 'pie',
+                  radius: '55%',
+                  data:[]
+              }
+          ]
+        })
+        self.search(false)
+      }
+      self.initpartnerConfig = function () {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateTime",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "goodsName": ""
+          }
+        }
+        data = JSON.stringify(data)
+        $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if (data.rescode === 200) {
+            self.goods = data.goods.lists;
+          } else if (data.rescode === 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback (response) {
+          alert('读取商品信息失败，请刷新页面重试')
+        })
+      }
+
+      self.initPartnersList = function () {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateDate",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "partnerName": ""
+          }
+        };
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.partners = data.partners.lists;
+          } else if (data.rescode === 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取分销商信息失败，请刷新页面重试');
+        });
+      }
+
+      self.search = function (flag) {
+        self.myChart.showLoading();
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/statistics' + c.extension;
+        if (flag) {
+          //读取下单日期
+          self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.goodsName = self.myGoods ? self.myGoods.goodsName : ''
+          self.OTAName = self.myPartner ? self.myPartner.partnerName : ''   
+        } else {
+          var n = new Date()
+          var d = new Date().getDate()
+          $('#rd_khaydt').val(self.timeToDate(n,'yyyy-MM-dd'))
+          $('#order-create-date-end').val(self.timeToDate(n,'yyyy-MM-dd'))          
+          $('#rd_qcaxwa').val(self.timeToDate(n.setDate(d - 6),'yyyy-MM-dd'))                    
+          $('#order-create-date-start').val(self.timeToDate(n,'yyyy-MM-dd'))
+          self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.goodsName = "";
+          self.OTAName = "";
+        }
+        var data = {
+          "action": "CustomerSexStatistics",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "search": {
+            "OrderStartTime": self.orderCreateDateStart ? self.orderCreateDateStart + "" : "", //下单日期开始
+            "OrderEndTime": self.orderCreateDateEnd ? self.orderCreateDateEnd + "" : "", //下单日期结束
+            "GoodsName": self.goodsName,
+            "OTAName": self.OTAName
+          }
+        }
+        data = JSON.stringify(data);
+        
+        $http.post(url, data).then(function successCallback (response) {
+          self.myChart.hideLoading();
+          var data = response.data;
+          if (data.rescode == 200) {
+            if (data.OrderSexStatus.length == 0) {
+              self.sexRatioData = [];
+              self.myChart.setOption({
+                title: {
+                  text: '无数据',
+                  left: 30
+                },
+                series: [
+                  {
+                    name: '客户性别统计',
+                    data: []
+                  }
+                ]
+              })
+            } else {
+              self.sexRatioData = data.OrderSexStatus
+              // var legendList = []
+              // self.sexRatioData.forEach(function (item) {
+              //   legendList.push(item.name)
+              // })
+              self.myChart.setOption({
+                title: {
+                    text: '客户性别统计',
+                    left: 'center',
+                    top: 20
+                },
+                // legend: {
+                //   data: legendList
+                // },
+                series : [
+                  {
+                    name: '客户性别统计',
+                    data: self.sexRatioData
+                  }
+                ]
+              })
+            }
+          } else if (data.rescode == 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }
+        }, function errorCallback (response) {
+          self.myChart.hideLoading();
+          alert('加载失败，请重试');
+        });
+      }
+
+      self.timeToDate = function (time,format) {
+        var t = new Date(time);
+        var tf = function(i){return (i < 10 ? '0' : '') + i};
+        return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a){
+          switch (a) {
+            case 'yyyy':
+              return tf(t.getFullYear());
+              break;
+            case 'MM':
+              return tf(t.getMonth() + 1);
+              break;
+            case 'mm':
+              return tf(t.getMinutes());
+              break;
+            case 'dd':
+              return tf(t.getDate());
+              break;
+            case 'HH':
+              return tf(t.getHours());
+              break;
+            case 'ss':
+              return tf(t.getSeconds());
+              break;
+          }
+        })
+      }      
+    }
+  ])
+  
+  app.controller('provinceRatioController', ['$filter', '$scope', '$http', '$cookies', '$location', '$window', 'NgTableParams',
+    function($filter, $scope, $http, $cookies, $location, $window, NgTableParams) {
+      console.log('provinceRatio');
+      var self = this;
+      self.init = function () {
+        $('.form_date').datetimepicker({
+          language: 'zh-CN',
+          weekStart: 1,
+          todayBtn: 1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0,
+          showMeridian: 1
+        })
+        self.initpartnerConfig()
+        self.initPartnersList()
+        self.myChart = echarts.init(document.getElementById('e-pie'))
+        self.myChart.setOption({
+          title: {
+            text: '各省销售比例',
+            left: 'center',
+            top: 20
+          },
+          series : [
+            {
+              name: '各省销售比例',
+              label: {
+                normal: {
+                  formatter: '{b}\n{c}张，{d}%\n',
+                }                    
+              },
+              type: 'pie',
+              radius: '55%',
+              data:[]
+            }
+          ]
+        })
+        self.search(false)
+      }
+      self.initpartnerConfig = function () {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/goods' + c.extension;
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateTime",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "goodsName": ""
+          }
+        }
+        data = JSON.stringify(data)
+        $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if (data.rescode === 200) {
+            self.goods = data.goods.lists;
+          } else if (data.rescode === 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback (response) {
+          alert('读取商品信息失败，请刷新页面重试')
+        })
+      }
+
+      self.initPartnersList = function () {
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/partners' + c.extension;
+        var data = {
+          "action": "GetList",
+          "account": $cookies.get('account'),
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "sortBy": "CreateDate",
+          "orderBy": "desc",
+          "count": 10000,
+          "page": 1,
+          "search": {
+            "partnerName": ""
+          }
+        };
+        data = JSON.stringify(data);
+        $http.post(url, data).then(function successCallback(response) {
+          var data = response.data;
+          if(data.rescode === 200) {
+            self.partners = data.partners.lists;
+          } else if (data.rescode === 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }  
+        }, function errorCallback(response) {
+          alert('读取分销商信息失败，请刷新页面重试');
+        });
+      }
+
+      self.search = function (flag) {
+        self.myChart.showLoading();
+        var c = $scope.root.config;
+        var url = c.requestUrl + '/statistics' + c.extension;
+        if (flag) {
+          //读取下单日期
+          self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.goodsName = self.myGoods ? self.myGoods.goodsName : ''
+          self.OTAName = self.myPartner ? self.myPartner.partnerName : ''   
+        } else {
+          var n = new Date()
+          var d = new Date().getDate()
+          $('#rd_khaydt').val(self.timeToDate(n,'yyyy-MM-dd'))
+          $('#order-create-date-end').val(self.timeToDate(n,'yyyy-MM-dd'))          
+          $('#rd_qcaxwa').val(self.timeToDate(n.setDate(d - 6),'yyyy-MM-dd'))                    
+          $('#order-create-date-start').val(self.timeToDate(n,'yyyy-MM-dd'))
+          self.orderCreateDateStart = $('#rd_qcaxwa').val() ? self.timeToDate(new Date($('#rd_qcaxwa').val() + ' 00:00:00'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.orderCreateDateEnd = $('#rd_khaydt').val() ? self.timeToDate(new Date($('#rd_khaydt').val() + ' 23:59:59'),'yyyy-MM-dd HH:mm:ss') : '';
+          self.goodsName = "";
+          self.OTAName = "";
+        }
+        var data = {
+          "action": "ProvinceStatistics",
+          "token": $cookies.get('token'),
+          "projectName": $cookies.get('projectName'),
+          "search": {
+            "OrderStartTime": self.orderCreateDateStart ? self.orderCreateDateStart + "" : "", //下单日期开始
+            "OrderEndTime": self.orderCreateDateEnd ? self.orderCreateDateEnd + "" : "", //下单日期结束
+            "GoodsName": self.goodsName,
+            "OTAName": self.OTAName
+          }
+        }
+        data = JSON.stringify(data);
+        
+        $http.post(url, data).then(function successCallback (response) {
+          self.myChart.hideLoading();
+          var data = response.data;
+          if (data.rescode == 200) {
+            if (data.ProvinceStatus.length == 0) {
+              self.provinceRatioData = [];
+              self.myChart.setOption({
+                title: {
+                    text: '无数据',
+                    left: 30
+                },
+                series : [
+                  {
+                    name: '各省销售比例',
+                    data: []
+                  }
+                ]
+              })
+            } else {
+              self.provinceRatioData = data.ProvinceStatus
+              self.provinceRatioData.sort((a,b) => {
+                return (b.value - a.value)
+              })
+              var legendList = []
+              self.provinceRatioData.forEach(function (item) {
+                legendList.push(item.name)
+              })
+              self.myChart.setOption({
+                title: {
+                  text: '各省销售比例',
+                  left: 'center',
+                  top: 20
+                },
+                legend: {
+                  type: 'scroll',
+                  bottom: 10,
+                  data: legendList
+                },
+                series : [
+                  {
+                    name: '各省销售比例',
+                    data: self.provinceRatioData
+                  }
+                ]
+              })
+            }
+          } else if (data.rescode == 401) {
+            alert('登录超时，请重新登录');
+            $location.path('/index');
+          } else {
+            alert(data.errInfo);
+          }
+        }, function errorCallback (response) {
+          self.myChart.hideLoading();
+          alert('加载失败，请重试');
+        });
+      }
+
+      self.timeToDate = function (time,format) {
+        var t = new Date(time);
+        var tf = function(i){return (i < 10 ? '0' : '') + i};
+        return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a){
+          switch (a) {
+            case 'yyyy':
+              return tf(t.getFullYear());
+              break;
+            case 'MM':
+              return tf(t.getMonth() + 1);
+              break;
+            case 'mm':
+              return tf(t.getMinutes());
+              break;
+            case 'dd':
+              return tf(t.getDate());
+              break;
+            case 'HH':
+              return tf(t.getHours());
+              break;
+            case 'ss':
+              return tf(t.getSeconds());
+              break;
+          }
+        })
+      }      
+    }
+  ])
+      
+})()
